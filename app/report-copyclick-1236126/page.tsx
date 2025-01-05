@@ -93,60 +93,95 @@ export default function ReportPage() {
               
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-bold">Links & Navigation</h4>
+                  <h4 className="font-bold">Indexation & Robots.txt</h4>
                   <p className="text-sm text-gray-600">Score: 0/100</p>
-                  <p className="text-sm">There was an error checking the sitemap. Please ensure the domain is accessible and try again.</p>
+                  <p className="text-sm">Add a canonical URL to specify the preferred version of this page.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Implement a canonical tag in your HTML head to indicate the preferred URL for this page. This helps prevent duplicate content issues and consolidates ranking signals.</p>
+                  </div>
                 </div>
                 
                 <div>
                   <h4 className="font-bold">Indexation & Robots.txt</h4>
                   <p className="text-sm text-gray-600">Score: 0/100</p>
                   <p className="text-sm">Consider adding hreflang tags if your content is available in multiple languages.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: If you have multiple language versions of your content, implement hreflang tags to help search engines serve the correct language version to users.</p>
+                  </div>
                 </div>
                 
                 <div>
-                  <h4 className="font-bold">Content Structure & Accessibility</h4>
-                  <p className="text-sm text-gray-600">Score: 21/100</p>
-                  <p className="text-sm">Consider adding more content to reach a minimum of 300 words for better SEO.</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-bold">Content Structure & Accessibility</h4>
-                  <p className="text-sm text-gray-600">Score: 50/100</p>
-                  <p className="text-sm">Add descriptive alt tags to images that are missing them to improve accessibility and SEO.</p>
+                  <h4 className="font-bold">Structured Data</h4>
+                  <p className="text-sm text-gray-600">Score: 0/100</p>
+                  <p className="text-sm">Consider adding structured data to enhance how your content appears in search results.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Implement relevant structured data (e.g., JSON-LD) to provide additional context about your page content to search engines, potentially improving your search result appearance.</p>
+                  </div>
                 </div>
                 
                 <div>
                   <h4 className="font-bold">Meta & SEO Tags</h4>
-                  <p className="text-sm text-gray-600">Score: 53/100</p>
+                  <p className="text-sm text-gray-600">Score: 22/100</p>
                   <p className="text-sm">Title is too short. Aim for 50-60 characters.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Expand your title tag to include more relevant keywords and make it more descriptive, while staying within the recommended 50-60 character limit for optimal display in search results.</p>
+                  </div>
                 </div>
                 
                 <div>
-                  <h4 className="font-bold">Content Structure & Accessibility</h4>
-                  <p className="text-sm text-gray-600">Score: 60/100</p>
-                  <p className="text-sm">Improve your heading structure: Heading level skipped. "Install now" should be H2 instead of H3. Heading level skipped. "Copy the text shown in any website or app on your browser in plain text ready to paste into ChatGPT or Claude." should be H3 instead of H4</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-bold">Meta & SEO Tags</h4>
-                  <p className="text-sm text-gray-600">Score: 69/100</p>
-                  <p className="text-sm">Meta description is too short. Aim for 120-160 characters.</p>
+                  <h4 className="font-bold">Links & Navigation</h4>
+                  <p className="text-sm text-gray-600">Score: 63/100</p>
+                  <p className="text-sm">Fix the broken links to ensure a smooth user experience and proper page indexing.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Conduct a thorough link audit to identify and fix any broken links. This improves user experience and helps search engines crawl your site more effectively.</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="col-span-full mt-6 bg-orange-100 border border-orange-300 rounded-lg p-4">
-              <h4 className="font-bold text-lg mb-3">Suggestions for Improvement</h4>
-              <ul className="list-disc list-inside space-y-2">
-                <li>Create and submit a valid sitemap.xml file to improve crawlability.</li>
-                <li>Implement hreflang tags if you have multi-language content to help search engines serve the correct version to users.</li>
-                <li>Expand your content to reach at least 300 words per page, focusing on providing valuable information to users.</li>
-                <li>Review all images and add descriptive, keyword-rich alt tags to improve accessibility and SEO.</li>
-                <li>Optimize your page title to be between 50-60 characters long, including relevant keywords.</li>
-                <li>Fix the heading structure to maintain a logical hierarchy.</li>
-                <li>Expand your meta description to be between 120-160 characters, providing a concise summary of the page content.</li>
-              </ul>
+            <div className="col-span-full mt-6 bg-orange-100 border border-orange-500 rounded-lg p-6">
+              <h3 className="text-2xl font-bold mb-4">Improve Your Landing Page</h3>
+              <p className="text-lg mb-4">Enhance your online presence and boost your SEO with these critical improvements:</p>
+              
+              <div className="space-y-4 mb-6">
+                <div>
+                  <h4 className="text-xl font-semibold">Extension Details</h4>
+                  <p>Our CopyClick extension simplifies the process of copying text from any website or app, making it ready for use in AI tools like ChatGPT or Claude. Key features include:</p>
+                  <ul className="list-disc list-inside ml-4 mt-2">
+                    <li>One-click text copying from any source</li>
+                    <li>Automatic formatting for AI tool compatibility</li>
+                    <li>Cross-browser support (Chrome, Firefox, Safari)</li>
+                    <li>Privacy-focused with no data storage</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="text-xl font-semibold">Boost Your SEO with Our Blog Service</h4>
+                  <p>Elevate your online presence with our professional blog writing service:</p>
+                  <ul className="list-disc list-inside ml-4 mt-2">
+                    <li>SEO-optimized content tailored to your industry</li>
+                    <li>Regular posts to improve search engine rankings</li>
+                    <li>Engaging articles to increase site traffic and user retention</li>
+                    <li>Expert writers with deep knowledge in various fields</li>
+                    <li>Affordable plans starting from just $14/month</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="bg-white p-4 rounded-lg">
+                <p className="text-xl font-bold text-center mb-2">Ready to supercharge your online presence?</p>
+                <p className="text-center mb-4">Get started with our blog service today and watch your site climb the search rankings!</p>
+                <div className="text-center">
+                  <a 
+                    href="https://x.com/KrissmannGupta" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="bg-gradient-to-r from-gray-600 to-orange-500 text-white px-6 py-2 rounded-lg font-bold inline-block hover:opacity-90 transition-opacity"
+                  >
+                    Contact Us on Twitter
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* Website list with load more */}
@@ -204,6 +239,7 @@ export default function ReportPage() {
                 rel="noopener noreferrer"
                 className="text-orange-500 hover:underline"
               >
+                Learn More
               </a>
             </div>
             <div className="bg-white border border-gray-200 rounded-lg p-4">
@@ -215,6 +251,7 @@ export default function ReportPage() {
                 rel="noopener noreferrer"
                 className="text-orange-500 hover:underline"
               >
+                Learn More
               </a>
             </div>
             <div className="bg-white border border-gray-200 rounded-lg p-4">
@@ -226,6 +263,7 @@ export default function ReportPage() {
                 rel="noopener noreferrer"
                 className="text-orange-500 hover:underline"
               >
+                Learn More
               </a>
             </div>
           </div>
@@ -270,8 +308,6 @@ export default function ReportPage() {
                 />
               </div>
             </div>
-
-            
           </div>
         </section>
       </main>
