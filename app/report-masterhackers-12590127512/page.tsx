@@ -79,7 +79,7 @@ export default function ReportPage() {
           <div className="space-y-6">
             <div className="prose max-w-none">
               <p className="text-gray-700">
-              MasterHackers’ landing page effectively conveys its purpose of helping cybersecurity enthusiasts with certifications and interviews. The messaging is clear but could benefit from more emotional and engaging hooks. The readability is excellent, with simple typography and clear sectioning, but the structure feels slightly cluttered in some areas.
+              MasterHackers landing page effectively conveys its purpose of helping cybersecurity enthusiasts with certifications and interviews. The messaging is clear but could benefit from more emotional and engaging hooks. The readability is excellent, with simple typography and clear sectioning, but the structure feels slightly cluttered in some areas.
 
 The call-to-action CTA buttons are visible but lack urgency or creativity in their phrasing, which affects actionability. The design, while functional, appears somewhat outdated and could use modern elements like dynamic visuals or smoother animations to stand out. Credibility takes a hit as there’s a lack of prominent testimonials or case studies to support claims of an 85% success rate.
               </p>
