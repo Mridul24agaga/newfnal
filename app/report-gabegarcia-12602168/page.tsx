@@ -5,7 +5,6 @@ import { websiteList } from './website-list'
 import { useState } from 'react'
 import { FiClock, FiTrendingUp, FiAlertCircle, FiCheckCircle, FiExternalLink, FiLink, FiTool, FiEdit } from 'react-icons/fi'
 import Footer from '../components/footer'
-import { CircularProgress } from './circular-progress'
 
 export default function ReportPage() {
   const [visibleWebsites, setVisibleWebsites] = useState(50)
@@ -26,6 +25,7 @@ export default function ReportPage() {
       </header>
 
       <main className="container mx-auto py-12 px-4">
+        {/* Report Overview Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <section className="bg-gray-50/80 border border-gray-200 rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">
@@ -62,67 +62,21 @@ export default function ReportPage() {
           </section>
         </div>
 
-        <section className="bg-gray-50/80 border border-gray-200 rounded-lg p-6 mb-12">
-          <h2 className="text-2xl font-bold mb-6">
-            <span className="text-orange-500">Landing Page</span> Analysis
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-8">
-            <CircularProgress value={70} label="Messaging" color="#FF9F43" />
-            <CircularProgress value={80} label="Readability" color="#28C76F" />
-            <CircularProgress value={75} label="Structure" color="#FF5C5C" />
-            <CircularProgress value={65} label="Actionability" color="#FF9F43" />
-            <CircularProgress value={60} label="Design" color="#FF9F43" />
-            <CircularProgress value={50} label="Credibility" color="#FF4F7A" />
-          </div>
-
-          <div className="space-y-6">
-            <div className="prose max-w-none">
-              <p className="text-gray-700">
-              MasterHackers’ landing page effectively conveys its purpose of helping cybersecurity enthusiasts with certifications and interviews. The messaging is clear but could benefit from more emotional and engaging hooks. The readability is excellent, with simple typography and clear sectioning, but the structure feels slightly cluttered in some areas.
-
-The call-to-action CTA buttons are visible but lack urgency or creativity in their phrasing, which affects actionability. The design, while functional, appears somewhat outdated and could use modern elements like dynamic visuals or smoother animations to stand out. Credibility takes a hit as there’s a lack of prominent testimonials or case studies to support claims of an 85% success rate.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold mb-4">Main Recommendations:</h3>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-2">
-                  <span className="text-orange-500">→</span>
-                  Add customer testimonials or case studies to enhance credibility.
-                  </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-orange-500">→</span>
-                  Use more engaging, action-oriented CTAs to improve actionability.
-                  </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-orange-500">→</span>
-                  Modernize the design with subtle animations, updated visuals, and interactive elements.
-                  </li>
-                  <li className="flex items-center gap-2">
-                  <span className="text-orange-500">→</span>
-                  Simplify the layout further for better structure and user experience.
-                  </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
+        {/* Submitted Websites Section */}
         <section className="bg-gray-50/80 border border-gray-200 rounded-lg p-6 mb-12">
           <h2 className="text-2xl font-bold mb-6">
             <span className="text-orange-500">Submitted</span> Websites
           </h2>
-          <p className="mb-6">Your startup has been submitted to {websiteList.length} websites. This extensive list covers a wide range of platforms, increasing your chances of visibility and success.</p>
+          <p className="mb-6">Your startup has been submitted to 200+ websites. This extensive list covers a wide range of platforms, increasing your chances of visibility and success.</p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gray-50/80 border border-gray-200 rounded-lg p-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div className="col-span-full bg-gray-50/80 border border-gray-200 rounded-lg p-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-bold text-lg mb-2">MasterHackers</h3>
+                  <h3 className="font-bold text-lg mb-2">Grit UI</h3>
                 </div>
                 <a 
-                  href="https://masterhackers.com/"
+                  href="https://grit-ui.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-black"
@@ -138,61 +92,74 @@ The call-to-action CTA buttons are visible but lack urgency or creativity in the
             <div className="col-span-full bg-gray-50/80 border border-gray-200 rounded-lg p-4">
               <h3 className="font-bold text-lg mb-4">Priority SEO Actions</h3>
               <p className="mb-4">Improvement suggestions for sections with a score below 100%</p>
-              
-              <div className="space-y-4">
+
+              <div className="space-y-6">
                 <div>
                   <h4 className="font-bold">Indexation & Robots.txt</h4>
                   <p className="text-sm text-gray-600">Score: 0/100</p>
                   <p className="text-sm">Consider adding hreflang tags if your content is available in multiple languages.</p>
-                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
-                    <p className="text-sm text-orange-800">Suggestion: Implement hreflang tags in your HTML head or HTTP headers to specify language and regional URLs. This helps search engines serve the correct language version of your pages to users.</p>
-                  </div>
                 </div>
-                
+
+                <div>
+                  <h4 className="font-bold">Content Structure & Accessibility</h4>
+                  <p className="text-sm text-gray-600">Score: 0/100</p>
+                  <p className="text-sm">Add descriptive alt tags to images that are missing them to improve accessibility and SEO.</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold">Content Structure & Accessibility</h4>
+                  <p className="text-sm text-gray-600">Score: 0/100</p>
+                  <p className="text-sm">Improve your heading structure: Heading level skipped. "350+" should be H2 instead of H3. Heading level skipped. "350+" should be H2 instead of H3. Heading level skipped. "350+" should be H2 instead of H3. Heading level skipped. "What is Grit UI?" should be H3 instead of H6. Heading level skipped. "What is Grit UI?" should be H3 instead of H6. Heading level skipped. "What is Grit UI?" should be H3 instead of H6. Multiple H1 headings found</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold">Structured Data</h4>
+                  <p className="text-sm text-gray-600">Score: 0/100</p>
+                  <p className="text-sm">Consider adding structured data to enhance how your content appears in search results.</p>
+                </div>
+
                 <div>
                   <h4 className="font-bold">Meta & SEO Tags</h4>
-                  <p className="text-sm text-gray-600">Score: 10/100</p>
+                  <p className="text-sm text-gray-600">Score: 65/100</p>
                   <p className="text-sm">Title is too short. Aim for 50-60 characters.</p>
-                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
-                    <p className="text-sm text-orange-800">Suggestion: Expand your title tag to include more relevant keywords and make it more descriptive. A good title should be compelling and accurately represent the page content.</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="font-bold">Indexation & Robots.txt</h4>
-                  <p className="text-sm text-gray-600">Score: 50/100</p>
-                  <p className="text-sm">The canonical URL differs from the current URL. Ensure this is intentional.</p>
-                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
-                    <p className="text-sm text-orange-800">Suggestion: Review your canonical tags. If the difference is unintentional, update the canonical URL to match the current URL. Canonical tags help prevent duplicate content issues by specifying the preferred version of a page.</p>
-                  </div>
                 </div>
               </div>
             </div>
+            <div className="col-span-full mt-6 bg-gray-50/80 border border-gray-200 rounded-lg p-6">
+              <h4 className="font-bold text-xl mb-4">SEO Improvement Suggestions</h4>
+              <p className="mb-4">Based on the analysis, here are the key areas to focus on and how to improve them:</p>
+              <ul className="list-disc list-inside space-y-2">
+                <li><strong>Multilingual SEO:</strong> If your content is available in multiple languages, implement hreflang tags. This helps search engines serve the correct language version to users.</li>
+                <li><strong>Image Optimization:</strong> Add descriptive alt tags to all images. This improves accessibility for screen readers and helps search engines understand the content of your images.</li>
+                <li><strong>Heading Structure:</strong> Revise your heading hierarchy to ensure it's logical and sequential. Use H1 for main titles, H2 for section headings, and H3 for subsections. Avoid skipping levels.</li>
+                <li><strong>Structured Data:</strong> Implement relevant schema markup (e.g., Organization, Product, FAQ) to enhance your search result appearance and potentially improve click-through rates.</li>
+                <li><strong>Meta Tags:</strong> Expand your title tag to 50-60 characters. Include your main keyword and make it compelling to improve click-through rates from search results.</li>
+              </ul>
+              <p className="mt-4">By addressing these areas, you can significantly improve your website's SEO performance, user experience, and visibility in search results.</p>
+            </div>
 
-            <div className="col-span-full mt-6 bg-orange-100 border border-orange-300 rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <FiEdit className="text-orange-500" />
-                <h4 className="font-bold text-lg">Boost Your SEO with Our Blog Service</h4>
-              </div>
-              <p className="text-sm mb-2">
-                <strong>Blogs are crucial for SEO success.</strong> They help you:
-              </p>
-              <ul className="list-disc list-inside text-sm space-y-1 mb-4">
+            <div className="col-span-full mt-6 bg-orange-100 border-2 border-orange-500 rounded-lg p-6">
+              <h4 className="font-bold text-2xl text-orange-600 mb-4">Boost Your SEO with Our Blog Service</h4>
+              <p className="text-lg mb-4">Blogs are crucial for SEO success. They help you:</p>
+              <ul className="list-disc list-inside text-lg space-y-2 mb-6">
                 <li>Increase organic traffic</li>
                 <li>Improve search engine rankings</li>
                 <li>Establish your brand as an industry authority</li>
                 <li>Create opportunities for backlinks</li>
                 <li>Engage your audience and increase time on site</li>
               </ul>
-              <p className="text-sm font-bold mb-2">We offer a premium blog service to supercharge your SEO efforts:</p>
-              <ul className="list-none text-sm space-y-1 mb-4">
-                <li>✅ SEO-optimized blog posts tailored to your needs</li>
-                <li>✅ Customized content strategy aligned with your business goals</li>
-                <li>✅ Expert writers with industry knowledge</li>
-                <li>✅ Plans starting from just $14/month</li>
+              <p className="text-xl font-bold mb-4">We offer a premium blog service to supercharge your SEO efforts:</p>
+              <ul className="list-none text-lg space-y-3 mb-6">
+                <li className="flex items-center"><span className="text-green-500 mr-2 text-2xl">✅</span> SEO-optimized blog posts tailored to your needs</li>
+                <li className="flex items-center"><span className="text-green-500 mr-2 text-2xl">✅</span> Customized content strategy aligned with your business goals</li>
+                <li className="flex items-center"><span className="text-green-500 mr-2 text-2xl">✅</span> Expert writers with industry knowledge</li>
+                <li className="flex items-center"><span className="text-green-500 mr-2 text-2xl">✅</span> Plans starting from just $14/month</li>
               </ul>
-              <p className="text-sm font-bold">
-                Ready to elevate your SEO game? DM us on <a className='text-orange-600' href="https://x.com/KrissmannGupta">Twitter</a> to get started!
+              <p className="text-xl font-bold">
+                Ready to elevate your SEO game? 
+                <a className='text-orange-600 hover:underline ml-2' href="https://twitter.com/KrissmannGupta" target="_blank" rel="noopener noreferrer">
+                  DM us on Twitter to get started!
+                </a>
               </p>
             </div>
 
@@ -298,35 +265,55 @@ The call-to-action CTA buttons are visible but lack urgency or creativity in the
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/masterhacker1.png" 
+                  src="/gritui1.png" 
                   alt="Startupanz.com confirmation"
                   fill
                   className="object-contain"
                 />
               </div>
+              
             </div>
 
             {/* Additional Evidence Cards */}
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/masterhacker2.png" 
+                  src="/gritui2.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"
                 />
               </div>
+             
             </div>
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+             {/* Additional Evidence Cards */}
+             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/masterhacker3.png" 
+                  src="/gritui3.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"
                 />
               </div>
+             
             </div>
+             {/* Additional Evidence Cards */}
+             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/gritui4.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+             
+            </div>
+             
+             
+
+           
           </div>
         </section>
       </main>
