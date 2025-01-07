@@ -27,7 +27,10 @@ async function captureScreenshot(url: string): Promise<string | null> {
 }
 
 export async function analyzeLandingPage(inputType: 'url' | 'content', input: string) {
+  console.log('Starting analyzeLandingPage function');
+  
   if (!process.env.OPENAI_API_KEY) {
+    console.error('OPENAI_API_KEY is not set in the environment variables');
     throw new Error('OPENAI_API_KEY is not set in the environment variables');
   }
 
@@ -36,6 +39,7 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
 
   if (inputType === 'url') {
     try {
+      console.log('Fetching URL content and capturing screenshot');
       const [response, screenshotData] = await Promise.all([
         fetch(input, {
           headers: {
@@ -48,7 +52,7 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
       screenshot = screenshotData;
     } catch (error) {
       console.error('Error fetching URL content:', error);
-      throw new Error('Failed to fetch content from the provided URL');
+      throw new Error(`Failed to fetch content from the provided URL: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -89,28 +93,32 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
   `;
 
   try {
+    console.log('Calling OpenAI API');
     const response = await generateText({
       model: openai('gpt-4o'),
       prompt: prompt,
     });
 
+    console.log('Parsing OpenAI response');
     const jsonContent = response.text.replace(/\`\`\`json\n|\n\`\`\`/g, '').trim();
     let results;
     try {
       results = JSON.parse(jsonContent).results;
     } catch (parseError) {
       console.error('Error parsing JSON:', parseError);
-      throw new Error('Failed to parse the analysis results');
+      throw new Error(`Failed to parse the analysis results: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`);
     }
 
     if (!Array.isArray(results)) {
+      console.error('Invalid results structure');
       throw new Error('Invalid results structure');
     }
 
     const overallScore = Math.round(
-      results.reduce((acc, curr) => acc + curr.score, 0) / results.length
+      results.reduce((acc: number, curr: { score: number }) => acc + curr.score, 0) / results.length
     );
 
+    console.log('Analysis completed successfully');
     return {
       results,
       metadata: {
