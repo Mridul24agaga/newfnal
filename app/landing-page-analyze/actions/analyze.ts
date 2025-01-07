@@ -2,27 +2,16 @@
 
 import { openai } from '@ai-sdk/openai'
 import { generateText } from 'ai'
-import puppeteer from 'puppeteer'
 
 const MAX_CONTENT_LENGTH = 8000
 
-async function captureScreenshot(url: string): Promise<string | null> {
-  let browser = null;
+function getFaviconUrl(url: string): string {
   try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1280, height: 800 });
-    await page.goto(url, { waitUntil: 'networkidle0' });
-    const screenshot = await page.screenshot({ encoding: 'base64', fullPage: false });
-    return `data:image/png;base64,${screenshot}`;
+    const parsedUrl = new URL(url);
+    return `${parsedUrl.protocol}//${parsedUrl.hostname}/favicon.ico`;
   } catch (error) {
-    console.error('Error capturing screenshot:', error);
-    return null;
-  } finally {
-    if (browser) await browser.close();
+    console.error('Error parsing URL:', error);
+    return '/default-favicon.ico'; // Provide a default favicon path
   }
 }
 
@@ -35,21 +24,18 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
   }
 
   let content = input;
-  let screenshot = null;
+  let faviconUrl = null;
 
   if (inputType === 'url') {
     try {
-      console.log('Fetching URL content and capturing screenshot');
-      const [response, screenshotData] = await Promise.all([
-        fetch(input, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-          }
-        }),
-        captureScreenshot(input)
-      ]);
+      console.log('Fetching URL content');
+      const response = await fetch(input, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+      });
       content = await response.text();
-      screenshot = screenshotData;
+      faviconUrl = getFaviconUrl(input);
     } catch (error) {
       console.error('Error fetching URL content:', error);
       throw new Error(`Failed to fetch content from the provided URL: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -123,7 +109,7 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
       results,
       metadata: {
         url: inputType === 'url' ? input : null,
-        screenshot,
+        faviconUrl,
         score: overallScore,
         date: new Date().toISOString()
       }
