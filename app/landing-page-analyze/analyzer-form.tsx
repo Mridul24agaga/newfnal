@@ -38,7 +38,6 @@ export function AnalyzerForm() {
           url={analysisData.metadata.url}
           score={analysisData.metadata.score}
           date={analysisData.metadata.date}
-          screenshot={analysisData.metadata.screenshot}
         />
         <Results analysisData={analysisData} />
       </div>
