@@ -6,36 +6,8 @@ import Image from "next/image"
 import { ChevronRight, ArrowRight, Globe, Search, AlertCircle, Menu, X } from 'lucide-react'
 import { OpenAI } from 'openai'
 
-const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-})
 
-const analyzeWebsite = async (url: string) => {
-  try {
-    const completion = await openai.chat.completions.create({
-      messages: [
-        { role: "system", content: "You are an SEO expert. Analyze the given website URL and provide an SEO score from 0 to 100, where 0 is extremely poor and 100 is perfect. Only respond with a number." },
-        { role: "user", content: `Analyze this website for SEO: ${url}` }
-      ],
-      model: "gpt-3.5-turbo",
-      max_tokens: 10,
-    });
 
-    const response = completion.choices[0].message.content;
-    if (!response) {
-      throw new Error("No response from OpenAI");
-    }
-    const score = parseInt(response.trim());
-    if (isNaN(score) || score < 0 || score > 100) {
-      throw new Error("Invalid score received from OpenAI");
-    }
-    return { seoScore: score };
-  } catch (error) {
-    console.error('Error in analyzeWebsite:', error);
-    throw error;
-  }
-};
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false)
@@ -59,18 +31,7 @@ export default function Hero() {
     // Simulate loading time
     const loadingTime = Math.floor(Math.random() * (7000 - 5000 + 1)) + 5000; // Random time between 5-7 seconds
     
-    setTimeout(async () => {
-      try {
-        const result = await analyzeWebsite(url);
-        setAnalysisResult(result);
-      } catch (error) {
-        setAnalysisResult({ 
-          error: error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.' 
-        });
-      } finally {
-        setIsScanning(false);
-      }
-    }, loadingTime);
+    
   }
 
   const scrollToPricing = () => {
