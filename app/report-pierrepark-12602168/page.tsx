@@ -73,10 +73,10 @@ export default function ReportPage() {
             <div className="col-span-full bg-gray-50/80 border border-gray-200 rounded-lg p-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-bold text-lg mb-2">Grit UI</h3>
+                  <h3 className="font-bold text-lg mb-2">Pierre Park</h3>
                 </div>
                 <a 
-                  href="https://grit-ui.com/"
+                  href="https://pierrepark.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-black"
@@ -255,67 +255,7 @@ export default function ReportPage() {
           </div>
         </section>
 
-        <section className="bg-gray-50/80 border border-gray-200 rounded-lg p-6 mb-12">
-          <h2 className="text-2xl font-bold mb-4">
-            <span className="text-orange-500">Submission</span> Evidence
-          </h2>
-          <p className="mb-6">Below are the confirmation emails and submission receipts from various platforms:</p>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Startupanz.com Card */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <div className="relative h-[400px]">
-                <Image 
-                  src="/gritui1.png" 
-                  alt="Startupanz.com confirmation"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              
-            </div>
-
-            {/* Additional Evidence Cards */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <div className="relative h-[400px]">
-                <Image 
-                  src="/gritui2.png" 
-                  alt="ProductHunt submission"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-             
-            </div>
-             {/* Additional Evidence Cards */}
-             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <div className="relative h-[400px]">
-                <Image 
-                  src="/gritui3.png" 
-                  alt="ProductHunt submission"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-             
-            </div>
-             {/* Additional Evidence Cards */}
-             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <div className="relative h-[400px]">
-                <Image 
-                  src="/gritui4.png" 
-                  alt="ProductHunt submission"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-             
-            </div>
-             
-             
-
-           
-          </div>
-        </section>
+        
       </main>
 
       <Footer/>
