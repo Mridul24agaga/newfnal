@@ -2,20 +2,13 @@
 
 import { openai } from '@ai-sdk/openai'
 import { generateText } from 'ai'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 const MAX_CONTENT_LENGTH = 8000
 
-function getFaviconUrl(url: string): string {
-  try {
-    const parsedUrl = new URL(url);
-    return `${parsedUrl.protocol}//${parsedUrl.hostname}/favicon.ico`;
-  } catch (error) {
-    console.error('Error parsing URL:', error);
-    return '/default-favicon.ico'; // Provide a default favicon path
-  }
-}
-
-export async function analyzeLandingPage(inputType: 'url' | 'content', input: string) {
+export async function analyzeLandingPage(inputType: 'url' | 'content', input: string, userId: string) {
   console.log('Starting analyzeLandingPage function');
   
   if (!process.env.OPENAI_API_KEY) {
@@ -24,18 +17,12 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
   }
 
   let content = input;
-  let faviconUrl = null;
 
   if (inputType === 'url') {
     try {
       console.log('Fetching URL content');
-      const response = await fetch(input, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-      });
+      const response = await fetch(input);
       content = await response.text();
-      faviconUrl = getFaviconUrl(input);
     } catch (error) {
       console.error('Error fetching URL content:', error);
       throw new Error(`Failed to fetch content from the provided URL: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -54,11 +41,17 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
     4. Actionability
     5. Design
     6. Credibility
+    7. SEO (including meta tags, heading structure, and keyword density)
+    8. Call-to-Action Effectiveness
+    9. Accessibility
+    10. Mobile Responsiveness
 
     For each category:
     - Provide a score out of 100
     - Write a brief but insightful analysis paragraph
     - Give 2 specific, actionable recommendations for improvement
+
+    Additionally, provide an overall content suggestion to improve the landing page.
 
     Content:
     ${content}
@@ -72,7 +65,8 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
           "feedback": "Detailed analysis paragraph",
           "recommendations": ["Specific recommendation 1", "Specific recommendation 2"]
         }
-      ]
+      ],
+      "contentSuggestion": "AI-generated content improvement suggestion"
     }
 
     Make the analysis critical but constructive, focusing on specific improvements that could be made.
@@ -87,33 +81,48 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
 
     console.log('Parsing OpenAI response');
     const jsonContent = response.text.replace(/\`\`\`json\n|\n\`\`\`/g, '').trim();
-    let results;
+    let parsedResponse;
     try {
-      results = JSON.parse(jsonContent).results;
+      parsedResponse = JSON.parse(jsonContent);
     } catch (parseError) {
       console.error('Error parsing JSON:', parseError);
       throw new Error(`Failed to parse the analysis results: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`);
     }
 
-    if (!Array.isArray(results)) {
+    if (!Array.isArray(parsedResponse.results)) {
       console.error('Invalid results structure');
       throw new Error('Invalid results structure');
     }
 
     const overallScore = Math.round(
-      results.reduce((acc: number, curr: { score: number }) => acc + curr.score, 0) / results.length
+      parsedResponse.results.reduce((acc: number, curr: { score: number }) => acc + curr.score, 0) / parsedResponse.results.length
     );
 
-    console.log('Analysis completed successfully');
-    return {
-      results,
+    const analysisResult = {
+      results: parsedResponse.results,
+      contentSuggestion: parsedResponse.contentSuggestion,
       metadata: {
         url: inputType === 'url' ? input : null,
-        faviconUrl,
         score: overallScore,
         date: new Date().toISOString()
       }
     };
+
+    // Save the analysis result to the database
+    const savedAnalysis = await prisma.analysis.create({
+      data: {
+        url: input,
+        results: analysisResult,
+        overallScore,
+        seoScore: parsedResponse.results.find((r: any) => r.category === 'SEO')?.score,
+        ctaScore: parsedResponse.results.find((r: any) => r.category === 'Call-to-Action Effectiveness')?.score,
+        accessibilityScore: parsedResponse.results.find((r: any) => r.category === 'Accessibility')?.score,
+        user: { connect: { id: userId } }
+      }
+    });
+
+    console.log('Analysis completed and saved successfully');
+    return analysisResult;
 
   } catch (error) {
     console.error('Error analyzing landing page:', error);
@@ -123,5 +132,36 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
       throw new Error('An unexpected error occurred during analysis');
     }
   }
+}
+
+export async function getHistoricalAnalyses(userId: string, url: string) {
+  return prisma.analysis.findMany({
+    where: {
+      userId,
+      url
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+}
+
+export async function compareCompetitors(urls: string[], userId: string) {
+  const analyses = await Promise.all(urls.map(url => analyzeLandingPage('url', url, userId)));
+  
+  const comparisonResult = {
+    urls,
+    results: analyses
+  };
+
+  await prisma.competitorComparison.create({
+    data: {
+      urls,
+      results: comparisonResult,
+      user: { connect: { id: userId } }
+    }
+  });
+
+  return comparisonResult;
 }
 
