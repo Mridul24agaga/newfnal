@@ -17,7 +17,7 @@ export function AnalyzerForm() {
     setIsLoading(true)
     setError(null)
     try {
-      const data = await analyzeLandingPage('url', input)
+      const data = await analyzeLandingPage('url', input, 'user-id')
       setAnalysisData(data)
     } catch (error) {
       console.error('Error analyzing landing page:', error)
