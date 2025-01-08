@@ -3,116 +3,82 @@
 import { openai } from '@ai-sdk/openai'
 import { generateText } from 'ai'
 
-const MAX_CONTENT_LENGTH = 8000
+interface AnalysisResult {
+  category: string;
+  score: number;
+  feedback: string;
+  recommendations: string[];
+}
+
+interface AnalysisResponse {
+  results: AnalysisResult[];
+  contentSuggestion: string;
+}
 
 export async function analyzeLandingPage(inputType: 'url' | 'content', input: string, userId: string) {
-  console.log('Starting analyzeLandingPage function');
-  
   if (!process.env.OPENAI_API_KEY) {
-    throw new Error('OPENAI_API_KEY is not set in the environment variables');
+    throw new Error('OpenAI API key is not configured')
   }
 
-  let content = input;
-
+  let content = input
+  
   if (inputType === 'url') {
     try {
-      console.log('Fetching URL content');
-      const response = await fetch(input, { next: { revalidate: 60 } });
+      const response = await fetch(input)
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Failed to fetch URL (${response.status} ${response.statusText})`)
       }
-      content = await response.text();
+
+      content = await response.text()
     } catch (error) {
-      console.error('Error fetching URL content:', error);
-      throw new Error(`Failed to fetch content from the provided URL: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`Unable to access the URL. Please verify the URL is correct and publicly accessible.`)
     }
   }
-
-  if (content.length > MAX_CONTENT_LENGTH) {
-    content = content.substring(0, MAX_CONTENT_LENGTH) + '...(truncated)';
-  }
-
-  const prompt = `
-    Analyze the following landing page content and provide a detailed analysis with scores (0-100) for these categories:
-    1. Messaging
-    2. Readability
-    3. Structure
-    4. Actionability
-    5. Design
-    6. Credibility
-    7. SEO (including meta tags, heading structure, and keyword density)
-    8. Call-to-Action Effectiveness
-    9. Accessibility
-    10. Mobile Responsiveness
-
-    For each category:
-    - Provide a score out of 100
-    - Write a brief but insightful analysis paragraph
-    - Give 2 specific, actionable recommendations for improvement
-
-    Additionally, provide an overall content suggestion to improve the landing page.
-
-    Content:
-    ${content}
-
-    Respond in the following JSON format:
-    {
-      "results": [
-        {
-          "category": "Category Name",
-          "score": 0,
-          "feedback": "Detailed analysis paragraph",
-          "recommendations": ["Specific recommendation 1", "Specific recommendation 2"]
-        }
-      ],
-      "contentSuggestion": "AI-generated content improvement suggestion"
-    }
-
-    Make the analysis critical but constructive, focusing on specific improvements that could be made.
-  `;
 
   try {
-    console.log('Calling OpenAI API');
     const response = await generateText({
       model: openai('gpt-4o'),
-      prompt: prompt,
-    });
+      prompt: `Analyze this landing page content and provide scores (0-100) and feedback:
+      
+      ${content.substring(0, 8000)}
+      
+      Format the response as JSON with this structure:
+      {
+        "results": [
+          {
+            "category": "Category Name",
+            "score": 0,
+            "feedback": "Analysis details",
+            "recommendations": ["Recommendation 1", "Recommendation 2"]
+          }
+        ],
+        "contentSuggestion": "Overall suggestion"
+      }`
+    })
 
-    console.log('Parsing OpenAI response');
-    const jsonContent = response.text.replace(/\`\`\`json\n|\n\`\`\`/g, '').trim();
-    let parsedResponse;
-    try {
-      parsedResponse = JSON.parse(jsonContent);
-    } catch (parseError) {
-      console.error('Error parsing JSON:', parseError);
-      throw new Error(`Failed to parse the analysis results: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`);
-    }
-
-    if (!Array.isArray(parsedResponse.results)) {
-      console.error('Invalid results structure');
-      throw new Error('Invalid results structure');
+    const analysisResult: AnalysisResponse = JSON.parse(response.text)
+    
+    if (!Array.isArray(analysisResult.results)) {
+      throw new Error('Invalid analysis results format')
     }
 
     const overallScore = Math.round(
-      parsedResponse.results.reduce((acc: number, curr: { score: number }) => acc + curr.score, 0) / parsedResponse.results.length
-    );
+      analysisResult.results.reduce((sum: number, item: AnalysisResult) => sum + item.score, 0) / 
+      analysisResult.results.length
+    )
 
-    const analysisResult = {
-      results: parsedResponse.results,
-      contentSuggestion: parsedResponse.contentSuggestion,
+    return {
+      results: analysisResult.results,
+      contentSuggestion: analysisResult.contentSuggestion,
       metadata: {
         url: inputType === 'url' ? input : null,
         score: overallScore,
         date: new Date().toISOString()
       }
-    };
-
-    console.log('Analysis completed successfully');
-    return analysisResult;
-
+    }
   } catch (error) {
-    console.error('Error analyzing landing page:', error);
-    throw new Error(`Analysis failed: ${error instanceof Error ? error.message : 'An unexpected error occurred during analysis'}`);
+    throw new Error('Failed to analyze the landing page. Please try again.')
   }
 }
 
