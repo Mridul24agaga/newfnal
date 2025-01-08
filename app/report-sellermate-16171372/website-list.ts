@@ -8,7 +8,6 @@ export const websiteList = [
   "https://9sites.net",
   "https://weboworld.com",
   "https://usalistingdirectory.com",
-  "https://everbestlinks.com",
   "https://freeprwebdirectory.com",
   "https://callyourcountry.com",
   "https://callbuster.net",
