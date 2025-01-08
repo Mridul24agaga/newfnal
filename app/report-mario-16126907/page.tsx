@@ -282,6 +282,48 @@ export default function ReportPage() {
           </div>
         </section>
 
+        <section className="bg-gray-50/80 border border-gray-200 rounded-lg p-6 mb-12">
+                  <h2 className="text-2xl font-bold mb-4">
+                    <span className="text-orange-500">Submission</span> Evidence
+                  </h2>
+                  <p className="mb-6">Below are the confirmation emails and submission receipts from various platforms:</p>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Startupanz.com Card */}
+                    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                      <div className="relative h-[400px]">
+                        <Image 
+                          src="/mario1.png" 
+                          alt="Startupanz.com confirmation"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+        
+                    {/* Additional Evidence Cards */}
+                    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                      <div className="relative h-[400px]">
+                        <Image 
+                          src="/mario2.png" 
+                          alt="ProductHunt submission"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+                    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                      <div className="relative h-[400px]">
+                        <Image 
+                          src="/mario3.png" 
+                          alt="ProductHunt submission"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
         
       </main>
 
