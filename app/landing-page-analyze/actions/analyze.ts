@@ -2,9 +2,6 @@
 
 import { openai } from '@ai-sdk/openai'
 import { generateText } from 'ai'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
 
 const MAX_CONTENT_LENGTH = 8000
 
@@ -12,7 +9,6 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
   console.log('Starting analyzeLandingPage function');
   
   if (!process.env.OPENAI_API_KEY) {
-    console.error('OPENAI_API_KEY is not set in the environment variables');
     throw new Error('OPENAI_API_KEY is not set in the environment variables');
   }
 
@@ -21,7 +17,10 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
   if (inputType === 'url') {
     try {
       console.log('Fetching URL content');
-      const response = await fetch(input);
+      const response = await fetch(input, { next: { revalidate: 60 } });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       content = await response.text();
     } catch (error) {
       console.error('Error fetching URL content:', error);
@@ -108,60 +107,12 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
       }
     };
 
-    // Save the analysis result to the database
-    const savedAnalysis = await prisma.analysis.create({
-      data: {
-        url: input,
-        results: analysisResult,
-        overallScore,
-        seoScore: parsedResponse.results.find((r: any) => r.category === 'SEO')?.score,
-        ctaScore: parsedResponse.results.find((r: any) => r.category === 'Call-to-Action Effectiveness')?.score,
-        accessibilityScore: parsedResponse.results.find((r: any) => r.category === 'Accessibility')?.score,
-        user: { connect: { id: userId } }
-      }
-    });
-
-    console.log('Analysis completed and saved successfully');
+    console.log('Analysis completed successfully');
     return analysisResult;
 
   } catch (error) {
     console.error('Error analyzing landing page:', error);
-    if (error instanceof Error) {
-      throw new Error(`Analysis failed: ${error.message}`);
-    } else {
-      throw new Error('An unexpected error occurred during analysis');
-    }
+    throw new Error(`Analysis failed: ${error instanceof Error ? error.message : 'An unexpected error occurred during analysis'}`);
   }
-}
-
-export async function getHistoricalAnalyses(userId: string, url: string) {
-  return prisma.analysis.findMany({
-    where: {
-      userId,
-      url
-    },
-    orderBy: {
-      createdAt: 'desc'
-    }
-  });
-}
-
-export async function compareCompetitors(urls: string[], userId: string) {
-  const analyses = await Promise.all(urls.map(url => analyzeLandingPage('url', url, userId)));
-  
-  const comparisonResult = {
-    urls,
-    results: analyses
-  };
-
-  await prisma.competitorComparison.create({
-    data: {
-      urls,
-      results: comparisonResult,
-      user: { connect: { id: userId } }
-    }
-  });
-
-  return comparisonResult;
 }
 
