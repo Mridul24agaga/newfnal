@@ -62,21 +62,23 @@ export default function ReportPage() {
           </section>
         </div>
 
+        
+
         {/* Submitted Websites Section */}
         <section className="bg-gray-50/80 border border-gray-200 rounded-lg p-6 mb-12">
           <h2 className="text-2xl font-bold mb-6">
             <span className="text-orange-500">Submitted</span> Websites
           </h2>
-          <p className="mb-6">Your startup has been submitted to 200+ websites. This extensive list covers a wide range of platforms, increasing your chances of visibility and success.</p>
+          <p className="mb-6">Your startup has been submitted to {websiteList.length} websites. This extensive list covers a wide range of platforms, increasing your chances of visibility and success.</p>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <div className="col-span-full bg-gray-50/80 border border-gray-200 rounded-lg p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div className="bg-gray-50/80 border border-gray-200 rounded-lg p-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-bold text-lg mb-2">Kenomont</h3>
+                  <h3 className="font-bold text-lg mb-2">SellerMate</h3>
                 </div>
                 <a 
-                  href="https://www.kenomont.com/"
+                  href="https://sellermate.ai/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-black"
@@ -92,86 +94,88 @@ export default function ReportPage() {
             <div className="col-span-full bg-gray-50/80 border border-gray-200 rounded-lg p-4">
               <h3 className="font-bold text-lg mb-4">Priority SEO Actions</h3>
               <p className="mb-4">Improvement suggestions for sections with a score below 100%</p>
-
-              <div className="space-y-6">
+              
+              <div className="space-y-4">
                 <div>
                   <h4 className="font-bold">Links & Navigation</h4>
                   <p className="text-sm text-gray-600">Score: 0/100</p>
-                  <p className="text-sm">There was an error checking the sitemap. Please ensure the domain is accessible and try again.</p>
+                  <p className="text-sm">Add more internal links to improve site structure and help search engines understand your content hierarchy.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Implement a clear internal linking strategy. Link related content, use descriptive anchor texts, and ensure a logical site structure.</p>
+                  </div>
                 </div>
-
+                
                 <div>
                   <h4 className="font-bold">Indexation & Robots.txt</h4>
                   <p className="text-sm text-gray-600">Score: 0/100</p>
                   <p className="text-sm">Consider adding hreflang tags if your content is available in multiple languages.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Implement hreflang tags in your HTML head or HTTP headers to specify language and regional URLs. This helps search engines serve the correct language version of your pages to users.</p>
+                  </div>
                 </div>
-
+                
                 <div>
                   <h4 className="font-bold">Content Structure & Accessibility</h4>
                   <p className="text-sm text-gray-600">Score: 0/100</p>
-                  <p className="text-sm">Improve your heading structure: Document doesn't start with an H1. Heading level skipped. "About us" should be H1 instead of H2. Heading level skipped. "At Kenomont Information Systems, we understand that business exists at the intersection of human and digital." should be H3 instead of H5. Heading level skipped. "Data Analytics" should be H4 instead of H5. Heading level skipped. "Transparent Communication" should be H3 instead of H5. Heading level skipped. "Data Analytics" should be H3 instead of H5. Heading level skipped. "Expertise and Experience" should be H3 instead of H5. Heading level skipped. "CRM Advantages: Boosting Your Business Growth" should be H3 instead of H5. Heading level skipped. "Contact Info" should be H3 instead of H4. No H1 heading found</p>
+                  <p className="text-sm">Improve your heading structure: Document doesn't start with an H1. Heading level skipped. "Supercharge Your Amazon PPC" should be H1 instead of H2. Heading level skipped. "Increase sales by allocating budget during the right times." should be H3 instead of H4. Heading level skipped. "COMPANY" should be H4 instead of H6. No H1 heading found.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Restructure your headings to follow a logical hierarchy. Start with an H1, followed by H2s, H3s, etc. Ensure each page has one H1 tag and maintain a consistent heading structure throughout.</p>
+                  </div>
                 </div>
-
-                <div>
-                  <h4 className="font-bold">Meta & SEO Tags</h4>
-                  <p className="text-sm text-gray-600">Score: 3/100</p>
-                  <p className="text-sm">Meta description is too short. Aim for 120-160 characters.</p>
-                </div>
-
-                <div>
-                  <h4 className="font-bold">Meta & SEO Tags</h4>
-                  <p className="text-sm text-gray-600">Score: 58/100</p>
-                  <p className="text-sm">Title is too short. Aim for 50-60 characters.</p>
-                </div>
-
+                
                 <div>
                   <h4 className="font-bold">Content Structure & Accessibility</h4>
-                  <p className="text-sm text-gray-600">Score: 62/100</p>
+                  <p className="text-sm text-gray-600">Score: 6/100</p>
                   <p className="text-sm">Add descriptive alt tags to images that are missing them to improve accessibility and SEO.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Review all images on your site and add descriptive, relevant alt text to each one. This improves accessibility for screen readers and helps search engines understand your content better.</p>
+                  </div>
                 </div>
-
+                
                 <div>
-                  <h4 className="font-bold">Links & Navigation</h4>
-                  <p className="text-sm text-gray-600">Score: 99/100</p>
-                  <p className="text-sm">Fix the broken links to ensure a smooth user experience and proper page indexing.</p>
+                  <h4 className="font-bold">Meta & SEO Tags</h4>
+                  <p className="text-sm text-gray-600">Score: 42/100</p>
+                  <p className="text-sm">Title is too short. Aim for 50-60 characters.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Expand your title tag to include more relevant keywords and make it more descriptive. A good title should be compelling and accurately represent the page content while staying within the 50-60 character limit.</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-bold">Indexation & Robots.txt</h4>
+                  <p className="text-sm text-gray-600">Score: 50/100</p>
+                  <p className="text-sm">The canonical URL differs from the current URL. Ensure this is intentional.</p>
+                  <div className="mt-2 bg-orange-100 border border-orange-300 rounded p-2">
+                    <p className="text-sm text-orange-800">Suggestion: Review your canonical tags. If the difference is unintentional, update the canonical URL to match the current URL. Canonical tags help prevent duplicate content issues by specifying the preferred version of a page.</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="col-span-full mt-6 bg-gray-50/80 border border-gray-200 rounded-lg p-6">
-              <h4 className="font-bold text-xl mb-4">SEO Improvement Suggestions</h4>
-              <p className="mb-4">Based on the analysis, here are the key areas to focus on and how to improve them:</p>
-              <ul className="list-disc list-inside space-y-2">
-                <li><strong>Multilingual SEO:</strong> If your content is available in multiple languages, implement hreflang tags. This helps search engines serve the correct language version to users.</li>
-                <li><strong>Image Optimization:</strong> Add descriptive alt tags to all images. This improves accessibility for screen readers and helps search engines understand the content of your images.</li>
-                <li><strong>Heading Structure:</strong> Revise your heading hierarchy to ensure it's logical and sequential. Use H1 for main titles, H2 for section headings, and H3 for subsections. Avoid skipping levels.</li>
-                <li><strong>Structured Data:</strong> Implement relevant schema markup (e.g., Organization, Product, FAQ) to enhance your search result appearance and potentially improve click-through rates.</li>
-                <li><strong>Meta Tags:</strong> Expand your title tag to 50-60 characters. Include your main keyword and make it compelling to improve click-through rates from search results.</li>
-              </ul>
-              <p className="mt-4">By addressing these areas, you can significantly improve your website's SEO performance, user experience, and visibility in search results.</p>
-            </div>
 
-            <div className="col-span-full mt-6 bg-orange-100 border-2 border-orange-500 rounded-lg p-6">
-              <h4 className="font-bold text-2xl text-orange-600 mb-4">Boost Your SEO with Our Blog Service</h4>
-              <p className="text-lg mb-4">Blogs are crucial for SEO success. They help you:</p>
-              <ul className="list-disc list-inside text-lg space-y-2 mb-6">
+            <div className="col-span-full mt-6 bg-orange-100 border border-orange-300 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <FiEdit className="text-orange-500" />
+                <h4 className="font-bold text-lg">Boost Your SEO with Our Blog Service</h4>
+              </div>
+              <p className="text-sm mb-2">
+                <strong>Blogs are crucial for SEO success.</strong> They help you:
+              </p>
+              <ul className="list-disc list-inside text-sm space-y-1 mb-4">
                 <li>Increase organic traffic</li>
                 <li>Improve search engine rankings</li>
                 <li>Establish your brand as an industry authority</li>
                 <li>Create opportunities for backlinks</li>
                 <li>Engage your audience and increase time on site</li>
               </ul>
-              <p className="text-xl font-bold mb-4">We offer a premium blog service to supercharge your SEO efforts:</p>
-              <ul className="list-none text-lg space-y-3 mb-6">
-                <li className="flex items-center"><span className="text-green-500 mr-2 text-2xl">✅</span> SEO-optimized blog posts tailored to your needs</li>
-                <li className="flex items-center"><span className="text-green-500 mr-2 text-2xl">✅</span> Customized content strategy aligned with your business goals</li>
-                <li className="flex items-center"><span className="text-green-500 mr-2 text-2xl">✅</span> Expert writers with industry knowledge</li>
-                <li className="flex items-center"><span className="text-green-500 mr-2 text-2xl">✅</span> Plans starting from just $14/month</li>
+              <p className="text-sm font-bold mb-2">We offer a premium blog service to supercharge your SEO efforts:</p>
+              <ul className="list-none text-sm space-y-1 mb-4">
+                <li>✅ SEO-optimized blog posts tailored to your needs</li>
+                <li>✅ Customized content strategy aligned with your business goals</li>
+                <li>✅ Expert writers with industry knowledge</li>
+                <li>✅ Plans starting from just $14/month</li>
               </ul>
-              <p className="text-xl font-bold">
-                Ready to elevate your SEO game? 
-                <a className='text-orange-600 hover:underline ml-2' href="https://twitter.com/KrissmannGupta" target="_blank" rel="noopener noreferrer">
-                  DM us on Twitter to get started!
-                </a>
+              <p className="text-sm font-bold">
+                Ready to elevate your SEO game? DM us on <a className='text-orange-600' href="https://x.com/KrissmannGupta">Twitter</a> to get started!
               </p>
             </div>
 
@@ -214,6 +218,7 @@ export default function ReportPage() {
           </div>
         </section>
 
+        {/* Paid Directories Section */}
         <section className="bg-gray-50/80 border border-gray-200 rounded-lg p-6 mb-12">
           <h2 className="text-2xl font-bold mb-6">
             <span className="text-orange-500">Paid</span> Directories
@@ -224,36 +229,15 @@ export default function ReportPage() {
             <div className="bg-white border border-gray-200 rounded-lg p-4">
               <h3 className="font-bold text-lg mb-2">Opentools</h3>
               <p className="text-sm text-gray-600 mb-2">Launch your product to a community of early adopters and tech enthusiasts.</p>
-              <a 
-                href="https://www.producthunt.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-orange-500 hover:underline"
-              >
-              </a>
             </div>
             <div className="bg-white border border-gray-200 rounded-lg p-4">
               <h3 className="font-bold text-lg mb-2">Killer Startups</h3>
-              <p className="text-sm text-gray-600 mb-2">Reach entrepreneurs and small business owners with lifetime deals.</p>
-              <a 
-                href="https://appsumo.com/partners/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-orange-500 hover:underline"
-              >
-              </a>
+              <p className="text-sm text-gray-600 mb-2">
+Reach entrepreneurs and small business owners with lifetime deals.</p>
             </div>
             <div className="bg-white border border-gray-200 rounded-lg p-4">
               <h3 className="font-bold text-lg mb-2">Futurepedia</h3>
               <p className="text-sm text-gray-600 mb-2">Get listed on the world's largest tech marketplace for business software.</p>
-              <a 
-                href="https://www.g2.com/products/new"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-orange-500 hover:underline"
-              >
-                Learn More
-              </a>
             </div>
           </div>
 
