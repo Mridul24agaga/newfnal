@@ -125,6 +125,14 @@ const blogPosts = [
     date: "December 3, 2024",
     slug: "why-saas-founders-cant-ignore-directory-listings-in-their-marketing-strategy",
     image: "/saas-marketing.webp"
+  },
+  {
+    id: 12,
+    title: "The Smart Startup's Guide: How Affiliate Programs and SEO Create Sustainable SaaS Growth",
+    excerpt: "Learn how directory listings can bolster visibility, SEO performance, and long-term growth for SaaS companies. Discover key benefits and implementation strategies.",
+    date: "January 9, 2025",
+    slug: "the-smart-startup-guide-how-affilate-programs-and-seo-create-sustainable-saas-growth",
+    image: "/blog1png.png"
   }
 ]
 
