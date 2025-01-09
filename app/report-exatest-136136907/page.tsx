@@ -76,7 +76,7 @@ export default function ReportPage() {
                   <h3 className="font-bold text-lg mb-2">Exatest</h3>
                 </div>
                 <a 
-                  href="https://mvpuc.com/"
+                  href="https://exatest.pages.dev/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-black"
