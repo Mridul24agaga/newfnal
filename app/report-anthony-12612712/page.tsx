@@ -76,7 +76,7 @@ export default function ReportPage() {
                   <h3 className="font-bold text-lg mb-2">Mass Invoices</h3>
                 </div>
                 <a 
-                  href="https://mvpuc.com/"
+                  href="https://massinvoices.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-black"
@@ -259,7 +259,18 @@ export default function ReportPage() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/mvp1.png" 
+                  src="/anthony1.png" 
+                  alt="Startupanz.com confirmation"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+            {/* Startupanz.com Card */}
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/anthony2.png" 
                   alt="Startupanz.com confirmation"
                   fill
                   className="object-contain"
