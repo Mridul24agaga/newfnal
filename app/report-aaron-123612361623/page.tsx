@@ -240,6 +240,7 @@ export default function ReportPage() {
                 rel="noopener noreferrer"
                 className="text-orange-500 hover:underline"
               >
+                Learn More
               </a>
             </div>
           </div>
@@ -254,8 +255,6 @@ export default function ReportPage() {
             </button>
           </div>
         </section>
-
-        
       </main>
 
       <Footer/>
