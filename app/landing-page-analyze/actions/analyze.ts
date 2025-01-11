@@ -57,9 +57,19 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
       }`
     })
 
-    const analysisResult: AnalysisResponse = JSON.parse(response.text)
+    let analysisResult: AnalysisResponse;
+
+    try {
+      // Remove Markdown code block syntax if present
+      const jsonString = response.text.replace(/^```json\n|\n```$/g, '').trim()
+      analysisResult = JSON.parse(jsonString)
+    } catch (parseError) {
+      console.error('Failed to parse OpenAI response:', response.text)
+      throw new Error('Invalid response format from OpenAI API')
+    }
     
     if (!Array.isArray(analysisResult.results)) {
+      console.error('Invalid analysis results format:', analysisResult)
       throw new Error('Invalid analysis results format')
     }
 
@@ -78,7 +88,12 @@ export async function analyzeLandingPage(inputType: 'url' | 'content', input: st
       }
     }
   } catch (error) {
-    throw new Error('Failed to analyze the landing page. Please try again.')
+    console.error('Error in analyzeLandingPage:', error)
+    if (error instanceof Error) {
+      throw new Error(`Failed to analyze the landing page: ${error.message}`)
+    } else {
+      throw new Error('Failed to analyze the landing page. Please try again.')
+    }
   }
 }
 

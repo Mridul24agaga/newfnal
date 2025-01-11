@@ -1,49 +1,51 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { User } from '@supabase/supabase-js'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { AnalyzerForm } from './analyzer-form'
-import Link from 'next/link'
-import Image from 'next/image'
-import { MobileNav } from './mobile-nav'
+import Sidebar from '@/app/components/Sidebar'
 import Footer from '../components/footer'
+import { Menu } from 'lucide-react'
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-mint-50">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 transition-all duration-300 bg-white shadow-sm">
-        <div className="container mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Image
-              src="/getmorepacklinks.png"
-              alt="Logo"
-              width={180}
-              height={40}
-              className="h-8 w-auto"
-            />
-            <div className="hidden md:flex items-center justify-center gap-4 sm:gap-8">
-              <Link href="/blogs" className="text-[15px] text-black transition-colors">
-                Blogs
-              </Link>
-              <Link href="/submit" className="text-[15px] text-black transition-colors">
-                Submit my Directory
-              </Link>
-              <Link
-                href="/#pricing-section"
-                className="px-6 py-2.5 bg-[#F97316] text-white text-[15px] rounded-full hover:bg-[#EA580C] transition-colors"
-              >
-                Submit my Product
-              </Link>
-            </div>
-            <MobileNav />
-          </div>
-        </div>
-      </nav>
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+  const supabase = createClientComponentClient()
 
-      <div className="container mx-auto min-h-[calc(10vh-73px)] flex items-center justify-center px-4">
-        <div className="w-full">
-          <AnalyzerForm />
-          <Footer/>
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+    }
+    getUser()
+  }, [supabase.auth])
+
+  return (
+    <div className="flex h-screen bg-[#FCFAFF]">
+      <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      
+      <main className="flex-1 overflow-auto">
+        <div className="container mx-auto min-h-[calc(100vh-73px)] flex flex-col">
+          <div className="flex justify-between items-center p-4 md:hidden">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 rounded-md hover:bg-gray-100"
+            >
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Open sidebar</span>
+            </button>
+          </div>
+          
+          <div className="flex-grow flex items-center justify-center px-4">
+            <div className="w-full max-w-md">
+              <AnalyzerForm />
+            </div>
+          </div>
+          
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }
 
