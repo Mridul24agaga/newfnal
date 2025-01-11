@@ -22,27 +22,28 @@ export default function Home() {
   }, [supabase.auth])
 
   return (
-    <div className="flex h-screen bg-[#FCFAFF]">
+    <div className="flex h-screen bg-[#FBFCFE]">
       <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       
       <main className="flex-1 overflow-auto">
-        <div className="container mx-auto min-h-[calc(100vh-73px)] flex flex-col">
+        <div className="min-h-screen flex flex-col">
           <div className="flex justify-between items-center p-4 md:hidden">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-md hover:bg-gray-100"
+              className="p-2 rounded-md hover:bg-white-100"
             >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Open sidebar</span>
             </button>
           </div>
           
-          <div className="flex-grow flex items-center justify-center px-4">
-            <div className="w-full max-w-md">
+          <div className="flex-grow flex items-center justify-center">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
               <AnalyzerForm />
             </div>
           </div>
           
+          <Footer />
         </div>
       </main>
     </div>
