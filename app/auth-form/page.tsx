@@ -18,13 +18,42 @@ export default function AuthForm() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        router.push('/dashboard')
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+          const isOnboarded = await checkOnboardingStatus(session.user.id)
+          if (isOnboarded) {
+            router.push('/dashboard')
+          } else {
+            router.push('/onboarding')
+          }
+        }
+      } catch (error) {
+        console.error('Error in checkUser:', error)
       }
     }
     checkUser()
   }, [router, supabase.auth])
+
+  const checkOnboardingStatus = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('onboarding_form')
+        .select('onboarded')
+        .eq('user_id', userId)
+        .single()
+
+      if (error) {
+        console.error('Error checking onboarding status:', error.message, error.details, error.hint)
+        return false
+      }
+
+      return data?.onboarded ?? false
+    } catch (error) {
+      console.error('Unexpected error in checkOnboardingStatus:', error)
+      return false
+    }
+  }
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,40 +61,32 @@ export default function AuthForm() {
       setLoading(true)
       setError(null)
       
+      let authResult;
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
+        authResult = await supabase.auth.signInWithPassword({
           email,
           password,
         })
-        if (error) throw error
       } else {
-        const { error } = await supabase.auth.signUp({
+        authResult = await supabase.auth.signUp({
           email,
           password,
         })
-        if (error) throw error
       }
-      router.push('/dashboard')
-    } catch (error: any) {
-      setError(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
 
-  const handleGoogleLogin = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
+      if (authResult.error) throw authResult.error
+
+      if (authResult.data.user) {
+        const isOnboarded = await checkOnboardingStatus(authResult.data.user.id)
+        if (isOnboarded) {
+          router.push('/dashboard')
+        } else {
+          router.push('/onboarding')
         }
-      })
-      if (error) throw error
+      }
     } catch (error: any) {
-      setError(error.message)
+      console.error('Error in handleAuth:', error)
+      setError(error.message || 'An unexpected error occurred')
     } finally {
       setLoading(false)
     }
@@ -165,8 +186,6 @@ export default function AuthForm() {
                   isLogin ? 'Log In' : 'Sign Up'
                 )}
               </button>
-
-              
             </form>
           </div>
 

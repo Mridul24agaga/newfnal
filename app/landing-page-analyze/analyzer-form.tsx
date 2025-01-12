@@ -8,6 +8,7 @@ import { LoadingAnimation } from './loading-animation'
 import { Results } from './results'
 import { AnalysisHeader } from './analysis-header'
 import { ArrowRight, Lock, Mail, Key, Eye, EyeOff } from 'lucide-react'
+import Link from 'next/link'
 
 export function AnalyzerForm() {
   const [input, setInput] = useState('')
@@ -141,19 +142,20 @@ export function AnalyzerForm() {
                 </p>
               </div>
               <div className="space-y-4">
-                <button
-                  onClick={handleSignIn}
+                <Link
+                  href="/auth-form"
                   className="w-full bg-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors flex items-center justify-center"
                 >
                   Sign In
                   <ArrowRight className="ml-2 w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => router.push('/signup')}
-                  className="w-full bg-white text-orange-500 px-6 py-3 rounded-lg font-medium border-2 border-orange-500 hover:bg-orange-50 transition-colors"
+                </Link>
+                <Link
+                  href="/auth-form"
+                  className="w-full bg-white text-orange-500 px-6 py-3 rounded-lg font-medium border-2 border-orange-500 hover:bg-orange-50 transition-colors flex items-center justify-center"
                 >
                   Create an Account
-                </button>
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Link>
               </div>
             </div>
           )}

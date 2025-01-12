@@ -2,12 +2,11 @@
 
 import { useState } from 'react'
 import { cn } from '@/app/lib/utils'
-import { toast } from 'react-hot-toast'
 
 const steps = [
   { name: 'Role', fields: ['role'] },
   { name: 'Company', fields: ['companyName', 'industry'] },
-  { name: 'Details', fields: ['name', 'email'] },
+  { name: 'Details', fields: ['name'] },
 ]
 
 const roles = [
@@ -37,7 +36,6 @@ type FormData = {
   companyName: string
   industry: string
   name: string
-  email: string
 }
 
 type OnboardingFormProps = {
@@ -52,10 +50,8 @@ export default function OnboardingForm({ onComplete, setCurrentStep }: Onboardin
     companyName: '',
     industry: '',
     name: '',
-    email: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -95,18 +91,11 @@ export default function OnboardingForm({ onComplete, setCurrentStep }: Onboardin
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    setError(null)
-    
     try {
-      // Simulate an API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      onComplete(formData)
-      toast.success('Onboarding completed successfully!')
+      await onComplete(formData)
     } catch (error) {
       console.error('Error submitting form:', error)
-      setError(error instanceof Error ? error.message : 'An unexpected error occurred')
-      toast.error('There was an error submitting the form. Please try again.')
+      // You might want to show an error message to the user here
     } finally {
       setIsSubmitting(false)
     }
@@ -214,28 +203,7 @@ export default function OnboardingForm({ onComplete, setCurrentStep }: Onboardin
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Work Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  required
-                />
-              </div>
             </div>
-          </div>
-        )}
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <strong className="font-bold">Error: </strong>
-            <span className="block sm:inline">{error}</span>
           </div>
         )}
 

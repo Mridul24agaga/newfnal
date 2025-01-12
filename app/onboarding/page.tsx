@@ -1,31 +1,89 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import OnboardingForm from './OnboardingForm'
 import Image from 'next/image'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function Onboarding() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
+  const [error, setError] = useState<string | null>(null)
+  const supabase = createClientComponentClient()
 
-  const handleOnboardingComplete = (formData: any) => {
-    // Store the onboarding data in localStorage
-    localStorage.setItem('onboardingData', JSON.stringify(formData))
-    localStorage.setItem('onboardingCompleted', 'true')
-    router.push('/dashboard')
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push('/auth')
+          return
+        }
+
+        const { data, error } = await supabase
+          .from('onboarding_form')
+          .select('onboarded')
+          .eq('email', user.email)
+          .single()
+
+        if (error) {
+          console.error('Error checking onboarding status:', error)
+          setError('Error checking onboarding status. Please try again.')
+          return
+        }
+
+        if (data && data.onboarded) {
+          router.push('/dashboard')
+        }
+      } catch (error) {
+        console.error('Unexpected error during onboarding check:', error)
+        setError('An unexpected error occurred. Please try again.')
+      }
+    }
+
+    checkOnboardingStatus()
+  }, [router, supabase])
+
+  const handleOnboardingComplete = async (formData: any) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('No user found')
+
+      const { error } = await supabase
+        .from('onboarding_form')
+        .upsert({
+          email: user.email,
+          role: formData.role,
+          company_name: formData.companyName,
+          industry: formData.industry,
+          name: formData.name,
+          onboarded: true
+        })
+
+      if (error) {
+        console.error('Error saving onboarding data:', error)
+        setError(`Error saving onboarding data: ${error.message}`)
+        return
+      }
+
+      router.push('/dashboard')
+    } catch (error: any) {
+      console.error('Error saving onboarding data:', error)
+      setError(`Error saving onboarding data: ${error.message || 'Unknown error'}`)
+    }
   }
 
   const getStepImage = () => {
     switch (currentStep) {
       case 0:
-        return "/role-image.svg"
+        return "/placeholder.svg?height=500&width=500"
       case 1:
-        return "/company-image.svg"
+        return "/placeholder.svg?height=500&width=500"
       case 2:
-        return "/details-image.svg"
+        return "/placeholder.svg?height=500&width=500"
       default:
-        return "/default-image.svg"
+        return "/placeholder.svg?height=500&width=500"
     }
   }
 
@@ -33,6 +91,11 @@ export default function Onboarding() {
     <div className="min-h-screen bg-white flex">
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-2xl">
+          {error && (
+            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
           <OnboardingForm onComplete={handleOnboardingComplete} setCurrentStep={setCurrentStep} />
         </div>
       </div>
