@@ -5,16 +5,20 @@ import { useRouter } from 'next/navigation'
 import OnboardingForm from './OnboardingForm'
 import Image from 'next/image'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Loader2 } from 'lucide-react'
 
 export default function Onboarding() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
     const checkOnboardingStatus = async () => {
       try {
+        setLoading(true)
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
           router.push('/auth')
@@ -35,10 +39,14 @@ export default function Onboarding() {
 
         if (data && data.onboarded) {
           router.push('/dashboard')
+        } else {
+          setShowForm(true)
         }
       } catch (error) {
         console.error('Unexpected error during onboarding check:', error)
         setError('An unexpected error occurred. Please try again.')
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -87,28 +95,40 @@ export default function Onboarding() {
     }
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-white flex">
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-2xl">
-          {error && (
-            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-              {error}
+      {showForm && (
+        <>
+          <div className="flex-1 flex items-center justify-center p-8">
+            <div className="w-full max-w-2xl">
+              {error && (
+                <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                  {error}
+                </div>
+              )}
+              <OnboardingForm onComplete={handleOnboardingComplete} setCurrentStep={setCurrentStep} />
             </div>
-          )}
-          <OnboardingForm onComplete={handleOnboardingComplete} setCurrentStep={setCurrentStep} />
-        </div>
-      </div>
-      <div className="hidden lg:flex lg:flex-1 relative bg-orange-50">
-        <Image
-          src={getStepImage()}
-          alt="Onboarding step illustration"
-          width={500}
-          height={500}
-          objectFit="contain"
-          className="p-12"
-        />
-      </div>
+          </div>
+          <div className="hidden lg:flex lg:flex-1 relative bg-orange-50">
+            <Image
+              src={getStepImage()}
+              alt="Onboarding step illustration"
+              width={500}
+              height={500}
+              objectFit="contain"
+              className="p-12"
+            />
+          </div>
+        </>
+      )}
     </div>
   )
 }
