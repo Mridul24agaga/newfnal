@@ -1,8 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { ArrowRight, CheckCircle, BarChart2, Globe, Calendar } from 'lucide-react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { ProgressCircle } from './progress-circle'
 
 type Category = 'Messaging' | 'Readability' | 'Structure' | 'Actionability' | 'Design' | 'Credibility'
 
@@ -25,127 +23,100 @@ interface ResultsProps {
   }
 }
 
-function ScoreBadge({ score }: { score: number }) {
-  const getColorClass = (score: number) => {
-    if (score >= 75) return 'bg-emerald-500'
-    if (score >= 60) return 'bg-orange-500'
-    return 'bg-rose-500'
-  }
-
-  return (
-    <div className={`${getColorClass(score)} text-white font-bold rounded-full w-12 h-12 flex items-center justify-center text-lg`}>
-      {score}
-    </div>
-  )
-}
-
 export function Results({ analysisData }: ResultsProps) {
-  const [user, setUser] = useState<any>(null)
-  const supabase = createClientComponentClient()
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-    }
-    getUser()
-  }, [supabase.auth])
-
   if (!analysisData?.results || !Array.isArray(analysisData.results)) {
     return null
   }
 
   const { results, metadata } = analysisData
 
-  const mainRecommendations = results.flatMap(result => 
-    result.recommendations.slice(0, 1)
-  ).slice(0, 3)
+  const getColorClass = (score: number) => {
+    if (score >= 75) return 'stroke-emerald-500'
+    if (score >= 60) return 'stroke-orange-500'
+    return 'stroke-rose-500'
+  }
+
+  const getScoreDescription = (score: number) => {
+    if (score >= 90) return 'Excellent'
+    if (score >= 75) return 'Good'
+    if (score >= 60) return 'Fair'
+    return 'Needs Improvement'
+  }
+
+  // Calculate overall summary
+  const summary = results.map(result => ({
+    category: result.category,
+    score: result.score,
+    color: getColorClass(result.score)
+  }))
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10">
-        <div className="mx-auto py-4 px-4">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Analysis Results</h1>
+    <div className="mt-8 space-y-8 bg-gray-50 p-6 rounded-lg">
+      <div className="border-b pb-6">
+        <h2 className="text-2xl font-bold mb-2">Landing Page Analysis</h2>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <span className="text-4xl font-bold">{metadata.score}</span>
+            <div className="text-sm text-gray-600">
+              <div>Overall Score</div>
+              <div>{getScoreDescription(metadata.score)}</div>
+            </div>
+          </div>
         </div>
-      </header>
+      </div>
 
-      <main className="container mx-auto px-4 py-6">
-        <div className="space-y-6">
-          <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 overflow-hidden">
-            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Overall Score</h2>
-            <div className="flex items-center justify-between">
-              <ScoreBadge score={metadata.score} />
-              <div className="text-right">
-                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{metadata.score}/100</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Overall Performance</p>
+      <div className="space-y-4">
+        <h3 className="text-xl font-bold">Category Breakdown:</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {summary.map(({ category, score, color }) => (
+            <ProgressCircle
+              key={category}
+              percentage={score}
+              label={category}
+              color={color}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        {results.map((result) => (
+          <div key={result.category} className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold">{result.category}</h3>
+              <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                result.score >= 75 ? 'bg-emerald-100 text-emerald-800' :
+                result.score >= 60 ? 'bg-orange-100 text-orange-800' :
+                'bg-rose-100 text-rose-800'
+              }`}>
+                Score: {result.score}
               </div>
             </div>
-          </section>
-
-          <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-            <h2 className="text-lg font-bold p-4 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700">Category Breakdown</h2>
-            {results.map((result, index) => (
-              <div key={result.category} className={`p-4 ${index !== results.length - 1 ? 'border-b border-gray-200 dark:border-gray-700' : ''}`}>
-                <div className="flex items-center space-x-3 mb-3">
-                  <ScoreBadge score={result.score} />
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{result.category}</h3>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{result.feedback}</p>
-                <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Recommendations:</h4>
-                <ul className="space-y-2">
-                  {result.recommendations.map((rec, recIndex) => (
-                    <li key={recIndex} className="flex items-start space-x-2">
-                      <ArrowRight className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-gray-600 dark:text-gray-300">{rec}</span>
+            <div className="prose prose-sm max-w-none">
+              <div className="mb-4">
+                <h4 className="font-semibold text-gray-900">Analysis:</h4>
+                <p className="text-gray-600">{result.feedback}</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900">Recommendations:</h4>
+                <ul className="list-none space-y-2 mt-2">
+                  {result.recommendations.map((rec, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="text-blue-500 mr-2">→</span>
+                      <span className="text-gray-600">{rec}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-            ))}
-          </section>
-
-          <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Key Recommendations</h2>
-            <ul className="space-y-3">
-              {mainRecommendations.map((rec, index) => (
-                <li key={index} className="flex items-start bg-blue-50 dark:bg-blue-900 p-3 rounded-lg">
-                  <CheckCircle className="h-5 w-5 mr-3 text-blue-500 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{rec}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Analysis Details</h2>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Globe className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">Analyzed URL</p>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{metadata.url}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Calendar className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">Analysis Date</p>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{new Date(metadata.date).toLocaleString()}</p>
-                </div>
-              </div>
             </div>
-          </section>
+          </div>
+        ))}
+      </div>
 
-          {metadata.screenshot && (
-            <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-              <h2 className="text-lg font-bold p-4 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700">Page Screenshot</h2>
-              <div className="aspect-w-16 aspect-h-9">
-                <img src={metadata.screenshot} alt="Analyzed page screenshot" className="object-cover w-full h-full" />
-              </div>
-            </section>
-          )}
-        </div>
-      </main>
+      <div className="mt-8 text-sm text-gray-500">
+        <div>Website: {metadata.url}</div>
+        <div>Generated on: {new Date(metadata.date).toLocaleString()}</div>
+      </div>
     </div>
   )
 }

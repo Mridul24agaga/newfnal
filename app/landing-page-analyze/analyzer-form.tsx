@@ -3,18 +3,14 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { analyzeLandingPage } from './actions/analyze'
-import { LoadingAnimation } from './loading-animation'
+import { analyzeLandingPage } from '@/app/landing-page-analyze/actions/analyze'
 import { Results } from './results'
 import { AnalysisHeader } from './analysis-header'
-import { ArrowRight, Lock, Mail, Key, Eye, EyeOff } from 'lucide-react'
+import { ArrowRight, Lock, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
 export function AnalyzerForm() {
-  const [input, setInput] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
+  const [url, setUrl] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [analysisData, setAnalysisData] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
@@ -33,14 +29,30 @@ export function AnalyzerForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
     if (!user) {
       setError('Please sign in to use the analyzer.')
       return
     }
+
+    if (!url) {
+      setError('Please enter a valid URL')
+      return
+    }
+
+    try {
+      // Validate URL format
+      new URL(url)
+    } catch {
+      setError('Please enter a valid URL (e.g., https://example.com)')
+      return
+    }
+
     setIsLoading(true)
     setError(null)
+
     try {
-      const data = await analyzeLandingPage('url', input, user.id)
+      const data = await analyzeLandingPage(url)
       setAnalysisData(data)
     } catch (error) {
       console.error('Error analyzing landing page:', error)
@@ -48,29 +60,6 @@ export function AnalyzerForm() {
         setError(error.message)
       } else {
         setError('An unexpected error occurred')
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError(null)
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-      if (error) throw error
-      router.refresh()
-    } catch (error) {
-      console.error('Error signing in:', error)
-      if (error instanceof Error) {
-        setError(error.message)
-      } else {
-        setError('An unexpected error occurred during sign in')
       }
     } finally {
       setIsLoading(false)
@@ -116,18 +105,26 @@ export function AnalyzerForm() {
                   id="url"
                   type="url"
                   placeholder="https://your-website.com/"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
                   required
+                  pattern="https?://.*"
                   className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 disabled:bg-orange-300 transition-colors"
+                className="w-full bg-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 disabled:bg-orange-300 transition-colors flex items-center justify-center"
               >
-                {isLoading ? 'Analyzing...' : 'Analyze Now'}
+                {isLoading ? (
+                  <>
+                    <Loader2 className="animate-spin -ml-1 mr-2 h-5 w-5" />
+                    Analyzing...
+                  </>
+                ) : (
+                  'Analyze Now'
+                )}
               </button>
             </form>
           ) : (
@@ -163,7 +160,10 @@ export function AnalyzerForm() {
 
         {isLoading && (
           <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
-            <LoadingAnimation />
+            <div className="flex items-center space-x-2">
+              <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+              <span className="text-lg font-medium text-gray-900">Analyzing your landing page...</span>
+            </div>
           </div>
         )}
 

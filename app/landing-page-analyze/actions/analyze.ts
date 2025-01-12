@@ -1,99 +1,168 @@
 'use server'
 
-import { openai } from '@ai-sdk/openai'
-import { generateText } from 'ai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
+import { load } from 'cheerio'
 
-interface AnalysisResult {
-  category: string;
-  score: number;
-  feedback: string;
-  recommendations: string[];
-}
+// Initialize Gemini API
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
-interface AnalysisResponse {
-  results: AnalysisResult[];
-  contentSuggestion: string;
-}
-
-export async function analyzeLandingPage(inputType: 'url' | 'content', input: string, userId: string) {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error('OpenAI API key is not configured')
+function extractImportantContent(html: string): string {
+  const $ = load(html)
+  let content = {
+    title: $('title').text(),
+    description: $('meta[name="description"]').attr('content') || '',
+    headings: [] as string[],
+    mainContent: [] as string[],
+    buttons: [] as string[],
+    navigation: [] as string[],
   }
 
-  let content = input
+  // Extract headings
+  $('h1, h2, h3').each((_, el) => {
+    content.headings.push($(el).text().trim())
+  })
+
+  // Extract main content paragraphs
+  $('p').each((_, el) => {
+    const text = $(el).text().trim()
+    if (text.length > 20) {
+      content.mainContent.push(text)
+    }
+  })
+
+  // Extract button text
+  $('button, a.button, .btn, [role="button"]').each((_, el) => {
+    content.buttons.push($(el).text().trim())
+  })
+
+  // Extract navigation items
+  $('nav a, header a').each((_, el) => {
+    content.navigation.push($(el).text().trim())
+  })
+
+  return JSON.stringify(content, null, 2)
+}
+
+function cleanJsonString(str: string): string {
+  // Remove any markdown code block syntax
+  str = str.replace(/```json\n?|\n?```/g, '')
   
-  if (inputType === 'url') {
-    try {
-      const response = await fetch(input)
+  // Remove any potential line breaks within the JSON
+  str = str.replace(/\n/g, ' ')
+  
+  // Fix common JSON formatting issues
+  str = str.replace(/,\s*}/g, '}') // Remove trailing commas
+  str = str.replace(/,\s*]/g, ']') // Remove trailing commas in arrays
+  
+  // Ensure proper quote usage
+  str = str.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?\s*:/g, '"$2": ')
+  
+  return str.trim()
+}
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch URL (${response.status} ${response.statusText})`)
-      }
-
-      content = await response.text()
-    } catch (error) {
-      throw new Error(`Unable to access the URL. Please verify the URL is correct and publicly accessible.`)
-    }
-  }
-
+export async function analyzeLandingPage(url: string) {
   try {
-    const response = await generateText({
-      model: openai('gpt-4o'),
-      prompt: `Analyze this landing page content and provide scores (0-100) and feedback:
-      
-      ${content.substring(0, 8000)}
-      
-      Format the response as JSON with this structure:
-      {
-        "results": [
-          {
-            "category": "Category Name",
-            "score": 0,
-            "feedback": "Analysis details",
-            "recommendations": ["Recommendation 1", "Recommendation 2"]
-          }
-        ],
-        "contentSuggestion": "Overall suggestion"
-      }`
-    })
+    // Fetch the content of the URL
+    const pageResponse = await fetch(url)
+    const html = await pageResponse.text()
 
-    let analysisResult: AnalysisResponse;
+    // Extract important content
+    const content = extractImportantContent(html)
 
-    try {
-      // Remove Markdown code block syntax if present
-      const jsonString = response.text.replace(/^```json\n|\n```$/g, '').trim()
-      analysisResult = JSON.parse(jsonString)
-    } catch (parseError) {
-      console.error('Failed to parse OpenAI response:', response.text)
-      throw new Error('Invalid response format from OpenAI API')
+    // Initialize Gemini Pro model
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+
+    const prompt = `As an expert web analyst, analyze this landing page content and provide feedback.
+Return ONLY a valid JSON object with exactly this structure (no additional text or formatting):
+{
+  "Messaging": {
+    "score": <number between 0-100>,
+    "feedback": "<single string with analysis>",
+    "recommendations": ["<recommendation 1>", "<recommendation 2>"]
+  },
+  "Readability": {
+    "score": <number between 0-100>,
+    "feedback": "<single string with analysis>",
+    "recommendations": ["<recommendation 1>", "<recommendation 2>"]
+  },
+  "Structure": {
+    "score": <number between 0-100>,
+    "feedback": "<single string with analysis>",
+    "recommendations": ["<recommendation 1>", "<recommendation 2>"]
+  },
+  "Actionability": {
+    "score": <number between 0-100>,
+    "feedback": "<single string with analysis>",
+    "recommendations": ["<recommendation 1>", "<recommendation 2>"]
+  },
+  "Design": {
+    "score": <number between 0-100>,
+    "feedback": "<single string with analysis>",
+    "recommendations": ["<recommendation 1>", "<recommendation 2>"]
+  },
+  "Credibility": {
+    "score": <number between 0-100>,
+    "feedback": "<single string with analysis>",
+    "recommendations": ["<recommendation 1>", "<recommendation 2>"]
+  }
+}
+
+Analyze this content: ${content}`
+
+    // Generate content with Gemini
+    const result = await model.generateContent(prompt)
+    const generatedText = await result.response.text()
+
+    if (!generatedText) {
+      throw new Error('Failed to generate analysis')
     }
+
+    // Clean and parse the JSON response
+    const cleanedJson = cleanJsonString(generatedText)
     
-    if (!Array.isArray(analysisResult.results)) {
-      console.error('Invalid analysis results format:', analysisResult)
-      throw new Error('Invalid analysis results format')
+    let parsedAnalysis: any
+    try {
+      parsedAnalysis = JSON.parse(cleanedJson)
+    } catch (parseError) {
+      console.error('JSON Parse Error:', parseError)
+      console.error('Generated Text:', generatedText)
+      console.error('Cleaned JSON:', cleanedJson)
+      throw new Error('Failed to parse analysis results. Invalid JSON format received.')
     }
 
-    const overallScore = Math.round(
-      analysisResult.results.reduce((sum: number, item: AnalysisResult) => sum + item.score, 0) / 
-      analysisResult.results.length
-    )
-
-    return {
-      results: analysisResult.results,
-      contentSuggestion: analysisResult.contentSuggestion,
-      metadata: {
-        url: inputType === 'url' ? input : null,
-        score: overallScore,
-        date: new Date().toISOString()
+    // Validate the parsed analysis structure
+    const requiredCategories = ['Messaging', 'Readability', 'Structure', 'Actionability', 'Design', 'Credibility']
+    for (const category of requiredCategories) {
+      if (!parsedAnalysis[category] || 
+          typeof parsedAnalysis[category].score !== 'number' ||
+          typeof parsedAnalysis[category].feedback !== 'string' ||
+          !Array.isArray(parsedAnalysis[category].recommendations)) {
+        throw new Error(`Invalid analysis format: Missing or invalid ${category} category`)
       }
     }
-  } catch (error) {
-    console.error('Error in analyzeLandingPage:', error)
-    if (error instanceof Error) {
-      throw new Error(`Failed to analyze the landing page: ${error.message}`)
-    } else {
-      throw new Error('Failed to analyze the landing page. Please try again.')
+
+    const results = Object.entries(parsedAnalysis).map(([category, data]: [string, any]) => ({
+      category,
+      score: Math.min(100, Math.max(0, Math.round(data.score))), // Ensure score is between 0-100
+      feedback: data.feedback,
+      recommendations: data.recommendations,
+    }))
+
+    const overallScore = Math.round(results.reduce((sum, result) => sum + result.score, 0) / results.length)
+
+    const analysisData = {
+      results,
+      metadata: {
+        url,
+        score: overallScore,
+        date: new Date().toISOString(),
+      },
     }
+
+    return analysisData
+  } catch (error) {
+    console.error('Error in analysis:', error)
+    throw new Error('An error occurred during analysis: ' + (error as Error).message)
   }
 }
 
