@@ -65,8 +65,8 @@ export default function Sidebar({ user, sidebarOpen, setSidebarOpen }: SidebarPr
             <a href="/landing-page-analyze" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
               Landing Page Analyze
             </a>
-            <a href="/directory" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
-              Backlink Directory
+            <a href="/hire-an-seo-expert" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
+              Hire an SEO Expert
             </a>
           </div>
 

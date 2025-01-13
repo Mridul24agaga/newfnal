@@ -585,26 +585,6 @@ export default function BacklinkDirectory() {
                             {backlink.da}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <div className="flex items-center justify-end space-x-2">
-                            <a
-                              href={backlink.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-orange-600 hover:text-orange-900 flex items-center"
-                            >
-                              Submit Now
-                              <ExternalLink className="ml-1 h-4 w-4" />
-                            </a>
-                            <button
-                              onClick={() => handleAutoSubmit(backlink.website)}
-                              className="text-blue-600 hover:text-blue-900 flex items-center"
-                            >
-                              Auto Submit
-                              <ExternalLink className="ml-1 h-4 w-4" />
-                            </button>
-                          </div>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
