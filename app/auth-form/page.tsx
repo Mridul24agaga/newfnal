@@ -40,7 +40,7 @@ export default function AuthForm() {
       const { data, error } = await supabase
         .from('onboarding_form')
         .select('onboarded')
-        .eq('user_id', userId)
+        .eq('email', userId)
         .single()
 
       if (error) {

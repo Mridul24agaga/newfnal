@@ -31,7 +31,7 @@ export default function Onboarding() {
           .eq('email', user.email)
           .single()
 
-        if (error) {
+        if (error && error.code !== 'PGRST116') {
           console.error('Error checking onboarding status:', error)
           setError('Error checking onboarding status. Please try again.')
           return
@@ -55,6 +55,9 @@ export default function Onboarding() {
 
   const handleOnboardingComplete = async (formData: any) => {
     try {
+      setLoading(true)
+      setError(null)
+
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('No user found')
 
@@ -79,6 +82,8 @@ export default function Onboarding() {
     } catch (error: any) {
       console.error('Error saving onboarding data:', error)
       setError(`Error saving onboarding data: ${error.message || 'Unknown error'}`)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -105,7 +110,11 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen bg-white flex">
-      {showForm && (
+      {loading ? (
+        <div className="w-full flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+        </div>
+      ) : showForm ? (
         <>
           <div className="flex-1 flex items-center justify-center p-8">
             <div className="w-full max-w-2xl">
@@ -128,7 +137,7 @@ export default function Onboarding() {
             />
           </div>
         </>
-      )}
+      ) : null}
     </div>
   )
 }

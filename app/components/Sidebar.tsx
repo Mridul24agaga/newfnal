@@ -2,9 +2,10 @@
 
 import { User } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
-import { X, Home, BarChart2, Users, Mail, Settings, Building2, CreditCard, Coins, ChevronUp, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { X, Home, BarChart2, Users, Bell, Coins, ChevronUp, ChevronDown } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import LogoutButton from './LogoutButton'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 type SidebarProps = {
   user: User | null
@@ -14,10 +15,50 @@ type SidebarProps = {
 
 export default function Sidebar({ user, sidebarOpen, setSidebarOpen }: SidebarProps) {
   const [showDropdown, setShowDropdown] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
+  const supabase = createClientComponentClient()
+
+  useEffect(() => {
+    fetchUnreadNotifications()
+    const channel = supabase
+      .channel('onboarding_form_changes')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'onboarding_form' }, handleNotificationUpdate)
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
+
+  async function fetchUnreadNotifications() {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return
+
+      const { data, error } = await supabase
+        .from('onboarding_form')
+        .select('notifications')
+        .eq('email', session.user.email)
+        .single()
+
+      if (error) throw error
+
+      const unreadNotifications = data?.notifications?.filter((n: any) => !n.read) || []
+      setUnreadCount(unreadNotifications.length)
+    } catch (error) {
+      console.error('Error fetching unread notifications:', error)
+    }
+  }
+
+  function handleNotificationUpdate(payload: any) {
+    if (payload.new && payload.new.notifications) {
+      const unreadNotifications = payload.new.notifications.filter((n: any) => !n.read)
+      setUnreadCount(unreadNotifications.length)
+    }
+  }
 
   return (
     <>
-      {/* Backdrop */}
       {sidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-20 md:hidden" 
@@ -25,9 +66,8 @@ export default function Sidebar({ user, sidebarOpen, setSidebarOpen }: SidebarPr
         />
       )}
       
-      {/* Sidebar */}
       <div 
-        className={`fixed inset-y-0 left-0 z-30 flex w-72 flex-col bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-30 flex w-72 flex-col bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 shadow-lg ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -47,7 +87,6 @@ export default function Sidebar({ user, sidebarOpen, setSidebarOpen }: SidebarPr
           </button>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-4">
           <a href="/dashboard" className="flex items-center px-3 py-2.5 text-sm font-medium rounded-md bg-orange-50 text-orange-600">
             <Home className="mr-3 h-5 w-5" />
@@ -65,38 +104,33 @@ export default function Sidebar({ user, sidebarOpen, setSidebarOpen }: SidebarPr
             <a href="/landing-page-analyze" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
               Landing Page Analyze
             </a>
-            <a href="/hire-an-seo-expert" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
-              Hire an SEO Expert
+            <a href="/open-graph-validator" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
+              Open Graph Validator
+            </a>
+            <a href="/meta-description-generator" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
+              Meta Description Generator
+            </a>
+            <a href="/seo-audit-website" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
+              SEO Audit Website
             </a>
           </div>
 
-          <a href="/contacts" className="flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50">
+          <a href="/hire-an-seo-expert" className="flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50">
             <Users className="mr-3 h-5 w-5" />
-            Contacts
+            Hire an SEO Expert
           </a>
 
-          <a href="/email" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
-            <Mail className="mr-3 h-5 w-5" />
-            Email Accounts
-          </a>
-
-          <a href="/settings" className="flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50">
-            <Settings className="mr-3 h-5 w-5" />
-            Settings
-          </a>
-
-          <a href="/organization" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
-            <Building2 className="mr-3 h-5 w-5" />
-            Organization
-          </a>
-
-          <a href="/billing" className="flex items-center px-3 py-2.5 text-sm font-medium pl-11 rounded-md text-gray-600 hover:bg-gray-50">
-            <CreditCard className="mr-3 h-5 w-5" />
-            Billing
+          <a href="/notifications" className="flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50">
+            <Bell className="mr-3 h-5 w-5" />
+            Notifications
+            {unreadCount > 0 && (
+              <span className="ml-auto bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                {unreadCount}
+              </span>
+            )}
           </a>
         </nav>
 
-        {/* Credits Section */}
         <div className="border-t border-gray-200 p-4">
           <div className="mb-4">
             <div className="flex items-center px-3 py-2">
@@ -111,7 +145,6 @@ export default function Sidebar({ user, sidebarOpen, setSidebarOpen }: SidebarPr
             </button>
           </div>
 
-          {/* User Profile */}
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}

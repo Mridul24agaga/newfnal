@@ -228,7 +228,7 @@ export default function SEOExpert() {
                     className="rounded-2xl overflow-hidden shadow-lg md:order-2 hover:scale-105 transition-transform duration-200"
                   >
                     <Image
-                      src="/placeholder.svg?height=400&width=600"
+                      src="/seo.webp"
                       alt="SEO Growth Graph"
                       width={600}
                       height={400}

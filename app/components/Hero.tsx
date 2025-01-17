@@ -103,7 +103,7 @@ export default function Hero() {
               <div className="relative">
                 <div className="absolute -right-2 -top-2 sm:-right-4 sm:-top-4">
                   <Image
-                    src="/placeholder.svg?height=50&width=50"
+                    src="/wand.webp"
                     alt="Cursor icon"
                     width={50}
                     height={50}
@@ -112,7 +112,7 @@ export default function Hero() {
                 </div>
                 <div className="border border-gray-200 rounded-lg overflow-hidden">
                   <Image
-                    src="/chart.webp"
+                    src="/chart.png"
                     alt="Backlinks Growth Graph"
                     width={800}
                     height={400}
