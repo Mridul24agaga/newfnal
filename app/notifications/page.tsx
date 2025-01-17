@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import Sidebar from '../components/Sidebar'
-import { Bell, CheckCircle } from 'lucide-react'
+import { Bell, CheckCircle, Lock, ArrowRight, Loader2 } from 'lucide-react'
 import { User } from '@supabase/auth-helpers-nextjs'
+import Link from 'next/link'
 
 interface Notification {
   id: string
@@ -22,21 +23,27 @@ export default function NotificationPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [user, setUser] = useState<User | null>(null)
+  const [isAuthChecking, setIsAuthChecking] = useState(true)
   const supabase = createClientComponentClient()
   const router = useRouter()
 
   useEffect(() => {
     fetchUser()
-    fetchNotifications()
-    const channel = supabase
-      .channel('onboarding_form_changes')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'onboarding_form' }, handleNotificationUpdate)
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
   }, [])
+
+  useEffect(() => {
+    if (user) {
+      fetchNotifications()
+      const channel = supabase
+        .channel('onboarding_form_changes')
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'onboarding_form' }, handleNotificationUpdate)
+        .subscribe()
+
+      return () => {
+        supabase.removeChannel(channel)
+      }
+    }
+  }, [user])
 
   async function fetchUser() {
     try {
@@ -44,6 +51,8 @@ export default function NotificationPage() {
       setUser(user)
     } catch (error) {
       console.error('Error fetching user:', error)
+    } finally {
+      setIsAuthChecking(false)
     }
   }
 
@@ -133,6 +142,46 @@ export default function NotificationPage() {
   )
 
   const Content = () => {
+    if (isAuthChecking) {
+      return (
+        <div className="flex justify-center items-center h-full">
+          <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+        </div>
+      )
+    }
+
+    if (!user) {
+      return (
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 space-y-6">
+          <div className="text-center">
+            <div className="bg-orange-100 rounded-full w-20 h-20 mx-auto flex items-center justify-center mb-4">
+              <Lock className="w-10 h-10 text-orange-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Sign In Required</h2>
+            <p className="text-gray-600 mb-4">
+              To view your notifications, please sign in or create an account. It's quick, easy, and free!
+            </p>
+          </div>
+          <div className="space-y-4">
+            <Link
+              href="/auth-form"
+              className="w-full bg-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors flex items-center justify-center"
+            >
+              Sign In
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
+            <Link
+              href="/auth-form"
+              className="w-full bg-white text-orange-500 px-6 py-3 rounded-lg font-medium border-2 border-orange-500 hover:bg-orange-50 transition-colors flex items-center justify-center"
+            >
+              Create an Account
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      )
+    }
+
     if (loading) return (
       <div className="flex items-center justify-center h-full">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>

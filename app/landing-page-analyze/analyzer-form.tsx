@@ -15,14 +15,21 @@ export function AnalyzerForm() {
   const [analysisData, setAnalysisData] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<any>(null)
+  const [isAuthChecking, setIsAuthChecking] = useState(true)
 
   const router = useRouter()
   const supabase = createClientComponentClient()
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        setUser(user)
+      } catch (error) {
+        console.error('Error fetching user:', error)
+      } finally {
+        setIsAuthChecking(false)
+      }
     }
     getUser()
   }, [supabase.auth])
@@ -95,7 +102,11 @@ export function AnalyzerForm() {
 
       <div className="w-full max-w-md mx-auto">
         <div className="bg-white rounded-xl border-2 border-orange-200 p-8">
-          {user ? (
+          {isAuthChecking ? (
+            <div className="flex justify-center items-center h-40">
+              <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+            </div>
+          ) : user ? (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="url" className="block text-sm font-medium text-gray-700">

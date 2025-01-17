@@ -1,19 +1,22 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { AnalysisResult } from '@/app/types/seo'
-import Sidebar from '@/app/components/Sidebar'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { User } from '@supabase/auth-helpers-nextjs'
-import { Search, ArrowRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Menu, Search, ArrowRight, CheckCircle } from 'lucide-react'
+import Image from 'next/image'
+import Sidebar from '@/app/components/Sidebar'
+import { AnalysisResult } from '@/app/types/seo'
 
 export default function SEOOptimizer() {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
   const [url, setUrl] = useState('')
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
+  const router = useRouter()
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -23,6 +26,11 @@ export default function SEOOptimizer() {
     }
     getUser()
   }, [supabase.auth])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/auth-form')
+  }
 
   const handleAnalyze = async () => {
     setLoading(true)
@@ -48,41 +56,212 @@ export default function SEOOptimizer() {
   return (
     <div className="flex h-screen bg-[#FBFCFE]">
       <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="flex-1 overflow-hidden">
-        <main className="h-full overflow-y-auto p-8">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold mb-8 text-gray-900">SEO Optimizer</h1>
-            <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-              <div className="flex space-x-2 mb-4">
-                <div className="relative flex-grow">
-                  <input
-                    type="text"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="Enter website URL"
-                    className="w-full p-3 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <header className="bg-white border-b border-gray-200 md:hidden">
+          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div className="w-8" /> {/* Spacer for centering */}
+            <h1 className="text-xl font-bold text-center text-gray-900">SEO Website Auditor</h1>
+            <button 
+              onClick={() => setSidebarOpen(true)} 
+              className="p-2 rounded-md hover:bg-gray-100"
+            >
+              <Menu className="h-6 w-6 text-gray-500" />
+              <span className="sr-only">Open sidebar</span>
+            </button>
+          </div>
+        </header>
+
+        <main className="flex-1 overflow-x-hidden overflow-y-auto">
+          <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                SEO Website Auditor
+              </h1>
+              <p className="mt-4 text-lg text-gray-600">
+                Generate, analyze, and validate URLs to enhance your website's visibility and SEO performance.
+              </p>
+            </div>
+
+            <div className="mt-10">
+              <div className="rounded-lg bg-white shadow-sm border border-gray-200 p-6">
+                <div className="space-y-6">
+                  <div>
+                    <label htmlFor="url" className="sr-only">
+                      Website URL
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="url"
+                        id="url"
+                        name="url"
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        placeholder="Enter your website URL"
+                        className="block w-full rounded-lg border border-gray-300 py-4 pl-4 pr-12 text-gray-900 placeholder:text-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                        <Search className="h-5 w-5 text-gray-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleAnalyze}
+                    disabled={loading || !url}
+                    className="w-full rounded-lg bg-orange-500 px-4 py-4 text-base font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500/20 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {loading ? 'Analyzing...' : 'Analyze Website'}
+                  </button>
                 </div>
-                <button
-                  onClick={handleAnalyze}
-                  disabled={loading}
-                  className="px-6 py-3 bg-orange-500 text-white rounded-lg disabled:bg-gray-400 hover:bg-orange-600 transition-colors flex items-center"
-                >
-                  {loading ? 'Analyzing...' : 'Analyze'}
-                  {!loading && <ArrowRight className="ml-2" size={18} />}
-                </button>
+
+                {error && (
+                  <div className="mt-4 p-4 rounded-lg bg-red-50 text-red-700 text-sm">
+                    {error}
+                  </div>
+                )}
               </div>
 
-              {error && (
-                <div className="text-red-500 mb-4 p-3 bg-red-100 rounded-lg">
-                  {error}
+              <div className="mt-8 space-y-8">
+                <div className="rounded-lg bg-white border border-gray-200 p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">About Our SEO Audit Tool</h2>
+                  <p className="text-gray-700 mb-4">
+                    Our SEO Website Auditor is a comprehensive tool designed to analyze and improve your website's search engine optimization. It provides in-depth insights and actionable recommendations to boost your site's visibility and performance in search results.
+                  </p>
+                  <Image
+                    src="/placeholder.svg?height=300&width=600"
+                    alt="SEO Audit Tool Dashboard"
+                    width={600}
+                    height={300}
+                    className="rounded-lg w-full mb-4"
+                  />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Key Features:</h3>
+                  <ul className="list-disc pl-5 text-gray-600 space-y-2 mb-4">
+                    <li>In-depth analysis of on-page SEO elements</li>
+                    <li>Technical SEO audit including HTTPS, mobile responsiveness, and more</li>
+                    <li>Image optimization check</li>
+                    <li>Content quality analysis</li>
+                    <li>Structured data implementation review</li>
+                    <li>Competitive analysis</li>
+                    <li>Prioritized recommendations for improvement</li>
+                  </ul>
                 </div>
-              )}
+
+                <div className="rounded-lg bg-white border border-gray-200 p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">How to Use the SEO Audit Tool</h2>
+                  <ol className="list-decimal pl-5 text-gray-700 space-y-4 mb-4">
+                    <li>
+                      <strong>Enter Your URL:</strong> Type or paste your website's URL into the input field above.
+                      <Image
+                        src="/placeholder.svg?height=100&width=600"
+                        alt="URL Input Field"
+                        width={600}
+                        height={100}
+                        className="rounded-lg w-full my-2"
+                      />
+                    </li>
+                    <li>
+                      <strong>Initiate Analysis:</strong> Click the "Analyze Website" button to start the comprehensive SEO audit.
+                    </li>
+                    <li>
+                      <strong>Review Results:</strong> Once the analysis is complete, you'll see a detailed report covering various aspects of your website's SEO.
+                      <Image
+                        src="/placeholder.svg?height=300&width=600"
+                        alt="SEO Analysis Results"
+                        width={600}
+                        height={300}
+                        className="rounded-lg w-full my-2"
+                      />
+                    </li>
+                    <li>
+                      <strong>Implement Recommendations:</strong> Focus on the high-priority items first, then work your way through medium and low-priority suggestions.
+                    </li>
+                    <li>
+                      <strong>Re-analyze:</strong> After making improvements, run the audit again to track your progress and identify any new opportunities.
+                    </li>
+                  </ol>
+                </div>
+
+                <div className="rounded-lg bg-white border border-gray-200 p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Understanding Your SEO Audit Results</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">On-Page SEO</h3>
+                      <p className="text-gray-700 mb-2">
+                        This section evaluates your page titles, meta descriptions, headings, and content structure. It provides scores and suggestions for improvement.
+                      </p>
+                      <Image
+                        src="/placeholder.svg?height=200&width=600"
+                        alt="On-Page SEO Analysis"
+                        width={600}
+                        height={200}
+                        className="rounded-lg w-full"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Technical SEO</h3>
+                      <p className="text-gray-700 mb-2">
+                        This covers aspects like HTTPS implementation, mobile responsiveness, canonical URLs, and robots.txt configuration.
+                      </p>
+                      <Image
+                        src="/placeholder.svg?height=200&width=600"
+                        alt="Technical SEO Analysis"
+                        width={600}
+                        height={200}
+                        className="rounded-lg w-full"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">Content and Image Analysis</h3>
+                      <p className="text-gray-700 mb-2">
+                        Get insights into your content quality, word count, image optimization, and structured data implementation.
+                      </p>
+                      <Image
+                        src="/placeholder.svg?height=200&width=600"
+                        alt="Content and Image Analysis"
+                        width={600}
+                        height={200}
+                        className="rounded-lg w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-lg bg-orange-50 border border-orange-200 p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Pro Tips for SEO Success</h2>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
+                      <span className="text-gray-700">Conduct regular audits to stay on top of SEO trends and algorithm updates.</span>
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
+                      <span className="text-gray-700">Focus on creating high-quality, original content that provides value to your users.</span>
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
+                      <span className="text-gray-700">Optimize your website for mobile devices to improve user experience and search rankings.</span>
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
+                      <span className="text-gray-700">Build high-quality backlinks from reputable websites in your industry.</span>
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
+                      <span className="text-gray-700">Use our SEO Audit Tool in conjunction with other SEO strategies for best results.</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <p className="mt-8 text-center text-sm text-gray-600">
+                This professional-grade tool is provided free of charge. If you find it valuable, consider sharing it with your network!
+              </p>
             </div>
 
             {analysis && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="mt-12 grid gap-6 md:grid-cols-2">
                 {analysis.onPageSEO && (
                   <div className="bg-white shadow-md rounded-lg p-6">
                     <h2 className="text-xl font-bold mb-4 text-gray-800">On-Page SEO</h2>
