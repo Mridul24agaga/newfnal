@@ -29,7 +29,7 @@ export default function URLValidatorInfo() {
           </p>
           <div className="my-6">
             <Image
-              src="/placeholder.svg?height=200&width=400"
+              src="/validate.png"
               alt="Example of Open Graph preview on social media"
               width={400}
               height={200}

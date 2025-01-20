@@ -12,7 +12,7 @@ export default function MetaDescriptionGeneratorInfo() {
             Meta descriptions are crucial for SEO and user engagement. They provide a brief summary of your page's content, appearing in search engine results. A well-crafted meta description can significantly improve click-through rates and drive more targeted traffic to your site.
           </p>
           <Image
-            src="/placeholder.svg?height=300&width=800"
+            src="/meta.png"
             alt="Example of meta descriptions in search results"
             width={800}
             height={300}

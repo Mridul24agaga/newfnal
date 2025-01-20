@@ -2,7 +2,7 @@
 
 import { User } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
-import { X, Home, BarChart2, Users, Bell, Coins, ChevronUp, ChevronDown } from 'lucide-react'
+import { X, Home, BarChart2, Users, Bell, Coins, ChevronUp, ChevronDown, Rocket } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import LogoutButton from './LogoutButton'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -114,6 +114,12 @@ export default function Sidebar({ user, sidebarOpen, setSidebarOpen }: SidebarPr
               SEO Audit Website
             </a>
           </div>
+
+          <a href="/easylaunch" className="flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50">
+            <Rocket className="mr-3 h-5 w-5" />
+            LaunchFast
+          </a>
+
 
           <a href="/hire-an-seo-expert" className="flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50">
             <Users className="mr-3 h-5 w-5" />

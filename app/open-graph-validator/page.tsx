@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
-import { AlertCircle, Loader2, Menu, Lock, ArrowRight } from 'lucide-react'
-import Sidebar from '../components/Sidebar'
-import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
-import Link from 'next/link'
-import URLValidatorInfo from './info'
+import { useState, useEffect } from "react"
+import { AlertCircle, Loader2, Menu, Lock, ArrowRight } from "lucide-react"
+import Sidebar from "../components/Sidebar"
+import { createClientComponentClient, type User } from "@supabase/auth-helpers-nextjs"
+import Link from "next/link"
+import OpenGraphValidatorInfo from "./info"
 
 type OpenGraphData = {
   title?: string
@@ -19,11 +19,11 @@ type OpenGraphData = {
   type?: string
 }
 
-export default function URLValidator() {
-  const [url, setUrl] = useState('')
+export default function OpenGraphValidator() {
+  const [url, setUrl] = useState("")
   const [ogData, setOgData] = useState<OpenGraphData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [error, setError] = useState("")
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [isAuthChecking, setIsAuthChecking] = useState(true)
@@ -32,10 +32,12 @@ export default function URLValidator() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
         setUser(user)
       } catch (error) {
-        console.error('Error fetching user:', error)
+        console.error("Error fetching user:", error)
       } finally {
         setIsAuthChecking(false)
       }
@@ -46,31 +48,52 @@ export default function URLValidator() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError('')
+    setError("")
     setOgData(null)
 
     try {
-      const response = await fetch('/api/validate-og', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/validate-og", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),
       })
 
       if (!response.ok) {
-        throw new Error('Failed to fetch URL data')
+        throw new Error("Failed to fetch URL data")
       }
 
       const data = await response.json()
       setOgData(data)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
+      setError(err instanceof Error ? err.message : "An unexpected error occurred")
     } finally {
       setIsLoading(false)
     }
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Open Graph Validator",
+    applicationCategory: "SEOApplication",
+    description: "Validate and analyze Open Graph data instantly. Get detailed metadata and image previews.",
+    operatingSystem: "Web",
+    url: "https://getmorebacklinks.org/open-graph-validator",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    creator: {
+      "@type": "Organization",
+      name: "Get More Backlinks",
+      url: "https://getmorebacklinks.org",
+    },
+  }
+
   return (
     <div className="flex h-screen bg-gray-100">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-end md:hidden">
@@ -85,9 +108,9 @@ export default function URLValidator() {
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
           <div className="container mx-auto px-4 sm:px-6 py-8 max-w-4xl">
             <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4">Professional URL Validator</h2>
+              <h1 className="text-2xl sm:text-3xl font-bold text-center mb-4">Professional Open Graph Validator</h1>
               <p className="text-center text-gray-600 mb-6 text-sm sm:text-base">
-                Generate, analyze, and validate URLs to enhance your content's visibility and engagement.
+                Analyze and validate Open Graph data to enhance your content's visibility and engagement.
               </p>
 
               {isAuthChecking ? (
@@ -109,7 +132,9 @@ export default function URLValidator() {
                       type="submit"
                       disabled={isLoading}
                       className={`px-6 py-2 rounded-lg text-white font-medium transition duration-150 ease-in-out ${
-                        isLoading ? 'bg-orange-400 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
+                        isLoading
+                          ? "bg-orange-400 cursor-not-allowed"
+                          : "bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                       }`}
                     >
                       {isLoading ? (
@@ -118,7 +143,7 @@ export default function URLValidator() {
                           Validating...
                         </>
                       ) : (
-                        'Validate'
+                        "Validate"
                       )}
                     </button>
                   </div>
@@ -131,7 +156,7 @@ export default function URLValidator() {
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Sign In Required</h2>
                     <p className="text-gray-600 mb-4">
-                      To use our URL Validator, please sign in or create an account. It's quick, easy, and free!
+                      To use our Open Graph Validator, please sign in or create an account. It's quick, easy, and free!
                     </p>
                   </div>
                   <div className="space-y-4">
@@ -165,7 +190,7 @@ export default function URLValidator() {
 
               {ogData && (
                 <div className="space-y-6">
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">URL Validation Results</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Open Graph Validation Results</h3>
                   <div className="bg-gray-50 p-4 sm:p-6 rounded-lg border border-gray-200 font-mono text-xs sm:text-sm overflow-x-auto">
                     {Object.entries(ogData).map(([key, value]) => (
                       <div key={key} className="mb-2">
@@ -178,9 +203,9 @@ export default function URLValidator() {
                   {ogData.image && (
                     <div className="mt-6">
                       <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Image Preview</h4>
-                      <img 
-                        src={ogData.image || "/placeholder.svg"} 
-                        alt={ogData.imageAlt || "Open Graph image"} 
+                      <img
+                        src={ogData.image || "/placeholder.svg"}
+                        alt={ogData.imageAlt || "Open Graph image"}
                         className="max-w-full h-auto rounded-lg border border-gray-200"
                       />
                     </div>
@@ -190,10 +215,11 @@ export default function URLValidator() {
             </div>
 
             <p className="text-center text-gray-500 text-xs sm:text-sm">
-              This professional-grade tool is provided free of charge. If you find it valuable, consider sharing it with your network!
+              This professional-grade tool is provided free of charge. If you find it valuable, consider sharing it with
+              your network!
             </p>
           </div>
-          <URLValidatorInfo/>
+          <OpenGraphValidatorInfo />
         </main>
       </div>
     </div>

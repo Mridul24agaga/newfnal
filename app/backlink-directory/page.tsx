@@ -1,11 +1,11 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Search, Menu, ExternalLink, ChevronDown, Loader2 } from 'lucide-react'
+import { Search, Menu, ExternalLink, ChevronDown, Loader2, ArrowUpDown, Rocket } from 'lucide-react'
 import { User } from '@supabase/auth-helpers-nextjs'
-import Sidebar from '@/app/components/Sidebar'
+import Sidebar from '../components/Sidebar'
+import { DomainAuthorityCircle } from '../components/domain-authority-circle'
 import Link from 'next/link'
 
 type Backlink = {
@@ -28,7 +28,7 @@ const backlinks: Backlink[] = [
   { name: "Mashable India", website: "https://in.mashable.com/", category: "Media", da: 93 },
   { name: "CNET", website: "https://www.cnet.com/news/", category: "Media", da: 93 },
   { name: "Engadget", website: "http://www.engadget.com/", category: "Media", da: 93 },
-  { name: "Gizmodo", website: "http://www.gizmodo.com/", category: "Media", da: 93 },
+  { name: "Gizmodo", website: "http://www:gizmodo.com/", category: "Media", da: 93 },
   { name: "Psychology Today", website: "https://www.psychologytoday.com/us", category: "Media", da: 93 },
   { name: "TechCrunch", website: "https://techcrunch.com/", category: "Media", da: 93 },
   { name: "Wired", website: "http://www.wired.com/", category: "Media", da: 93 },
@@ -255,7 +255,7 @@ const backlinks: Backlink[] = [
   { name: "Top Apps", website: "https://topapps.ai/submit", category: "Directories", da: 35 },
   { name: "Foundr.ai", website: "https://foundr.ai/", category: "Discover The Best AI Tools", da: 35 },
   { name: "Women in Technology", website: "http://witchat.github.io/", category: "Slack Community", da: 35 },
-  { name: "Techboard", website: "https://techboard.com.au/", category: "startup data", da: 35 },
+  { name: "Techboard", website: "https://techboard.com.au/", category: "startup data",da: 35 },
   { name: "Toolify", website: "https://www.toolify.ai/", category: "AI directory", da: 34 },
   { name: "Ctrl Alt", website: "https://ctrlalt.cc/", category: "Directories", da: 34 },
   { name: "Romanian Startups", website: "https://www.romanianstartups.com/", category: "Directory", da: 34 },
@@ -360,14 +360,14 @@ function SignInOverlay() {
         <div className="space-y-4">
           <Link
             href="/auth-form"
-            className="w-full bg-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors flex items-center justify-center"
+            className="w-full bg-orange-600 text-white px-6 py-3 rounded-md font-medium hover:bg-orange-700 transition-colors flex items-center justify-center"
           >
             Sign In
             <ExternalLink className="ml-2 w-5 h-5" />
           </Link>
           <Link
             href="/auth-form"
-            className="w-full bg-white text-orange-500 px-6 py-3 rounded-lg font-medium border-2 border-orange-500 hover:bg-orange-50 transition-colors flex items-center justify-center"
+            className="w-full bg-white text-orange-600 px-6 py-3 rounded-md font-medium border-2 border-orange-600 hover:bg-orange-50 transition-colors flex items-center justify-center"
           >
             Create an Account
             <ExternalLink className="ml-2 w-5 h-5" />
@@ -380,14 +380,12 @@ function SignInOverlay() {
 
 export default function BacklinkDirectory() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [sortColumn, setSortColumn] = useState<keyof Backlink>('name')
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sortColumn, setSortColumn] = useState<keyof Backlink>('da')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
-  const [showNameSortDropdown, setShowNameSortDropdown] = useState(false)
-  const itemsPerPage = 30
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const router = useRouter()
   const supabase = createClientComponentClient()
@@ -425,10 +423,10 @@ export default function BacklinkDirectory() {
     return 0
   })
 
-  const totalPages = Math.ceil(sortedBacklinks.length / itemsPerPage)
+  const totalPages = Math.ceil(sortedBacklinks.length / 10)
   const paginatedBacklinks = sortedBacklinks.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (currentPage - 1) * 10,
+    currentPage * 10
   )
 
   const handleSort = (column: keyof Backlink) => {
@@ -438,183 +436,175 @@ export default function BacklinkDirectory() {
       setSortColumn(column)
       setSortDirection('asc')
     }
-    setShowNameSortDropdown(false)
   }
 
-  const handlePreviousPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1))
-  }
-
-  const handleNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-  }
-
-  const handleAutoSubmit = (website: string) => {
-    router.push(`/auto-submit?website=${encodeURIComponent(website)}`)
+  const handleAutoSubmit = () => {
+    const uniqueId = crypto.randomUUID()
+    router.push(`/billing?id=${uniqueId}`)
   }
 
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-orange-600" />
       </div>
     )
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="min-h-screen bg-white flex">
       <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-[#FBFCFE] shadow-sm">
-          <div className="max-w-7xl mx-auto py-3 md:py-4 px-4 sm:px-6 lg:px-8">
-            <nav className="flex items-center justify-between w-full">
-              <div className="flex items-center space-x-2 text-xs text-gray-500 mt-20">
-                <a href="/backlinks" className="hover:text-gray-700">Backlinks</a>
+      <div className="flex-1">
+        <header className="bg-white border-b border-gray-200 md:hidden">
+          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div className="w-8" />
+            <h1 className="text-xl font-bold text-center text-gray-900">Backlink Directory</h1>
+            <button 
+              onClick={() => setSidebarOpen(true)} 
+              className="p-2 rounded-md hover:bg-gray-100"
+            >
+              <Menu className="h-6 w-6 text-gray-500" />
+              <span className="sr-only">Open sidebar</span>
+            </button>
+          </div>
+        </header>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div>
+              <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-2 mt-10">
+                <Link href="/backlinks" className="hover:text-gray-900">Backlinks</Link>
                 <span>/</span>
                 <span className="text-gray-900">Backlink Directory</span>
+              </nav>
+              <h1 className="text-2xl font-semibold text-gray-900">Backlink Directory</h1>
+              <p className="text-sm text-gray-500 mt-1">A list of directories to submit your startup or tool to.</p>
+            </div>
+            <button
+              onClick={handleAutoSubmit}
+              className="hidden sm:inline-flex items-center mt-20 px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              Auto Submit
+            </button>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="flex gap-2 sm:hidden w-full">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  placeholder="Search Links"
+                  className="w-full pl-10 pr-4 h-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               </div>
               <button
-                onClick={() => setSidebarOpen(true)}
-                className="md:hidden p-2 rounded-md hover:bg-gray-100"
+                onClick={handleAutoSubmit}
+                className="h-10 px-4 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 flex items-center gap-2"
               >
-                <Menu className="h-5 w-5" />
+                <Rocket className="h-4 w-4" />
+                Auto Submit
               </button>
-            </nav>
-            <h1 className="mt-1 md:mt-2 text-2xl font-semibold text-gray-900">Backlink Directory</h1>
-            <p className="mt-0.5 text-sm text-gray-500">A list of directories to submit your startup or tool to.</p>
-            <div className="relative max-w-lg mt-2 md:mt-3">
+            </div>
+
+            <div className="relative hidden sm:flex w-64">
               <input
                 type="text"
                 placeholder="Search Links"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
-            <div className="flex justify-between items-center mt-4">
-              <div></div>
+            <button
+              onClick={() => handleSort('da')}
+              className="hidden sm:flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
+            >
+              Sort by DA
+              <ArrowUpDown className="h-4 w-4" />
+            </button>
+          </div>
+
+          {!user && <SignInOverlay />}
+
+          <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden ${!user ? 'filter blur-sm' : ''}`}>
+            <div className="overflow-x-auto" style={{ maxHeight: 'calc(100vh - 300px)' }}>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 sticky top-0 z-10">
+                  <tr className="bg-gray-50">
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th scope="col" className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Category
+                    </th>
+                    <th scope="col" className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Cost
+                    </th>
+                    <th scope="col" className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Domain Authority
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Submit Link
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {paginatedBacklinks.map((backlink, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{backlink.name}</div>
+                      </td>
+                      <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">{backlink.category}</div>
+                      </td>
+                      <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">Free</div>
+                      </td>
+                      <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
+                        <DomainAuthorityCircle score={backlink.da} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <a
+                          href={backlink.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-medium text-orange-600 hover:text-orange-800 inline-block"
+                        >
+                          Submit Now
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-sm text-gray-500 order-2 sm:order-1">
+              Showing {(currentPage - 1) * 10 + 1} to {Math.min(currentPage * 10, sortedBacklinks.length)} of {sortedBacklinks.length} results
+            </div>
+            <div className="flex space-x-2 order-1 sm:order-2">
               <button
-                onClick={() => router.push('/auto-submit')}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 hover:bg-gray-50 disabled:opacity-50"
               >
-                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Auto Submit
+                Previous
+              </button>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+              >
+                Next
               </button>
             </div>
           </div>
-        </header>
-
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-[#FBFCFE] relative">
-          {!user && <SignInOverlay />}
-          <div className={`max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 ${!user ? 'filter blur-sm' : ''}`}>
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        <div className="flex items-center">
-                          <span>Name</span>
-                          <button
-                            className="ml-2 focus:outline-none"
-                            onClick={() => setShowNameSortDropdown(!showNameSortDropdown)}
-                          >
-                            <ChevronDown className="h-4 w-4" />
-                          </button>
-                          {showNameSortDropdown && (
-                            <div className="absolute mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                              <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                <button
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                                  onClick={() => handleSort('name')}
-                                >
-                                  Sort Ascending
-                                </button>
-                                <button
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                                  onClick={() => {
-                                    setSortDirection('desc')
-                                    handleSort('name')
-                                  }}
-                                >
-                                  Sort Descending
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Website
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Category
-                      </th>
-                      <th 
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                        onClick={() => handleSort('da')}
-                      >
-                        DA {sortColumn === 'da' && (sortDirection === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {paginatedBacklinks.map((backlink, index) => (
-                      <tr key={index} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {backlink.name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <a href={backlink.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                            {backlink.website}
-                          </a>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {backlink.category}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <div className="flex items-center">
-                            <div className="h-2 w-2 rounded-full bg-green-400 mr-2"></div>
-                            {backlink.da}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between mt-6">
-              <div className="text-sm text-gray-500">
-                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, sortedBacklinks.length)} of {sortedBacklinks.length} results
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  className="px-3 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50"
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-                <button 
-                  className="px-3 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50"
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        </main>
+        </div>
       </div>
     </div>
   )
