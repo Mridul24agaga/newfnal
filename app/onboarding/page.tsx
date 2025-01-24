@@ -21,7 +21,7 @@ export default function Onboarding() {
         setLoading(true)
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-          router.push('/auth')
+          router.push('/auth-form')
           return
         }
 

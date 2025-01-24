@@ -77,9 +77,9 @@ export default function Footer() {
                     <>
                       <li>
                         {pathname === '/' ? (
-                          <button onClick={() => scrollTo('page')} className="hover:text-gray-900 transition-colors">Features</button>
+                          <button onClick={() => scrollTo('free')} className="hover:text-gray-900 transition-colors">Features</button>
                         ) : (
-                          <Link href="/#page" className="hover:text-gray-900 transition-colors">Features</Link>
+                          <Link href="/#free" className="hover:text-gray-900 transition-colors">Features</Link>
                         )}
                       </li>
                       <li>
@@ -113,14 +113,14 @@ export default function Footer() {
               <div>
                 <h3 className="text-gray-900 font-semibold mb-4">Tools</h3>
                 <ul className="space-y-3">
+                <li><Link href="/landing-page-analyze" className="hover:text-gray-900 transition-colors">Landing Page Analyzer</Link></li>
+                  <li><Link href="/seo-audit-website" className="hover:text-gray-900 transition-colors">SEO Audit</Link></li>
+                  <li><Link href="/open-graph-validator" className="hover:text-gray-900 transition-colors">Open Graph Validator</Link></li>
+                  <li><Link href="/meta-description-generator" className="hover:text-gray-900 transition-colors">Meta Description Generator</Link></li>
                   <li><Link href="/ai-content-checker" className="hover:text-gray-900 transition-colors">AI Content Checker</Link></li>
                   <li><Link href="/paragraph-writer" className="hover:text-gray-900 transition-colors">Paragraph Rewriter</Link></li>
                   <li><Link href="/backlink-checker" className="hover:text-gray-900 transition-colors">Backlink Checker</Link></li>
                   <li><Link href="/keyword-rank-tracker" className="hover:text-gray-900 transition-colors">Keyword Rank Tracker</Link></li>
-                  <li><Link href="/seo-scorecard" className="hover:text-gray-900 transition-colors">SEO Scorecard</Link></li>
-                  <li><Link href="/seo-audit" className="hover:text-gray-900 transition-colors">SEO Audit</Link></li>
-                  <li><Link href="/seo-keyword-generator" className="hover:text-gray-900 transition-colors">SEO Keyword Generator</Link></li>
-                  <li><Link href="/seo-content-gap-analysis" className="hover:text-gray-900 transition-colors">SEO Content Gap Analysis</Link></li>
                 </ul>
               </div>
 

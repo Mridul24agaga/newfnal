@@ -45,7 +45,7 @@ export default function Hero() {
                 href="/blogs"
                 className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
               >
-                Blog
+                Blogs
               </Link>
               <Link
                 href="/auth-form"
@@ -189,7 +189,7 @@ export default function Hero() {
                 </p>
                 <div className="flex flex-col gap-6 transform">
                   <BacklinkCard
-                    domain="shortsninja.com"
+                    domain="saasydb.com"
                     rating={45}
                     backlinks="2.8k"
                     dofollow={97}
@@ -199,8 +199,8 @@ export default function Hero() {
                     <BacklinkCard
                       domain="shortsninja.com"
                       rating={65}
-                      backlinks="2.8k"
-                      dofollow={97}
+                      backlinks="1.8k"
+                      dofollow={84}
                       tiltDirection="right"
                     />
                   </div>

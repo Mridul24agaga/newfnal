@@ -72,32 +72,33 @@ export default function BlogPost() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <header className="container mx-auto px-4 py-4 sm:py-6 border-b border-gray-100">
-        <div className="flex items-center justify-between">
-          <Link href="/">
-            <Image
-              src="/getmorepacklinks.png"
-              alt="GetMoreBacklinks.org"
-              width={200}
-              height={50}
-              className="h-8 w-auto"
-              priority
-            />
-          </Link>
-          <nav className="flex items-center gap-4">
-            <Link 
-              href="/blog" 
-              className="text-gray-900 hover:text-gray-600 transition-colors text-sm font-medium"
-            >
-              Blog
-            </Link>
-            <Link 
-              href="/" 
-              className="px-4 py-2 text-sm rounded-md bg-black text-white hover:bg-gray-800 transition-colors font-medium"
-            >
-              Try It Free
-            </Link>
-          </nav>
+      <header className="border-b border-gray-200 relative bg-white z-10">
+        <div className="container mx-auto px-4">
+          <div className="h-16 sm:h-20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/getmorepacklinks.png"
+                alt="getmorebacklinks"
+                width={100}
+                height={32}
+                className="h-6 sm:h-8 w-auto"
+              />
+            </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link
+                href="/blogs"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Blogs
+              </Link>
+              <Link
+                href="/auth-form"
+                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+              >
+                Login
+              </Link>
+            </div>
+          </div>
         </div>
       </header>
 

@@ -70,38 +70,33 @@ export default function BlogPost() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <header className="container mx-auto px-4 py-4 sm:py-6">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/getmorepacklinks.png"
-              alt="GetMoreBacklinks.org"
-              width={200}
-              height={50}
-              className="h-8 w-auto"
-              priority
-            />
-          </Link>
-          <nav>
-            <ul className="flex items-center gap-6">
-              <li>
-                <Link
-                  href="/blogs"
-                  className="text-black hover:text-gray-600 transition-colors text-base font-semibold"
-                >
-                  Blogs
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/submit"
-                  className="px-4 py-2 text-base rounded-md bg-black text-white hover:bg-orange-600 transition-colors font-semibold"
-                >
-                  Submit Your Directory
-                </Link>
-              </li>
-            </ul>
-          </nav>
+     <header className="border-b border-gray-200 relative bg-white z-10">
+        <div className="container mx-auto px-4">
+          <div className="h-16 sm:h-20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/getmorepacklinks.png"
+                alt="getmorebacklinks"
+                width={100}
+                height={32}
+                className="h-6 sm:h-8 w-auto"
+              />
+            </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link
+                href="/blogs"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Blogs
+              </Link>
+              <Link
+                href="/auth-form"
+                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+              >
+                Login
+              </Link>
+            </div>
+          </div>
         </div>
       </header>
 

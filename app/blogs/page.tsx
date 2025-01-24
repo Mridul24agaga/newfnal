@@ -186,7 +186,7 @@ export default function BlogPage() {
                 href="/blogs"
                 className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
               >
-                Blog
+                Blogs
               </Link>
               <Link
                 href="/auth-form"

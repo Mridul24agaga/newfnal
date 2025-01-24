@@ -49,7 +49,35 @@ export default function BlogPost() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-              <Header/>
+      <header className="border-b border-gray-200 relative bg-white z-10">
+        <div className="container mx-auto px-4">
+          <div className="h-16 sm:h-20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/getmorepacklinks.png"
+                alt="getmorebacklinks"
+                width={100}
+                height={32}
+                className="h-6 sm:h-8 w-auto"
+              />
+            </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link
+                href="/blogs"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Blogs
+              </Link>
+              <Link
+                href="/auth-form"
+                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+              >
+                Login
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
 
       <article className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <header className="mb-12">

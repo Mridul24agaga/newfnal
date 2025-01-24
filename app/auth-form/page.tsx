@@ -204,7 +204,7 @@ export default function AuthForm() {
               Terms and Conditions
             </Link>{" "}
             and{" "}
-            <Link href="/privacy-policy" className="text-[#F78226] hover:text-[#FF4405] transition-colors">
+            <Link href="/privacy" className="text-[#F78226] hover:text-[#FF4405] transition-colors">
               Privacy Policy
             </Link>
             .
