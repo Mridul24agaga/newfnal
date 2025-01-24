@@ -44,7 +44,7 @@ export default function Page() {
               </p>
               <div className="space-y-4">
                 <Link
-                  href="#"
+                  href="/#pricing"
                   className="inline-block bg-white hover:bg-gray-100 transition-colors px-6 py-3 rounded-lg font-semibold text-lg text-[#111827]"
                 >
                   Get Started Now
