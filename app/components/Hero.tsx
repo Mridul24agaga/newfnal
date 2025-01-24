@@ -247,7 +247,7 @@ export default function Hero() {
               href="/submit-listing"
               className="bg-[#F36516] text-white px-4 py-2 rounded-full font-medium hover:bg-[#E55505] transition-colors flex items-center"
             >
-              Submit your listing
+              Get Free Directory List
               <ExternalLink className="ml-2" size={16} />
             </Link>
             <button onClick={() => setShowPopup(false)} className="text-gray-500 hover:text-gray-700 font-medium">
