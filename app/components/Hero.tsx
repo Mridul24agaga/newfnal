@@ -223,7 +223,7 @@ export default function Hero() {
           </button>
           <div className="flex items-center mb-4">
             <Gift className="text-[#F36516] mr-3" size={24} />
-            <h3 className="text-xl font-bold text-[#F36516]">Free Directory Listing!</h3>
+            <h3 className="text-xl font-bold text-[#F36516]">Free Directory Database!</h3>
           </div>
           <p className="text-gray-600 mb-4">
             Boost your SEO instantly! Get a free high-quality backlink by listing your website in our directory.
