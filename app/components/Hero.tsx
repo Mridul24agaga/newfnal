@@ -244,7 +244,7 @@ export default function Hero() {
           </ul>
           <div className="flex justify-between items-center">
             <Link
-              href="/submit-listing"
+              href="/auth-form"
               className="bg-[#F36516] text-white px-4 py-2 rounded-full font-medium hover:bg-[#E55505] transition-colors flex items-center"
             >
               Get Free Directory List
