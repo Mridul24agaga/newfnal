@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from 'next/link'
 
 export default function CTASection() {
   return (
@@ -12,9 +13,9 @@ export default function CTASection() {
               rankings.
             </p>
             <div>
-              <button className="bg-orange-500 text-white rounded-lg px-6 py-3 font-semibold hover:bg-orange-600 transition-colors">
+              <Link href="/#pricing" className="bg-orange-500 text-white rounded-lg px-6 py-3 font-semibold hover:bg-orange-600 transition-colors">
                 Start Building Backlinks
-              </button>
+              </Link>
               <p className="text-gray-500 text-sm mt-4">
                 Get started today and increase your backlinks and organic traffic
               </p>
