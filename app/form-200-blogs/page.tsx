@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@supabase/supabase-js"
+import { X } from "lucide-react"
 
 export default function SaasForm() {
   const [isLoading, setIsLoading] = useState(false)
-  const [isRedirecting, setIsRedirecting] = useState(false)
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false)
   const [message, setMessage] = useState("")
-  const [expertChoice, setExpertChoice] = useState<string>("expert")
   const router = useRouter()
 
   const supabase = createClient(
@@ -26,7 +26,7 @@ export default function SaasForm() {
 
     const submissionData = {
       ...data,
-      expertChoice: expertChoice,
+      expertChoice: "expert", // Default to expert choice
     }
 
     try {
@@ -34,15 +34,12 @@ export default function SaasForm() {
 
       if (error) throw error
 
-      setMessage(
-        "Submission successful! You will be redirected to the auth page. Please login with the same email you entered here.",
-      )
-      setIsRedirecting(true)
+      setShowSuccessPopup(true)
 
-      // Delay the redirect to show the success message
+      // Redirect after 3 seconds
       setTimeout(() => {
         router.push("/auth-form")
-      }, 5000)
+      }, 7000)
     } catch (error: unknown) {
       console.error("Submission Error:", JSON.stringify(error, null, 2))
       console.error("Submitted Data:", JSON.stringify(submissionData, null, 2))
@@ -58,26 +55,33 @@ export default function SaasForm() {
     }
   }
 
-  useEffect(() => {
-    if (isRedirecting) {
-      const timer = setTimeout(() => {
-        setIsRedirecting(false)
-      }, 5000) // Set a timeout to reset isRedirecting after 5 seconds
-      return () => clearTimeout(timer)
-    }
-  }, [isRedirecting])
-
-  if (isRedirecting) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-200 via-orange-300 to-orange-400">
-        <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-[0_20px_70px_-15px_rgba(0,0,0,0.3)] w-full max-w-md animate-fade-in relative z-10 border border-white/20 text-center">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">Redirecting to Auth Page...</h2>
-          <p className="text-gray-600 mb-4">Please login with the same email you entered in the form.</p>
-          <div className="w-16 h-16 border-t-4 border-orange-500 border-solid rounded-full animate-spin mx-auto"></div>
+  // Success Popup Component
+  const SuccessPopup = () => (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+      <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative animate-fade-in">
+        <button
+          onClick={() => setShowSuccessPopup(false)}
+          className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
+        >
+          <X size={20} />
+        </button>
+        <div className="text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Submission Successful!</h3>
+          <p className="text-gray-600 mb-4">
+            Thank you for your submission. You will be redirected to the dashboard in a few seconds.
+          </p>
+          <p className="text-sm text-gray-500">
+            You can Sign Up using the email address you provided to access your reports and messages. NOTE: PLEASE NOTE THAT FOR THE BLOG SERVICE WE WILL REACH OUT TO YOU PERSONALLY AND TAKE ALL THE INFORMATION. THESE BLOGS ARE NOT AI GENERATED. A REAL HUMAN WRITES IT. THANKS
+          </p>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-200 via-orange-300 to-orange-400 p-4 relative">
@@ -124,23 +128,9 @@ export default function SaasForm() {
             placeholder="Comments/Remarks"
             className="w-full px-4 py-3 border border-orange-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-transparent text-black bg-white/50 backdrop-blur-sm transition-all h-24 resize-none placeholder:text-gray-400"
           ></textarea>
-          <div className="space-y-3">
-            <p className="font-medium text-gray-700">Expert Review:</p>
-            <div className="flex items-center space-x-2">
-              <input
-                type="radio"
-                id="expert"
-                name="expertChoice"
-                value="expert"
-                checked={expertChoice === "expert"}
-                onChange={(e) => setExpertChoice(e.target.value)}
-                className="text-orange-500 focus:ring-orange-400"
-              />
-              <label htmlFor="expert" className="text-gray-700">
-                Let the expert choose the directories
-              </label>
-            </div>
-          </div>
+          <p className="text-sm text-gray-600 italic">
+            Note: You'll be able to login to the dashboard using this email address to access your reports and messages.
+          </p>
           <button
             type="submit"
             className="w-full bg-gradient-to-r from-orange-400 to-orange-500 text-white py-3 px-4 rounded-xl hover:from-orange-500 hover:to-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 transition-all disabled:opacity-50 relative shadow-lg shadow-orange-500/25 font-medium text-lg"
@@ -160,12 +150,15 @@ export default function SaasForm() {
         </form>
         {message && (
           <p
-            className={`mt-6 text-center text-lg font-medium ${message.includes("Error") ? "text-red-500" : "text-green-500"}`}
+            className={`mt-6 text-center text-lg font-medium ${message.includes("error") ? "text-red-500" : "text-green-500"}`}
           >
             {message}
           </p>
         )}
       </div>
+
+      {/* Success Popup */}
+      {showSuccessPopup && <SuccessPopup />}
     </div>
   )
 }

@@ -168,34 +168,37 @@ export default function BlogPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <header className="container mx-auto px-4 py-4 sm:py-6 border-b border-gray-100">
-        <div className="flex items-center justify-between">
-          <Link href="/">
-            <Image
-              src="/getmorepacklinks.png"
-              alt="GetMoreBacklinks Logo"
-              width={532}
-              height={132}
-              className="h-8 w-auto"
-              priority
-            />
-          </Link>
-          <nav className="flex items-center gap-4">
-            <Link 
-              href="/blogs" 
-              className="text-gray-900 hover:text-gray-600 transition-colors text-sm font-medium"
-            >
-              Blog
-            </Link>
-            <Link 
-              href="/#pricing-section" 
-              className="px-4 py-2 text-sm rounded-md bg-orange-500 text-white hover:bg-orange-600 transition-colors font-medium"
-            >
-              Submit your app
-            </Link>
-          </nav>
+       {/* Header */}
+       <header className="border-b border-gray-200 relative bg-white z-10">
+        <div className="container mx-auto px-4">
+          <div className="h-16 sm:h-20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/getmorepacklinks.png"
+                alt="getmorebacklinks"
+                width={100}
+                height={32}
+                className="h-6 sm:h-8 w-auto"
+              />
+            </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link
+                href="/blogs"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Blog
+              </Link>
+              <Link
+                href="/auth-form"
+                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+              >
+                Login
+              </Link>
+            </div>
+          </div>
         </div>
       </header>
+
 
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">

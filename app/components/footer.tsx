@@ -77,25 +77,19 @@ export default function Footer() {
                     <>
                       <li>
                         {pathname === '/' ? (
-                          <button onClick={() => scrollTo('features')} className="hover:text-gray-900 transition-colors">Features</button>
+                          <button onClick={() => scrollTo('page')} className="hover:text-gray-900 transition-colors">Features</button>
                         ) : (
-                          <Link href="/#features" className="hover:text-gray-900 transition-colors">Features</Link>
+                          <Link href="/#page" className="hover:text-gray-900 transition-colors">Features</Link>
                         )}
                       </li>
                       <li>
                         {pathname === '/' ? (
-                          <button onClick={() => scrollTo('pricing-section')} className="hover:text-gray-900 transition-colors">Pricing</button>
+                          <button onClick={() => scrollTo('pricing')} className="hover:text-gray-900 transition-colors">Pricing</button>
                         ) : (
-                          <Link href="/#pricing-section" className="hover:text-gray-900 transition-colors">Pricing</Link>
+                          <Link href="/#pricing" className="hover:text-gray-900 transition-colors">Pricing</Link>
                         )}
                       </li>
-                      <li>
-                        {pathname === '/' ? (
-                          <button onClick={() => scrollTo('howitworks')} className="hover:text-gray-900 transition-colors">How it Works</button>
-                        ) : (
-                          <Link href="/#howitworks" className="hover:text-gray-900 transition-colors">How it Works</Link>
-                        )}
-                      </li>
+                      
                       <li>
                         {pathname === '/' ? (
                           <button onClick={() => scrollTo('faq')} className="hover:text-gray-900 transition-colors">FAQ</button>

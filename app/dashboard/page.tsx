@@ -1,9 +1,10 @@
-'use client'
+"use client"
 
-import { useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
-import DashboardLayout from './DashboardLayout'
+import { useEffect, useState } from "react"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { useRouter } from "next/navigation"
+import DashboardLayout from "./DashboardLayout"
+import Link from "next/link"
 
 interface OnboardingData {
   startupName: string
@@ -14,21 +15,31 @@ interface OnboardingData {
   website: string
 }
 
+interface BacklinkData {
+  domain: string
+  backlinks: number
+}
+
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
   const [onboardingData, setOnboardingData] = useState<OnboardingData | null>(null)
+  const [backlinkData, setBacklinkData] = useState<BacklinkData[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
   const supabase = createClientComponentClient()
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (user) {
         setUser(user)
-        await fetchOnboardingData(user.email || '')
+        await fetchOnboardingData(user.email || "")
+        await fetchBacklinkData()
       } else {
-        router.push('/auth-form')
+        router.push("/auth-form")
       }
     }
 
@@ -36,15 +47,11 @@ export default function DashboardPage() {
   }, [router, supabase.auth])
 
   const fetchOnboardingData = async (email: string) => {
-    const { data, error } = await supabase
-      .from('onboarding_form')
-      .select('*')
-      .eq('email', email)
-      .single()
+    const { data, error } = await supabase.from("onboarding_form").select("*").eq("email", email).single()
 
     if (error) {
-      console.error('Error fetching onboarding data:', error)
-      router.push('/onboarding')
+      console.error("Error fetching onboarding data:", error)
+      router.push("/onboarding")
     } else if (data) {
       setOnboardingData({
         startupName: data.company_name,
@@ -52,12 +59,35 @@ export default function DashboardPage() {
         name: data.name,
         role: data.role,
         email: data.email,
-        website: data.website || ''
+        website: data.website || "",
       })
       setLoading(false)
     } else {
-      router.push('/onboarding')
+      router.push("/onboarding")
     }
+  }
+
+  const fetchBacklinkData = async () => {
+    // This is a mock function. In a real application, you would fetch this data from your backend or an API
+    const mockData: BacklinkData[] = [
+      { domain: "example.com", backlinks: 150 },
+      { domain: "sample.org", backlinks: 89 },
+      { domain: "test.net", backlinks: 76 },
+      { domain: "demo.io", backlinks: 54 },
+      { domain: "mockup.com", backlinks: 32 },
+    ]
+    setBacklinkData(mockData)
+  }
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Implement search functionality here
+    console.log("Searching for:", searchQuery)
+  }
+
+  const handleRefresh = () => {
+    setLoading(true)
+    fetchBacklinkData().then(() => setLoading(false))
   }
 
   if (loading) {
@@ -70,46 +100,43 @@ export default function DashboardPage() {
     )
   }
 
+  const totalBacklinks = backlinkData.reduce((sum, item) => sum + item.backlinks, 0)
+
   return (
     <DashboardLayout user={user}>
-      <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Welcome to your Dashboard
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            You have successfully completed the onboarding process.
-          </p>
-          {onboardingData && (
-            <div className="mt-8 bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-              <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Name</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{onboardingData.name}</dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Role</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{onboardingData.role}</dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Company</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{onboardingData.startupName}</dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Industry</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{onboardingData.industry}</dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Email</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{onboardingData.email}</dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Website</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{onboardingData.website}</dd>
-                </div>
-              </dl>
+      <div className="min-h-screen bg-white p-8">
+        <h1 className="text-3xl font-bold mb-8">Welcome, {onboardingData?.name}!</h1>
+
+        
+
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-semibold">Name:</p>
+              <p>{onboardingData?.name}</p>
             </div>
-          )}
+            <div>
+              <p className="font-semibold">Role:</p>
+              <p>{onboardingData?.role}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Company:</p>
+              <p>{onboardingData?.startupName}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Industry:</p>
+              <p>{onboardingData?.industry}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Email:</p>
+              <p>{onboardingData?.email}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Website:</p>
+              <p>{onboardingData?.website}</p>
+            </div>
+          </div>
         </div>
       </div>
     </DashboardLayout>

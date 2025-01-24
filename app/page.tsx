@@ -8,12 +8,16 @@ import ListingSection from './components/listing'
 import BacklinkFeatures from './components/backlinkfeatures'
 import WhyChooseSection from './components/whychooseus'
 import ComparisonSection from './components/comparisonsection'
-import PricingSection from './components/pricing'
 import TeamStats from './components/teamstats'
 import FAQSection from './components/faq'
 import EarlyBirdFooter from './components/cta'
 import Footer from './components/footer'
 import SenjaWidget from './components/senjawidget'
+import Page from './components/backlink-build'
+import SEOToolsDashboard from './components/seo-tools-dashboard'
+import Testimonials from './components/testimonialcard'
+import { PricingSection } from './components/pricing-section'
+import CTASection from './components/cta-section'
 
 export const metadata: Metadata = {
   title: 'GetMoreBacklinks - Boost Your SEO with 500+ Directory Listings',
@@ -84,17 +88,17 @@ export default function Home() {
       <body>
         <main>
           <Hero/>
+          <Page/>
           <TestimonialsSection/>
-          <DirectoriesSection/>
-          <ListingSection/>
-          <BacklinkFeatures/>
-          <WhyChooseSection/>
-          <ComparisonSection/>
-          <SenjaWidget/>
-          <PricingSection/>
-          <EarlyBirdFooter/>
+          <SEOToolsDashboard/>
+          <PricingSection uniqueId="pricing" />
+          <Testimonials/>
           <TeamStats/>
           <FAQSection/>
+          <SenjaWidget/>
+
+          <CTASection/>
+         
           <Footer/>
         </main>
         <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-VTWX7GVQ6X"/>

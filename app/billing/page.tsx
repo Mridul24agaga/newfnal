@@ -1,7 +1,7 @@
 "use client"
 
 import { Suspense } from "react"
-import { WallOfLove } from "@/app/components/wall-of-love"
+import Testimonials from "../components/testimonialcard"
 import Link from "next/link"
 import { PricingSectionWrapper } from "./pricing-section-wrapper"
 
@@ -25,15 +25,11 @@ export default function PricingPage() {
             Back to Directory
           </Link>
         </div>
-        <h1 className="text-3xl font-bold text-center mb-4">Pricing</h1>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Choose the perfect plan for your business. Our packages are designed to provide maximum value and results for
-          your website's growth.
-        </p>
+       
         <Suspense fallback={<PricingLoadingState />}>
           <PricingSectionWrapper />
         </Suspense>
-        <WallOfLove />
+        <Testimonials  />
       </div>
     </div>
   )
