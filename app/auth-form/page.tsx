@@ -70,6 +70,9 @@ export default function AuthForm() {
         authResult = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
         })
         if (!authResult.error) {
           setIsLogin(true)
@@ -81,11 +84,15 @@ export default function AuthForm() {
       if (authResult.error) throw authResult.error
 
       if (authResult.data.user) {
-        const isOnboarded = await checkOnboardingStatus(authResult.data.user.id)
-        if (isOnboarded) {
-          router.push("/dashboard")
+        if (authResult.data.user.confirmed_at) {
+          const isOnboarded = await checkOnboardingStatus(authResult.data.user.id)
+          if (isOnboarded) {
+            router.push("/dashboard")
+          } else {
+            router.push("/onboarding")
+          }
         } else {
-          router.push("/onboarding")
+          setShowConfirmationPopup(true)
         }
       }
     } catch (error: any) {
