@@ -154,7 +154,7 @@ export default function Footer() {
             <span className="text-red-600">Facing Issue in Signup</span>
           </div>
         </div>
-      </div>
+      </div>ye s
     </footer>
   )
 }
