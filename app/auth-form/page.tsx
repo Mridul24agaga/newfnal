@@ -56,30 +56,18 @@ export default function AuthForm() {
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!isLogin) {
+      setError("We apologize, but signups are currently unavailable. Please try again later.")
+      return
+    }
     try {
       setLoading(true)
       setError(null)
 
-      let authResult
-      if (isLogin) {
-        authResult = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        })
-      } else {
-        authResult = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
-        })
-        if (!authResult.error) {
-          setIsLogin(true)
-          setShowConfirmationPopup(true)
-          return
-        }
-      }
+      const authResult = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
       if (authResult.error) throw authResult.error
 
@@ -104,25 +92,29 @@ export default function AuthForm() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="absolute top-4 left-4">
+    <div className="min-h-screen flex flex-col bg-white pt-16 sm:pt-20 px-4 sm:px-6 lg:px-8">
+      <div className="fixed top-0 left-0 right-0 bg-[#F78226] text-white py-2 text-center z-50 text-xs sm:text-sm">
+        🔧 We are currently facing issues with signups. We are sorry for the inconvenience. Sign-in remains unaffected
+        🔧
+      </div>
+      <div className="absolute top-8 sm:top-12 left-4">
         <Link href="/" className="flex items-center text-gray-600 hover:text-[#F78226] transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          <span className="text-sm font-medium">Home</span>
+          <span className="text-xs sm:text-sm font-medium">Home</span>
         </Link>
       </div>
 
-      <div className="flex-grow flex items-center justify-center">
-        <div className="max-w-md w-full space-y-8">
+      <div className="flex-grow flex items-center justify-center mt-8 sm:mt-0">
+        <div className="w-full max-w-md space-y-8">
           <div className="flex justify-center">
-            <Image src="/getmorepacklinks.png" alt="Logo" width={200} height={64} className="h-16 w-auto" />
+            <Image src="/getmorepacklinks.png" alt="Logo" width={150} height={48} className="h-12 sm:h-16 w-auto" />
           </div>
 
           <div className="border border-gray-300 rounded-lg overflow-hidden">
             <div className="flex border-b border-gray-300">
               <button
                 onClick={() => setIsLogin(true)}
-                className={`flex-1 py-4 text-center font-medium transition-colors ${
+                className={`flex-1 py-3 sm:py-4 text-center text-sm sm:text-base font-medium transition-colors ${
                   isLogin ? "text-[#F78226] bg-orange-50" : "text-gray-500 hover:text-[#F78226] hover:bg-orange-50"
                 }`}
               >
@@ -130,18 +122,17 @@ export default function AuthForm() {
               </button>
               <button
                 onClick={() => setIsLogin(false)}
-                className={`flex-1 py-4 text-center font-medium transition-colors ${
-                  !isLogin ? "text-[#F78226] bg-orange-50" : "text-gray-500 hover:text-[#F78226] hover:bg-orange-50"
-                }`}
+                className="flex-1 py-3 sm:py-4 text-center text-sm sm:text-base font-medium transition-colors text-gray-400 bg-gray-100 cursor-not-allowed"
+                disabled
               >
-                Sign Up
+                Sign Up (Unavailable)
               </button>
             </div>
 
-            <form onSubmit={handleAuth} className="p-8 space-y-6">
+            <form onSubmit={handleAuth} className="p-6 sm:p-8 space-y-4 sm:space-y-6">
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Email address
                   </label>
                   <input
@@ -150,11 +141,11 @@ export default function AuthForm() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F78226] focus:border-transparent transition-all"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F78226] focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="password" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                     Password
                   </label>
                   <input
@@ -163,17 +154,19 @@ export default function AuthForm() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F78226] focus:border-transparent transition-all"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F78226] focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
-              {error && <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded-lg">{error}</div>}
+              {error && (
+                <div className="text-red-500 text-xs sm:text-sm text-center bg-red-50 p-2 rounded-lg">{error}</div>
+              )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#F78226] hover:bg-[#FF4405] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F78226] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center px-4 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-lg text-white bg-[#F78226] hover:bg-[#FF4405] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F78226] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <svg
@@ -219,16 +212,16 @@ export default function AuthForm() {
         </div>
       </div>
       {showConfirmationPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
             <h3 className="text-lg font-semibold text-[#F78226] mb-2">Confirmation Email Sent</h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 mb-4 text-sm">
               We've sent you a confirmation email. Please check your inbox and follow the instructions to verify your
               account.
             </p>
             <button
               onClick={() => setShowConfirmationPopup(false)}
-              className="w-full px-4 py-2 bg-[#F78226] text-white rounded-lg hover:bg-[#FF4405] transition-colors"
+              className="w-full px-4 py-2 bg-[#F78226] text-white rounded-lg hover:bg-[#FF4405] transition-colors text-sm"
             >
               Close
             </button>
