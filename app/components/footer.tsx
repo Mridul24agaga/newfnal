@@ -151,10 +151,10 @@ export default function Footer() {
           </div>
           <div className="flex items-center space-x-2 text-sm">
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full"></span>
-            <span className="text-red-600">Facing Issue in Signup</span>
+            <span className="text-green-600">All Systems Are Normal</span>
           </div>
         </div>
-      </div>ye s
+      </div>
     </footer>
   )
 }
