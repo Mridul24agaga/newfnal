@@ -89,7 +89,6 @@ export default function Home() {
         <main>
           <Hero/>
           <Page/>
-          <TestimonialsSection/>
           <SEOToolsDashboard/>
           <PricingSection uniqueId="pricing" />
           <Testimonials/>

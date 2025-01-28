@@ -128,7 +128,7 @@ export default function Onboarding() {
           </div>
           <div className="hidden lg:flex lg:flex-1 relative bg-orange-50">
             <Image
-              src={getStepImage()}
+              src="/onboard.png"
               alt="Onboarding step illustration"
               width={500}
               height={500}
