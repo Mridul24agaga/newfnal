@@ -35,7 +35,7 @@ export default function TestimonialsSection() {
       text: '"This is sooo good."',
       author: "Baback",
       role: "Founder",
-      avatar: "/cj.jpeg",
+      avatar: "/cj.jpg",
     },
     {
       text: '"The value for money is unmatched. For anyone serious about backlinks, this is a must-have tool"',
