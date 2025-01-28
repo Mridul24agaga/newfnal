@@ -11,8 +11,7 @@ interface BacklinkEntry {
       { name: "Geekwire", category: "Startup News/Directory", cost: "Free" },
       { name: "AlternativeTo", category: "Software/Tool Directory", cost: "Free" },
       { name: "ToolPilot", category: "Software/Tool Directory", cost: "Free" },
-      { name: "GptForge", category: "Software/Tool Directory", cost: "Free" },
-      { name: "ToolGuru", category: "Software/Tool Directory", cost: "Free" },
+    
 
 
     ]

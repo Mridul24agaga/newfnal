@@ -104,12 +104,12 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout user={user}>
-      <div className="min-h-screen bg-white p-8">
+      <div className="min-h-screen bg-[#FBFCFE] p-8">
         <h1 className="text-3xl font-bold mb-8">Welcome, {onboardingData?.name}!</h1>
 
         
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-[#FBFCFE] rounded-lg shadow p-6">
           <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>

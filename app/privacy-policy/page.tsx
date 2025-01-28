@@ -59,32 +59,33 @@ export default function PrivacyPolicy() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <header className="container mx-auto px-4 py-4 sm:py-6 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/">
+      {/* Header */}
+      <header className="border-b border-gray-200 relative bg-white z-10">
+        <div className="container mx-auto px-4">
+          <div className="h-16 sm:h-20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <Image
                 src="/getmorepacklinks.png"
-                alt="GetMoreBacklinks.org Logo"
-                width={532}
-                height={132}
-                className="h-8 sm:h-10 md:h-12 w-auto"
+                alt="getmorebacklinks"
+                width={100}
+                height={32}
+                className="h-6 sm:h-8 w-auto"
               />
-            </Link>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link 
-              href="/blogs" 
-              className="text-gray-600 hover:text-black transition-colors text-sm sm:text-base font-bold"
-            >
-              Blogs
-            </Link>
-            <Link 
-              href="/submit" 
-              className="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md bg-orange-500 text-white hover:bg-orange-600 transition-colors font-bold"
-            >
-              Submit Your Directory
-            </Link>
+            </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link
+                href="/blogs"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Blog
+              </Link>
+              <Link
+                href="/auth-form"
+                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+              >
+                Login
+              </Link>
+            </div>
           </div>
         </div>
       </header>

@@ -114,7 +114,7 @@ export default function Onboarding() {
           <div className="hidden lg:flex lg:flex-1 relative bg-[#e5f0f0] items-center justify-center">
             <div className="max-w-[600px] w-full p-12">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KgaEFJSCeIgzcGvyknxTxrOqLGBZij.png"
+                src="/onboard.png"
                 alt="Onboarding step illustration"
                 width={500}
                 height={500}

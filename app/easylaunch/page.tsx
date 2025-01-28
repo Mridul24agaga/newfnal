@@ -27,6 +27,7 @@ export default function EasyLaunchPage() {
   const [user, setUser] = useState<User | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
+  const [generationComplete, setGenerationComplete] = useState(false)
 
   const router = useRouter()
   const supabase = createClientComponentClient()
@@ -48,8 +49,10 @@ export default function EasyLaunchPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
+    setGenerationComplete(false)
     await formAction(new FormData(e.currentTarget))
     setLoading(false)
+    setGenerationComplete(true)
     setShowPopup(true)
   }
 
@@ -226,6 +229,11 @@ export default function EasyLaunchPage() {
                     <>
                       <Loader2 className="animate-spin mr-2" />
                       Generating...
+                    </>
+                  ) : generationComplete ? (
+                    <>
+                      <Check className="mr-2" />
+                      Generation Complete
                     </>
                   ) : (
                     "Generate Launch Posts"

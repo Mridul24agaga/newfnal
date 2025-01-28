@@ -50,7 +50,7 @@ export default function Footer() {
               </div>
               
               <p className="text-gray-600 leading-relaxed">
-                Get instant traffic on your site, save days of manual work with just one click. Submit Your AI Startup To 100+ Plaƞorms In 7 Days
+                Get instant traffic on your site, save days of manual work with just one click. Submit Your AI Startup To 100+ Platform In 7 Days
               </p>
 
               <div className="flex space-x-4">

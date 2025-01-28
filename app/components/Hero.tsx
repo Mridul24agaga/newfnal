@@ -1,12 +1,25 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ArrowUpRight, Search, X, Gift, ExternalLink } from "lucide-react"
+import { ArrowUpRight, Search, X, Gift, ExternalLink, Info } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BacklinksTable } from "./backlinks-table"
-import { BacklinkCard } from "./backlinkscard"
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  type ChartOptions,
+} from "chart.js"
+import { Line } from "react-chartjs-2"
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 export default function Hero() {
   const [url, setUrl] = useState("")
@@ -23,6 +36,78 @@ export default function Hero() {
     if (url) {
       router.push("/auth-form")
     }
+  }
+
+  const chartDates = ["22 Mar", "17 Apr", "13 May", "8 Jun", "4 Jul", "30 Jul", "25 Aug", "20 Sep"]
+  const chartValues = [0, 0, 0, 5, 8, 10, 30, 45]
+
+  const chartOptions: ChartOptions<"line"> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        grid: {
+          color: "#e5e7eb",
+        },
+        ticks: {
+          font: {
+            family: "Inter, sans-serif",
+          },
+        },
+      },
+      y: {
+        grid: {
+          color: "#e5e7eb",
+        },
+        min: 0,
+        max: 45,
+        ticks: {
+          stepSize: 10,
+          font: {
+            family: "Inter, sans-serif",
+          },
+        },
+        title: {
+          display: true,
+          text: "Referring domains",
+          font: {
+            family: "Inter, sans-serif",
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: "white",
+        titleColor: "black",
+        bodyColor: "black",
+        borderColor: "#e5e7eb",
+        borderWidth: 1,
+        padding: 12,
+        displayColors: false,
+        callbacks: {
+          label: (context) => `${context.parsed.y} referring domains`,
+        },
+      },
+    },
+  }
+
+  const chartData = {
+    labels: chartDates,
+    datasets: [
+      {
+        data: chartValues,
+        borderColor: "#f97316",
+        backgroundColor: "#f97316",
+        tension: 0.3,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      },
+    ],
   }
 
   return (
@@ -145,13 +230,29 @@ export default function Hero() {
                   />
                 </div>
                 <div className="border border-gray-200 rounded-lg overflow-hidden">
-                  <Image
-                    src="/graph.png"
-                    alt="Backlinks Growth Graph"
-                    width={800}
-                    height={400}
-                    className="w-full h-auto"
-                  />
+                  <div className="h-[400px] relative p-4">
+                    <Line options={chartOptions} data={chartData} />
+                    {/* Arrow and Label */}
+                    <div className="absolute left-[45%] top-[45%] flex flex-col items-center">
+                      <div className="text-center mb-2">
+                        <div className="font-medium">Started SEO with</div>
+                        <div className="text-orange-500 font-semibold">GetMoreBacklinks</div>
+                      </div>
+                      <svg
+                        width="24"
+                        height="60"
+                        viewBox="0 0 24 60"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="transform rotate-45"
+                      >
+                        <path
+                          d="M12 60L23.547 40L0.452994 40L12 60ZM10.5 0L10.5 42L13.5 42L13.5 0L10.5 0Z"
+                          fill="black"
+                        />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,30 +280,92 @@ export default function Hero() {
                 </Link>
               </div>
 
-              {/* Card 2 - Scale with less effort */}
-              <div className="bg-white rounded-3xl border border-gray-200 p-6 flex flex-col">
+              {/* Card 2 - Backlink Profiles */}
+              <div className="bg-white rounded-3xl border border-gray-200 p-8 space-y-6">
                 <h3 className="text-2xl sm:text-3xl font-bold mb-2">
                   Scale with <span className="text-[#F36516]">90% less effort</span>
                 </h3>
-                <p className="text-gray-600 mb-6">
-                  Outreach made easy. Send thousands of backlink outreach emails in just minutes.
-                </p>
-                <div className="flex flex-col gap-6 transform">
-                  <BacklinkCard
-                    domain="saasydb.com"
-                    rating={45}
-                    backlinks="2.8k"
-                    dofollow={97}
-                    tiltDirection="left"
-                  />
-                  <div className="transform -mt-2">
-                    <BacklinkCard
-                      domain="skillop.in"
-                      rating={65}
-                      backlinks="1.8k"
-                      dofollow={84}
-                      tiltDirection="right"
-                    />
+                <p className="text-gray-600 mb-6">Outreach made easy. Get detailed backlink profiles instantly.</p>
+
+                {/* First Backlink Card */}
+                <div className="relative transform -rotate-2 transition-transform hover:rotate-0 hover:scale-[1.02]">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#F36516]/20 to-[#FE9D40]/20 rounded-3xl transform rotate-2"></div>
+                  <div className="bg-white rounded-3xl border-2 border-[#F36516] p-6 relative">
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-xl font-bold mb-1">Backlink profile for skillop</h3>
+                        <p className="text-gray-500 text-sm">Domain including subdomains. One link per domain</p>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-8">
+                        {/* Domain Rating */}
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm font-medium">Domain Rating</span>
+                            <button className="text-gray-400 hover:text-gray-600">
+                              <Info className="h-4 w-4" />
+                            </button>
+                          </div>
+                          <div className="relative w-20 h-20">
+                            <div className="absolute inset-0">
+                              <svg className="w-full h-full" viewBox="0 0 100 100">
+                                <circle
+                                  className="text-gray-200"
+                                  strokeWidth="10"
+                                  stroke="currentColor"
+                                  fill="transparent"
+                                  r="45"
+                                  cx="50"
+                                  cy="50"
+                                />
+                                <circle
+                                  className="text-[#F36516]"
+                                  strokeWidth="10"
+                                  strokeDasharray={25 * 2.827}
+                                  strokeLinecap="round"
+                                  stroke="currentColor"
+                                  fill="transparent"
+                                  r="45"
+                                  cx="50"
+                                  cy="50"
+                                />
+                              </svg>
+                            </div>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="text-3xl font-bold">25</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Backlinks */}
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm font-medium">Backlinks</span>
+                            <button className="text-gray-400 hover:text-gray-600">
+                              <Info className="h-4 w-4" />
+                            </button>
+                          </div>
+                          <div>
+                            <div className="text-3xl font-bold mb-1">117</div>
+                            <div className="text-sm text-gray-600">79% dofollow</div>
+                          </div>
+                        </div>
+
+                        {/* Linking websites */}
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm font-medium">Linking websites</span>
+                            <button className="text-gray-400 hover:text-gray-600">
+                              <Info className="h-4 w-4" />
+                            </button>
+                          </div>
+                          <div>
+                            <div className="text-3xl font-bold mb-1">64</div>
+                            <div className="text-sm text-gray-600">86% dofollow</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
