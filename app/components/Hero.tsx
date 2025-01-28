@@ -197,7 +197,7 @@ export default function Hero() {
                   />
                   <div className="transform -mt-2">
                     <BacklinkCard
-                      domain="shortsninja.com"
+                      domain="skillop.in"
                       rating={65}
                       backlinks="1.8k"
                       dofollow={84}
