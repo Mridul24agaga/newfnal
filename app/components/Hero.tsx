@@ -231,9 +231,12 @@ export default function Hero() {
                   <span className="text-2xl text-[#F36516]">Sign Up</span> →{" "}
                   <span className="text-2xl text-[#F36516]">Free Directory List</span>
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 mb-4 hidden sm:block">
                   Find high quality, relevant backlinks for your site and email asking for a backlink, all in one
                   platform. Free directories sign up.
+                </p>
+                <p className="text-gray-600 mb-4 sm:hidden">
+                  Find high quality, relevant backlinks for your site. Free directories sign up.
                 </p>
                 <div className="flex-grow mb-4">
                   <BacklinksTable />
