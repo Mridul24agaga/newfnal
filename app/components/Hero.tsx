@@ -6,20 +6,18 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BacklinksTable } from "./backlinks-table"
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  type ChartOptions,
-} from "chart.js"
-import { Line } from "react-chartjs-2"
+import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
+const chartData = [
+  { date: "22 Mar", domains: 0 },
+  { date: "17 Apr", domains: 0 },
+  { date: "13 May", domains: 0 },
+  { date: "8 Jun", domains: 5 },
+  { date: "4 Jul", domains: 8 },
+  { date: "30 Jul", domains: 10 },
+  { date: "25 Aug", domains: 30 },
+  { date: "20 Sep", domains: 45 },
+]
 
 export default function Hero() {
   const [url, setUrl] = useState("")
@@ -36,78 +34,6 @@ export default function Hero() {
     if (url) {
       router.push("/auth-form")
     }
-  }
-
-  const chartDates = ["22 Mar", "17 Apr", "13 May", "8 Jun", "4 Jul", "30 Jul", "25 Aug", "20 Sep"]
-  const chartValues = [0, 0, 0, 5, 8, 10, 30, 45]
-
-  const chartOptions: ChartOptions<"line"> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        grid: {
-          color: "#e5e7eb",
-        },
-        ticks: {
-          font: {
-            family: "Inter, sans-serif",
-          },
-        },
-      },
-      y: {
-        grid: {
-          color: "#e5e7eb",
-        },
-        min: 0,
-        max: 45,
-        ticks: {
-          stepSize: 10,
-          font: {
-            family: "Inter, sans-serif",
-          },
-        },
-        title: {
-          display: true,
-          text: "Referring domains",
-          font: {
-            family: "Inter, sans-serif",
-          },
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: true,
-        backgroundColor: "white",
-        titleColor: "black",
-        bodyColor: "black",
-        borderColor: "#e5e7eb",
-        borderWidth: 1,
-        padding: 12,
-        displayColors: false,
-        callbacks: {
-          label: (context) => `${context.parsed.y} referring domains`,
-        },
-      },
-    },
-  }
-
-  const chartData = {
-    labels: chartDates,
-    datasets: [
-      {
-        data: chartValues,
-        borderColor: "#f97316",
-        backgroundColor: "#f97316",
-        tension: 0.3,
-        pointRadius: 4,
-        pointHoverRadius: 6,
-      },
-    ],
   }
 
   return (
@@ -231,12 +157,52 @@ export default function Hero() {
                 </div>
                 <div className="border border-gray-200 rounded-lg overflow-hidden">
                   <div className="h-[400px] relative p-4">
-                    <Line options={chartOptions} data={chartData} />
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                        <XAxis
+                          dataKey="date"
+                          tick={{ fontSize: 12 }}
+                          tickLine={false}
+                          axisLine={{ stroke: "#e5e7eb" }}
+                        />
+                        <YAxis
+                          label={{
+                            value: "Referring domains",
+                            angle: -90,
+                            position: "insideLeft",
+                            style: { textAnchor: "middle" },
+                          }}
+                          tick={{ fontSize: 12 }}
+                          tickLine={false}
+                          axisLine={{ stroke: "#e5e7eb" }}
+                          domain={[0, 45]}
+                        />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "white",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "4px",
+                            padding: "8px",
+                          }}
+                          formatter={(value) => [`${value} referring domains`]}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="domains"
+                          stroke="#F97316"
+                          strokeWidth={2}
+                          dot={{ fill: "#F97316", strokeWidth: 2 }}
+                          activeDot={{ r: 6 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+
                     {/* Arrow and Label */}
                     <div className="absolute left-[45%] top-[45%] flex flex-col items-center">
-                      <div className="text-center mb-2">
+                      <div className="text-center mb-2 bg-white px-2 py-1 rounded-md shadow-sm">
                         <div className="font-medium">Started SEO with</div>
-                        <div className="text-orange-500 font-semibold">GetMoreBacklinks</div>
+                        <div className="text-[#F97316] font-semibold">GetMoreBacklinks</div>
                       </div>
                       <svg
                         width="24"
@@ -256,7 +222,8 @@ export default function Hero() {
                 </div>
               </div>
             </div>
-            {/* Updated Additional Cards */}
+
+            {/* Grid Cards */}
             <div className="grid gap-8 md:grid-cols-2">
               {/* Card 1 - Hours to Minutes */}
               <div className="bg-white rounded-3xl border border-gray-200 p-6 flex flex-col">
@@ -287,7 +254,7 @@ export default function Hero() {
                 </h3>
                 <p className="text-gray-600 mb-6">Outreach made easy. Get detailed backlink profiles instantly.</p>
 
-                {/* First Backlink Card */}
+                {/* Backlink Card */}
                 <div className="relative transform -rotate-2 transition-transform hover:rotate-0 hover:scale-[1.02]">
                   <div className="absolute inset-0 bg-gradient-to-r from-[#F36516]/20 to-[#FE9D40]/20 rounded-3xl transform rotate-2"></div>
                   <div className="bg-white rounded-3xl border-2 border-[#F36516] p-6 relative">
