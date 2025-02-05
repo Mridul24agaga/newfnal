@@ -218,23 +218,6 @@ export default function AuthForm() {
           </div>
         </div>
       </div>
-      {showConfirmationPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
-            <h3 className="text-lg font-semibold text-[#F78226] mb-2">Confirmation Email Sent</h3>
-            <p className="text-gray-600 mb-4">
-              We've sent you a confirmation email. Please check your inbox and follow the instructions to verify your
-              account.
-            </p>
-            <button
-              onClick={() => setShowConfirmationPopup(false)}
-              className="w-full px-4 py-2 bg-[#F78226] text-white rounded-lg hover:bg-[#FF4405] transition-colors"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
