@@ -90,32 +90,7 @@ export default function ReportPage() {
             
            
 
-            <div className="col-span-full mt-6 bg-orange-100 border border-orange-300 rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <FiEdit className="text-orange-500" />
-                <h4 className="font-bold text-lg">Boost Your SEO with Our Blog Service</h4>
-              </div>
-              <p className="text-sm mb-2">
-                <strong>Blogs are crucial for SEO success.</strong> They help you:
-              </p>
-              <ul className="list-disc list-inside text-sm space-y-1 mb-4">
-                <li>Increase organic traffic</li>
-                <li>Improve search engine rankings</li>
-                <li>Establish your brand as an industry authority</li>
-                <li>Create opportunities for backlinks</li>
-                <li>Engage your audience and increase time on site</li>
-              </ul>
-              <p className="text-sm font-bold mb-2">We offer a premium blog service to supercharge your SEO efforts:</p>
-              <ul className="list-none text-sm space-y-1 mb-4">
-                <li>✅ 10 high-quality, SEO-optimized blog posts per month</li>
-                <li>✅ Tailored content strategy aligned with your business goals</li>
-                <li>✅ Expert writers with industry knowledge</li>
-                <li>✅ Only $499/month</li>
-              </ul>
-              <p className="text-sm font-bold">
-                Ready to elevate your SEO game? DM us on <a className='text-orange-600' href="https://x.com/KrissmannGupta">Twitter</a> to get started!
-              </p>
-            </div>
+            
 
             {/* Website list with load more */}
             <div className="col-span-full">
