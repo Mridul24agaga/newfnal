@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { websiteList } from "./website-list"
 import { useState } from "react"
 import { FiClock, FiTrendingUp, FiExternalLink } from "react-icons/fi"
@@ -12,8 +13,15 @@ export default function ReportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black">
-      <main className="container mx-auto py-12 px-4">
+    <div className="min-h-screen bg-white text-black flex flex-col">
+      <header className="bg-[#294FD6] border-b border-gray-200 py-4">
+        <div className="container mx-auto px-4 flex items-center">
+          <Image src="/blawgy.png" alt="Logo" width={50} height={50} />
+          <h1 className="text-2xl font-bold ml-4">Report Page</h1>
+        </div>
+      </header>
+
+      <main className="container mx-auto py-12 px-4 flex-grow">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <section className="bg-gray-50/80 border border-gray-200 rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">
@@ -122,6 +130,13 @@ export default function ReportPage() {
           </div>
         </section>
       </main>
+
+      <footer className="bg-[#294FD6] border-t border-gray-200 py-4">
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          <Image src="/blawgy.png" alt="Logo" width={50} height={50} />
+          <p>&copy; 2025 Getmorebacklinks. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   )
 }
