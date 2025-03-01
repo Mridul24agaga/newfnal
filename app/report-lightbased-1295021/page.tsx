@@ -65,7 +65,7 @@ export default function ReportPage() {
           <h2 className="text-2xl font-bold mb-6">
             <span className="text-orange-500">Submitted</span> Websites
           </h2>
-          <p className="mb-6">Your startup has been submitted to {websiteList.length} websites. This extensive list covers a wide range of platforms, increasing your chances of visibility and success.</p>
+          <p className="mb-6">Your startup has been submitted to 200+ websites. This extensive list covers a wide range of platforms, increasing your chances of visibility and success.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             <div className="bg-gray-50/80 border border-gray-200 rounded-lg p-4">
