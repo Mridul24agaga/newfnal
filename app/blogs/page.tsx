@@ -133,6 +133,14 @@ const blogPosts = [
     date: "January 9, 2025",
     slug: "the-smart-startup-guide-how-affilate-programs-and-seo-create-sustainable-saas-growth",
     image: "/blog1png.png"
+  },
+  {
+    id: 13,
+    title: "Stop Chasing Trends: Build a Real Growth Game Plan",
+    excerpt: "Discover sustainable business growth strategies that create long-term success instead of short-lived wins.",
+    date: "March 10th, 2025",
+    slug: "link-building-on-a-budget-get-results-without-breaking-the-rank",
+    image: "/123.png"
   }
 ]
 
