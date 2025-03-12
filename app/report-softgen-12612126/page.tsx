@@ -65,7 +65,7 @@ export default function ReportPage() {
           <h2 className="text-2xl font-bold mb-6">
             <span className="text-orange-500">Submitted</span> Websites
           </h2>
-          <p className="mb-6">Your startup has been submitted to {websiteList.length} websites. This extensive list covers a wide range of platforms, increasing your chances of visibility and success.</p>
+          <p className="mb-6">Your startup has been submitted to 400 websites. This extensive list covers a wide range of platforms, increasing your chances of visibility and success.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             <div className="bg-gray-50/80 border border-gray-200 rounded-lg p-4">
@@ -245,6 +245,159 @@ export default function ReportPage() {
               <div className="relative h-[400px]">
                 <Image 
                   src="/softgen5.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/12.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/13.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/14.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/15.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/16.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/17.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/18.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/19.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/21.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/23.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/24.png" 
+                  alt="ProductHunt submission"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              
+             
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="relative h-[400px]">
+                <Image 
+                  src="/25.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"

@@ -1,7 +1,4 @@
 export const websiteList = [
-  "https://whattheai.tech/submit",
-  "https://every-ai.com/submit-tool/",
-  "https://goodaitools.com/",
   "https://www.webwiki.com/info/add-website.html",
   "https://www.somuch.com/",
   "https://www.promoteproject.com/",
