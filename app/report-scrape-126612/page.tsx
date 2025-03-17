@@ -72,7 +72,6 @@ export default function ReportPage() {
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-bold text-lg mb-2">ScrapeGraphAI</h3>
-                  <p className="text-sm text-gray-600 mb-2">Comprehensive SaaS company lead database</p>
                 </div>
                 <a 
                   href="https://scrapegraphai.com/"
