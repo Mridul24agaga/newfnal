@@ -72,7 +72,7 @@ export default function ReportPage() {
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-bold text-lg mb-2">ScrapeGraphAI</h3>
-                </div>
+          </div>
                 <a 
                   href="https://scrapegraphai.com/"
                   target="_blank"
