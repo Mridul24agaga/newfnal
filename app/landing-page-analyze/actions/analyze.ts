@@ -1,16 +1,16 @@
-'use server'
+"use server"
 
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import { load } from 'cheerio'
+import { GoogleGenerativeAI } from "@google/generative-ai"
+import { load } from "cheerio"
 
 // Initialize Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
 function extractImportantContent(html: string): string {
   const $ = load(html)
-  let content = {
-    title: $('title').text(),
-    description: $('meta[name="description"]').attr('content') || '',
+  const content = {
+    title: $("title").text(),
+    description: $('meta[name="description"]').attr("content") || "",
     headings: [] as string[],
     mainContent: [] as string[],
     buttons: [] as string[],
@@ -18,12 +18,12 @@ function extractImportantContent(html: string): string {
   }
 
   // Extract headings
-  $('h1, h2, h3').each((_, el) => {
+  $("h1, h2, h3").each((_, el) => {
     content.headings.push($(el).text().trim())
   })
 
   // Extract main content paragraphs
-  $('p').each((_, el) => {
+  $("p").each((_, el) => {
     const text = $(el).text().trim()
     if (text.length > 20) {
       content.mainContent.push(text)
@@ -36,7 +36,7 @@ function extractImportantContent(html: string): string {
   })
 
   // Extract navigation items
-  $('nav a, header a').each((_, el) => {
+  $("nav a, header a").each((_, el) => {
     content.navigation.push($(el).text().trim())
   })
 
@@ -45,18 +45,18 @@ function extractImportantContent(html: string): string {
 
 function cleanJsonString(str: string): string {
   // Remove any markdown code block syntax
-  str = str.replace(/```json\n?|\n?```/g, '')
-  
+  str = str.replace(/```json\n?|\n?```/g, "")
+
   // Remove any potential line breaks within the JSON
-  str = str.replace(/\n/g, ' ')
-  
+  str = str.replace(/\n/g, " ")
+
   // Fix common JSON formatting issues
-  str = str.replace(/,\s*}/g, '}') // Remove trailing commas
-  str = str.replace(/,\s*]/g, ']') // Remove trailing commas in arrays
-  
+  str = str.replace(/,\s*}/g, "}") // Remove trailing commas
+  str = str.replace(/,\s*]/g, "]") // Remove trailing commas in arrays
+
   // Ensure proper quote usage
   str = str.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?\s*:/g, '"$2": ')
-  
+
   return str.trim()
 }
 
@@ -69,8 +69,8 @@ export async function analyzeLandingPage(url: string) {
     // Extract important content
     const content = extractImportantContent(html)
 
-    // Initialize Gemini Pro model
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+    // Initialize Gemini 2.0 Flash model
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
 
     const prompt = `As an expert web analyst, analyze this landing page content and provide feedback.
 Return ONLY a valid JSON object with exactly this structure (no additional text or formatting):
@@ -114,29 +114,31 @@ Analyze this content: ${content}`
     const generatedText = await result.response.text()
 
     if (!generatedText) {
-      throw new Error('Failed to generate analysis')
+      throw new Error("Failed to generate analysis")
     }
 
     // Clean and parse the JSON response
     const cleanedJson = cleanJsonString(generatedText)
-    
+
     let parsedAnalysis: any
     try {
       parsedAnalysis = JSON.parse(cleanedJson)
     } catch (parseError) {
-      console.error('JSON Parse Error:', parseError)
-      console.error('Generated Text:', generatedText)
-      console.error('Cleaned JSON:', cleanedJson)
-      throw new Error('Failed to parse analysis results. Invalid JSON format received.')
+      console.error("JSON Parse Error:", parseError)
+      console.error("Generated Text:", generatedText)
+      console.error("Cleaned JSON:", cleanedJson)
+      throw new Error("Failed to parse analysis results. Invalid JSON format received.")
     }
 
     // Validate the parsed analysis structure
-    const requiredCategories = ['Messaging', 'Readability', 'Structure', 'Actionability', 'Design', 'Credibility']
+    const requiredCategories = ["Messaging", "Readability", "Structure", "Actionability", "Design", "Credibility"]
     for (const category of requiredCategories) {
-      if (!parsedAnalysis[category] || 
-          typeof parsedAnalysis[category].score !== 'number' ||
-          typeof parsedAnalysis[category].feedback !== 'string' ||
-          !Array.isArray(parsedAnalysis[category].recommendations)) {
+      if (
+        !parsedAnalysis[category] ||
+        typeof parsedAnalysis[category].score !== "number" ||
+        typeof parsedAnalysis[category].feedback !== "string" ||
+        !Array.isArray(parsedAnalysis[category].recommendations)
+      ) {
         throw new Error(`Invalid analysis format: Missing or invalid ${category} category`)
       }
     }
@@ -161,8 +163,8 @@ Analyze this content: ${content}`
 
     return analysisData
   } catch (error) {
-    console.error('Error in analysis:', error)
-    throw new Error('An error occurred during analysis: ' + (error as Error).message)
+    console.error("Error in analysis:", error)
+    throw new Error("An error occurred during analysis: " + (error as Error).message)
   }
 }
 
