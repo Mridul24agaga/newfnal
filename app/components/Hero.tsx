@@ -91,9 +91,9 @@ export default function Hero() {
                 isVisible ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-4"
               }`}
             >
-              Get 10x more backlinks
+             Most Affordable High DA 
               <br className="hidden sm:inline" />
-              <span className="text-white"> on autopilot</span>
+              <span className="text-white"> Directory Submission Services</span>
             </h1>
 
             <p
