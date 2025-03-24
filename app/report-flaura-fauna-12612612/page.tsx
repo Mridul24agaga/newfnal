@@ -71,10 +71,10 @@ export default function ReportPage() {
             <div className="bg-gray-50/80 border border-gray-200 rounded-lg p-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-bold text-lg mb-2">Bustem</h3>
+                  <h3 className="font-bold text-lg mb-2">FlauraFauna</h3>
                 </div>
                 <a 
-                  href="https://bustem.com/"
+                  href="https://www.florafauna.ai/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-black"
@@ -193,7 +193,7 @@ export default function ReportPage() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/bustem.png" 
+                  src="/flaura1.png" 
                   alt="Startupanz.com confirmation"
                   fill
                   className="object-contain"
@@ -206,7 +206,7 @@ export default function ReportPage() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/whattheai.png" 
+                  src="/flaura2.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"
@@ -218,7 +218,7 @@ export default function ReportPage() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/bustem2.png" 
+                  src="/flaura3.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"
@@ -231,7 +231,7 @@ export default function ReportPage() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/bustem3.png" 
+                  src="/flaura4.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"
@@ -243,7 +243,7 @@ export default function ReportPage() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/bustem4.png" 
+                  src="/flaura5.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"
@@ -256,7 +256,7 @@ export default function ReportPage() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/bustem5.png" 
+                  src="/flaura6.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"
@@ -269,7 +269,7 @@ export default function ReportPage() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="relative h-[400px]">
                 <Image 
-                  src="/bustem6.png" 
+                  src="/flaura7.png" 
                   alt="ProductHunt submission"
                   fill
                   className="object-contain"
@@ -279,30 +279,7 @@ export default function ReportPage() {
              
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <div className="relative h-[400px]">
-                <Image 
-                  src="/bustem7.png" 
-                  alt="ProductHunt submission"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              
-             
-            </div>
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <div className="relative h-[400px]">
-                <Image 
-                  src="/bustem8.png" 
-                  alt="ProductHunt submission"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              
-             
-            </div>
+            
 
             
 
