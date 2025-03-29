@@ -344,67 +344,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Enhanced Popup for Free Directory Listing */}
-      {showPopup && (
-        <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-xl p-6 max-w-sm z-50 border-t-4 border-[#F36516] animate-fade-in-up">
-          <button
-            onClick={() => setShowPopup(false)}
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-            aria-label="Close popup"
-          >
-            <X size={20} />
-          </button>
-          <div className="flex items-center mb-4">
-            <Gift className="text-[#F36516] mr-3" size={24} />
-            <h3 className="text-xl font-bold text-[#F36516]">Free Directory Database!</h3>
-          </div>
-          <p className="text-gray-600 mb-4">
-            Boost your SEO instantly! Get a free high-quality backlink by listing your website in our directory.
-          </p>
-          <ul className="text-sm text-gray-600 mb-4 space-y-2">
-            <li className="flex items-center">
-              <ArrowUpRight className="text-green-500 mr-2" size={16} />
-              Improve your domain authority
-            </li>
-            <li className="flex items-center">
-              <ArrowUpRight className="text-green-500 mr-2" size={16} />
-              Increase organic traffic
-            </li>
-            <li className="flex items-center">
-              <ArrowUpRight className="text-green-500 mr-2" size={16} />
-              Enhance your online visibility
-            </li>
-          </ul>
-          <div className="flex justify-between items-center">
-            <Link
-              href="/auth-form"
-              className="bg-[#F36516] text-white px-4 py-2 rounded-full font-medium hover:bg-[#E55505] transition-colors flex items-center"
-            >
-              Get Free Directory List
-              <ExternalLink className="ml-2" size={16} />
-            </Link>
-            <button onClick={() => setShowPopup(false)} className="text-gray-500 hover:text-gray-700 font-medium">
-              Maybe later
-            </button>
-          </div>
-        </div>
-      )}
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translate3d(0, 40px, 0);
-          }
-          to {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-          }
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 0.5s ease-out;
-        }
-      `}</style>
+    
     </div>
   )
 }

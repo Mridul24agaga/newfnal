@@ -11,9 +11,9 @@ export function PricingSection({ uniqueId }: PricingProps) {
     {
       name: "Pro",
       description: "Perfect for small businesses and startups",
-      price: "57",
-      originalPrice: "159",
-      discount: "64% off",
+      price: "87",
+      originalPrice: "265",
+      discount: "67% off",
       features: [
         { text: "50 Backlink Submissions", included: true },
         { text: "Hand Picked Listings", included: true },
@@ -30,8 +30,8 @@ export function PricingSection({ uniqueId }: PricingProps) {
     {
       name: "Advanced",
       description: "Ideal for growing businesses",
-      price: "87",
-      originalPrice: "259",
+      price: "127",
+      originalPrice: "385",
       discount: "67% off",
       features: [
         { text: "100 Backlink Submissions", included: true },
@@ -49,9 +49,9 @@ export function PricingSection({ uniqueId }: PricingProps) {
     {
       name: "Business",
       description: "For businesses seeking enhanced performance",
-      price: "147",
-      originalPrice: "499",
-      discount: "70% off",
+      price: "187",
+      originalPrice: "567",
+      discount: "67% off",
       features: [
         { text: "200 Backlink Submissions", included: true },
         { text: "50 Paid Platform List", included: true },
@@ -68,9 +68,9 @@ export function PricingSection({ uniqueId }: PricingProps) {
     {
       name: "Starter",
       description: "For businesses requiring maximum impact",
-      price: "199",
-      originalPrice: "799",
-      discount: "75% off",
+      price: "247",
+      originalPrice: "750",
+      discount: "67% off",
       features: [
         { text: "200 Backlink Submissions", included: true },
         { text: "75 Paid Platform List", included: true },

@@ -18,6 +18,7 @@ import SEOToolsDashboard from './components/seo-tools-dashboard'
 import Testimonials from './components/testimonialcard'
 import { PricingSection } from './components/pricing-section'
 import CTASection from './components/cta-section'
+import DirectoryListing from './components/directory-listing'
 
 export const metadata: Metadata = {
   title: 'GetMoreBacklinks - Boost Your SEO with 500+ Directory Listings',
@@ -90,6 +91,7 @@ export default function Home() {
           <Hero/>
           <Page/>
           <SEOToolsDashboard/>
+          <DirectoryListing/>
           <PricingSection uniqueId="pricing" />
           <Testimonials/>
           <TeamStats/>
