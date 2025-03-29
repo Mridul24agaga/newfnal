@@ -136,7 +136,6 @@ export default function Footer() {
                   <h4 className="text-gray-900 font-semibold mb-2">Contact Us</h4>
                   <ul className="space-y-2">
                     <li><a href="mailto:hi@mridulthareja.com" className="hover:text-gray-900 transition-colors">hi@mridulthareja.com</a></li>
-                    <li><a href="mailto:founder@markupxbrands.com" className="hover:text-gray-900 transition-colors">founder@markupxbrands.com</a></li>
                   </ul>
                 </div>
               </div>

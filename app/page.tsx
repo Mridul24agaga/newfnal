@@ -90,8 +90,6 @@ export default function Home() {
       <body>
         <main>
           <Hero/>
-          <Page/>
-          <SEOToolsDashboard/>
           <DirectoryListing/>
           <CardGrid/>
           <PricingSection uniqueId="pricing" />
