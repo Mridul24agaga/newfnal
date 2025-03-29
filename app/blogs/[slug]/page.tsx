@@ -6,7 +6,9 @@ import { ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
 import Footer from "@/app/components/footer"
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+// Remove the type annotations completely for generateMetadata
+export async function generateMetadata(props: any): Promise<Metadata> {
+  const { params } = props
   const post = await getBlogPostBySlug(params.slug)
 
   if (!post) {
@@ -50,7 +52,9 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+// Remove type annotations for the page component as well
+export default async function BlogPostPage(props: any) {
+  const { params } = props
   const post = await getBlogPostBySlug(params.slug)
 
   if (!post) {
