@@ -19,6 +19,7 @@ import Testimonials from './components/testimonialcard'
 import { PricingSection } from './components/pricing-section'
 import CTASection from './components/cta-section'
 import DirectoryListing from './components/directory-listing'
+import CardGrid from './components/card-grid'
 
 export const metadata: Metadata = {
   title: 'GetMoreBacklinks - Boost Your SEO with 500+ Directory Listings',
@@ -92,6 +93,7 @@ export default function Home() {
           <Page/>
           <SEOToolsDashboard/>
           <DirectoryListing/>
+          <CardGrid/>
           <PricingSection uniqueId="pricing" />
           <Testimonials/>
           <TeamStats/>

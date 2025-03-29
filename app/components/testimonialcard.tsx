@@ -1,135 +1,189 @@
-export default function TestimonialsSection() {
+"use client"
+
+import { ExternalLink } from "lucide-react"
+
+export default function TestimonialSection() {
   const testimonials = [
+    
     {
-      text: '"the perfect tool for startups like ours. Affordable, fast, and it actually improved our search rankings."',
-      author: "Stuart",
-      role: "Founder",
-      avatar: "/50.jpg",
+      name: "Amit Verma",
+      position: "",
+      avatar: "/amit.jpg",
+      content: "Thanks bro, just visited getmorebacklinks, really impressive. Would love to connect with you:)",
+      date: "Mar 22, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/whocares0412/status/1888814676450197649",
     },
     {
-      text: '"i love how seamless the process is. Enter your details once, and the platform does the heavy lifting"',
-      author: "Frank D.",
-      role: "Entrepreneur",
-      avatar: "/49.jpg",
-      isLarge: true,
+      name: "RTR",
+      position: "",
+      avatar: "/raghu.jpg",
+      content: "Checkout getmorebacklinks.org By @KrissmannGupta and @Innvisionagency",
+      date: "Mar 19, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/raghu_rtr/status/1876320392106979477",
     },
     {
-      text: '"its incredibly easy to use, even for non-tech-savvy people."',
-      author: "Fabian.",
-      role: "Founder",
-      avatar: "/48.jpg",
+      name: "Arthur",
+      position: "",
+      avatar: "/arthur.jpg",
+      content:
+        "Just bought getmorebacklinks.org from @KrissmannGupta for my BuildFast! Excited to level up SEO game. 🚀",
+      date: "Mar 18, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/arthuryuzbashew/status/1876330172879647156",
     },
     {
-      text: '"We saw a noticeable uptick in our website traffic within two weeks of using the service"',
-      author: "Ashar J.",
-      role: "Founder",
-      avatar: "/dm.jpeg",
+      name: "Dom",
+      position: "@DG_9_6",
+      avatar: "/dom.jpg",
+      content:
+        "Backlink Automation. We submitted our product to hundreds of directories — automatically. Tools like Getmorebacklinks[dot]org helped us build backlinks at scale.",
+      date: "Mar 16, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/DG_9_6/status/1902723043488649601",
     },
     {
-      text: '"This is the best B2B Tool!"',
-      author: "Wesam",
-      role: "SAAS Owner",
-      avatar: "/cok.jpeg",
+      name: "Kaivan Parekh",
+      position: "@KaivanParekh2",
+      avatar: "/kavin.jpg",
+      content:
+        "http://Getmorebacklinks.org Don't click if you're not looking into increasing website traffic and optimising SEO for your website. The compounding SEO effect kicked in fast.",
+      date: "Mar 15, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/KaivanParekh2/status/1881350868400046292",
     },
     {
-      text: '"This is sooo good."',
-      author: "Baback",
-      role: "Founder",
-      avatar: "/cj.jpeg",
+      name: "Andrew",
+      position: "",
+      avatar: "/andrew.jpg",
+      content: "I would hanestly considered your service if I found it earlier. But already bought one 🤷‍♂️",
+      date: "Mar 12, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/andriixzvf/status/1903901641251942698",
     },
     {
-      text: '"The value for money is unmatched. For anyone serious about backlinks, this is a must-have tool"',
-      author: "Julie J.",
-      role: "Entrepreneur",
-      avatar: "/aunty45.jpeg",
+      name: "Stuart, saasyDB",
+      position: "@WhoWorksThere",
+      avatar: "/stuart.png",
+      content:
+        "This crazy jump in domain rating is from actively building links for saasyDB. it's wild. I want to do this more and more. And I didn't even do the labor, I hired @KrissmannGupta and his team did most of it",
+      date: "Mar 10, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/WhoWorksThere/status/1892672579141308794",
     },
     {
-      text: '""Finally, a directory submission tool that actually delivers results! The AI makes the process effortless."',
-      author: "Dean F.",
-      role: "Entrepreneur",
-      avatar: "/cowoker.jpeg",
+      name: "Lewis ⚡ oss/acc",
+      position: "@illyism",
+      avatar: "/lewis.jpg",
+      content: "lmao check out this out getmorebacklinks.org from @KrissmannGupta @Innvisionagency",
+      date: "Mar 24, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/lewisbuildsai/status/1891187147597619242",
     },
     {
-      text: '"GetMoreBacklinks is a lifesaver! It’s like having a whole team working for you, but at a fraction of the cost"',
-      author: "Thomas",
-      role: "SAAS Owner",
-      avatar: "/kag.jpg",
+      name: "Russ Shimon",
+      position: "",
+      avatar: "/russ.jpg",
+      content: "Hired @KrissmannGupta to help me figure it out!",
+      date: "Mar 8, 2025",
+      hasTwitter: true,
+      twitterUrl: "https://x.com/pureshimon/status/1871376482116964685",
     },
   ]
 
   return (
-    <section className="py-24 px-4 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <span className="text-orange-500 font-medium mb-4 block">Testimonials</span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black max-w-4xl mx-auto leading-[1.1]">
-            We have inspired thousands of
-            <br />
-            amazing people
+    <div className="bg-white py-16 px-4 md:px-6 lg:px-8" style={{ fontFamily: "Saira, sans-serif" }}>
+      <style jsx global>{`
+        @import url("https://fonts.googleapis.com/css2?family=Saira:wght@300;400;500;600;700&display=swap");
+      `}</style>
+
+      <div className="max-w-6xl mx-auto">
+        {/* Heading and Description */}
+        <div className="text-center mb-12">
+          <h2
+            className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"
+            style={{ fontFamily: "Saira, sans-serif" }}
+          >
+            What Our Users Say
           </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg" style={{ fontFamily: "Saira, sans-serif" }}>
+            Join thousands of satisfied users who have transformed their SEO with GetMoreBacklinks
+          </p>
         </div>
 
-        <div className="grid grid-cols-12 gap-6">
-          {/* First row */}
-          <div className="col-span-12 md:col-span-3">
-            <TestimonialCard {...testimonials[0]} />
-          </div>
-          <div className="col-span-12 md:col-span-6">
-            <TestimonialCard {...testimonials[1]} />
-          </div>
-          <div className="col-span-12 md:col-span-3">
-            <TestimonialCard {...testimonials[2]} />
-          </div>
+        {/* Testimonials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {testimonials.map((testimonial, index) => (
+            <div
+              key={index}
+              className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col shadow-sm hover:shadow-md transition-all duration-300 relative"
+            >
+              {/* Twitter/X Icon */}
+              {testimonial.hasTwitter && (
+                <a
+                  href={testimonial.twitterUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute top-5 right-5 text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </a>
+              )}
 
-          {/* Second row */}
-          <div className="col-span-12 md:col-span-4">
-            <TestimonialCard {...testimonials[3]} />
-          </div>
-          <div className="col-span-12 md:col-span-4">
-            <TestimonialCard {...testimonials[4]} />
-          </div>
-          <div className="col-span-12 md:col-span-4">
-            <TestimonialCard {...testimonials[5]} />
-          </div>
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+                  <img
+                    src={testimonial.avatar || "/placeholder.svg"}
+                    alt={`${testimonial.name}'s avatar`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800" style={{ fontFamily: "Saira, sans-serif" }}>
+                    {testimonial.name}
+                  </h3>
+                  {testimonial.position && (
+                    <p className="text-sm text-gray-600" style={{ fontFamily: "Saira, sans-serif" }}>
+                      {testimonial.position}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-          {/* Third row */}
-          <div className="col-span-12 md:col-span-4">
-            <TestimonialCard {...testimonials[6]} />
-          </div>
-          <div className="col-span-12 md:col-span-4">
-            <TestimonialCard {...testimonials[7]} />
-          </div>
-          <div className="col-span-12 md:col-span-4">
-            <TestimonialCard {...testimonials[8]} />
-          </div>
+              <p className="text-gray-700 mb-4 flex-grow" style={{ fontFamily: "Saira, sans-serif" }}>
+                {testimonial.content}
+              </p>
+
+              <div className="mt-2">
+                <span className="text-sm text-gray-500" style={{ fontFamily: "Saira, sans-serif" }}>
+                  {testimonial.date}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    </section>
-  )
-}
 
-function TestimonialCard({
-  text,
-  author,
-  role,
-  avatar,
-}: {
-  text: string
-  author: string
-  role: string
-  avatar: string
-}) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-6 h-full relative transition-all hover:border-orange-500">
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500/5 to-orange-500/10 opacity-0 hover:opacity-100 transition-opacity" />
-      <div className="space-y-4">
-        <p className="text-gray-900">{text}</p>
-        <div className="flex items-center gap-3">
-          <img src={avatar || "/placeholder.svg"} alt={author} className="w-10 h-10 rounded-full" />
-          <div>
-            <div className="font-medium text-gray-900">{author}</div>
-            <div className="text-sm text-gray-600">{role}</div>
-          </div>
+        {/* CTA Button */}
+        <div className="mt-12 text-center">
+          <a
+            href="#pricing"
+            rel="noopener noreferrer"
+            className="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-medium px-8 py-3 rounded-full relative overflow-hidden group shadow-md transition-all duration-300"
+            style={{ fontFamily: "Saira, sans-serif" }}
+          >
+            <span className="relative z-10">Get More Backlinks Today</span>
+            <span className="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+            <ExternalLink size={16} className="ml-2 relative z-10" />
+          </a>
         </div>
       </div>
     </div>
