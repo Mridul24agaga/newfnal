@@ -32,7 +32,7 @@ export default function Hero() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (url) {
-      router.push("/auth-form")
+      router.push("/#pricing")
     }
   }
 
