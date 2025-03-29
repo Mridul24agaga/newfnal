@@ -33,7 +33,7 @@ export default function CardGrid() {
     }
 
     return (
-        <div className="min-h-screen w-full bg-white overflow-hidden relative p-4 mt-20">
+        <div id="results" className="min-h-screen w-full bg-white overflow-hidden relative p-4 mt-20">
             <div className="text-center mb-10">
                 <h1
                     className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"

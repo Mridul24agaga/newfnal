@@ -59,10 +59,10 @@ export default function Hero() {
                 Blogs
               </Link>
               <Link
-                href="/auth-form"
+                href="/#results"
                 className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
               >
-                Login
+                See Results
               </Link>
             </div>
           </div>
