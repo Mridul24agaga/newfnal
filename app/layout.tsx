@@ -92,6 +92,69 @@ export default function RootLayout({
             });
           `}
         </Script>
+
+        {/* Google tag (gtag.js) event - delayed navigation helper */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+  // Helper function to delay opening a URL until a gtag event is sent.
+  // Call it in response to an action that should navigate to a URL.
+  function gtagSendEvent(url) {
+    var callback = function () {
+      if (typeof url === 'string') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'ads_conversion_Purchase_1', {
+      'event_callback': callback,
+      'event_timeout': 2000,
+      // <event_parameters>
+    });
+    return false;
+  }
+`,
+          }}
+        />
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+  gtag('event', 'ads_conversion_Purchase_1', {
+    // <event_parameters>
+  });
+`,
+          }}
+        />
+
+        {/* Google Analytics Helper Function */}
+        <Script id="gtag-helper" strategy="afterInteractive">
+          {`
+            // Helper function to delay opening a URL until a gtag event is sent.
+            // Call it in response to an action that should navigate to a URL.
+            function gtagSendEvent(url) {
+              var callback = function () {
+                if (typeof url === 'string') {
+                  window.location = url;
+                }
+              };
+              gtag('event', 'ads_conversion_Purchase_1', {
+                'event_callback': callback,
+                'event_timeout': 2000,
+                // <event_parameters>
+              });
+              return false;
+            }
+          `}
+        </Script>
+
+        {/* Google Analytics Conversion Event */}
+        <Script id="gtag-conversion" strategy="afterInteractive">
+          {`
+            gtag('event', 'ads_conversion_Purchase_1', {
+              // <event_parameters>
+            });
+          `}
+        </Script>
       </head>
       <UserProvider>
         <body>{children}</body>
