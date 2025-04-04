@@ -121,7 +121,7 @@ export default function ReportPage() {
               <div className="bg-orange-100 border-2 border-orange-500 rounded-lg p-6 text-center">
                 <p className="text-2xl font-bold mb-4">⭐ IMPORTANT NOTE ⭐</p>
                 <p className="text-xl font-bold">
-                  If your startup has not been listed yet, don't worry! It takes 30-60 days for the results to appear.
+                  If your startup has not been listed yet, don't worry! It takes 60-90 days for the results to appear.
                 </p>
                 <p className="text-lg mt-4">
                   After 30 days, if you face any issues, message us on <a className='text-orange-600' href="https://x.com/KrissmannGupta">Twitter</a>. We will help you out as much as we can!
