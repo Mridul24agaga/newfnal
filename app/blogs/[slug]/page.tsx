@@ -407,7 +407,7 @@ export default function BlogPost() {
 
         // If not found in static blogs, fetch from the API
         const apiKey = "351f7b8a-f756-47cb-a44d-b37420d54516" // Replace with your actual API key
-        const response = await fetch("https://getmoreseo.org/api/fetch-blogs", {
+        const response = await fetch("https://www.getmoreseo.org/api/fetch-blogs", {
           method: "GET",
           headers: {
             "x-api-key": apiKey,

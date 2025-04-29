@@ -247,7 +247,7 @@ async function fetchBlogsFromAPI(): Promise<BlogPost[]> {
 
   try {
     // Fetch blogs from the API endpoint
-    const response = await fetch("https://getmoreseo.org/api/fetch-blogs", {
+    const response = await fetch("https://www.getmoreseo.org/api/fetch-blogs", {
       method: "GET",
       headers: {
         "x-api-key": API_KEY,
