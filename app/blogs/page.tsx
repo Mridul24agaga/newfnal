@@ -1,9 +1,26 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowRight } from "lucide-react"
-import Footer from "@/app/components/footer"
-import { getBlogPosts } from "@/lib/blog-service"
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import Footer from "@/app/components/footer";
+
+// Define interface for API blog data
+interface APIBlog {
+  blog_post: string;
+  user_id: string;
+}
+
+// Define interface for blog post (used for both static and dynamic posts)
+interface BlogPost {
+  id: number;
+  title: string;
+  excerpt: string;
+  date: string;
+  slug: string;
+  image: string;
+  blog_post?: string; // Optional for dynamic posts
+  user_id?: string; // Optional for dynamic posts
+}
 
 export const metadata: Metadata = {
   title: "GetMoreBacklinks Blog - Guides and Tips for SaaS Growth",
@@ -37,10 +54,10 @@ export const metadata: Metadata = {
       "en-US": "https://www.getmorebacklinks.org/blogs",
     },
   },
-}
+};
 
 // This would typically come from a database or CMS
-const staticBlogPosts = [
+const staticBlogPosts: BlogPost[] = [
   {
     id: 1,
     title: "Top 10 Software Listing Websites for New Startups in 2025",
@@ -158,20 +175,164 @@ const staticBlogPosts = [
     slug: "link-building-on-a-budget-get-results-without-breaking-the-rank",
     image: "/123.png",
   },
-]
+];
+
+// Helper function to extract a title from blog post and remove asterisks
+export const extractTitle = (blogPost: string): string => {
+  if (!blogPost) return "Untitled Blog";
+
+  // Remove asterisks from the blog post
+  const cleanBlogPost = blogPost.replace(/\*/g, "");
+
+  // Extract first sentence or first 50 characters as title
+  const firstSentence = cleanBlogPost.split(".")[0];
+  return firstSentence.length > 50 ? firstSentence.substring(0, 50) + "..." : firstSentence;
+};
+
+// Helper function to extract an excerpt from blog post
+export const extractExcerpt = (blogPost: string): string => {
+  if (!blogPost) return "No content available";
+
+  // Remove asterisks from the blog post
+  const cleanBlogPost = blogPost.replace(/\*/g, "");
+
+  // Get content after the first sentence for the excerpt
+  const sentences = cleanBlogPost.split(".");
+  if (sentences.length > 1) {
+    const excerpt = sentences.slice(1, 3).join("."); // Use 2nd and 3rd sentences for excerpt
+    return excerpt.length > 150 ? excerpt.substring(0, 150) + "..." : excerpt;
+  }
+
+  // If there's only one sentence, use part of it
+  return cleanBlogPost.length > 150 ? cleanBlogPost.substring(0, 150) + "..." : cleanBlogPost;
+};
+
+// Helper function to create a URL-friendly slug from a title
+export const createSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/--+/g, "-") // Replace multiple hyphens with single hyphen
+    .trim(); // Trim whitespace
+};
+
+// Helper function to extract the first URL from a blog post
+export const extractImageUrl = (blogPost: string): string | null => {
+  if (!blogPost) return null;
+
+  // Regular expression to match URLs
+  const urlRegex = /(https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp))/i;
+  const match = blogPost.match(urlRegex);
+
+  if (match && match[0]) {
+    return match[0];
+  }
+
+  // If no image URL found, try to find any URL
+  const generalUrlRegex = /(https?:\/\/[^\s]+)/i;
+  const generalMatch = blogPost.match(generalUrlRegex);
+
+  if (generalMatch && generalMatch[0]) {
+    return generalMatch[0];
+  }
+
+  return null;
+};
+
+// This function fetches blogs from the API
+async function fetchBlogsFromAPI(): Promise<BlogPost[]> {
+  // API key - in production, this should be stored in environment variables
+  const API_KEY = "351f7b8a-f756-47cb-a44d-b37420d54516"; // Replace with your actual API key
+
+  try {
+    // Fetch blogs from the API endpoint
+    const response = await fetch("http://localhost:3000/api/fetch-blogs", {
+      method: "GET",
+      headers: {
+        "x-api-key": API_KEY,
+        Accept: "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      console.error("API response not OK:", response.status, response.statusText);
+      return [];
+    }
+
+    // Parse the response as text first to inspect it
+    const responseText = await response.text();
+
+    try {
+      // Try to parse the response as JSON
+      const result = JSON.parse(responseText);
+      let fetchedBlogs: APIBlog[] = [];
+
+      // Check if the result contains an error about multiple rows
+      if (result.error && typeof result.error === "string" && result.error.includes("multiple (or no) rows returned")) {
+        // If the error contains blogs data, use it
+        if (result.blogs && Array.isArray(result.blogs)) {
+          fetchedBlogs = result.blogs;
+        }
+      } else {
+        // Handle different response formats
+        if (Array.isArray(result)) {
+          fetchedBlogs = result;
+        } else if (result.blogs && Array.isArray(result.blogs)) {
+          fetchedBlogs = result.blogs;
+        } else if (typeof result === "object" && result.blog_post) {
+          fetchedBlogs = [result];
+        }
+      }
+
+      // Convert the fetched blogs to the format expected by the main blogs page
+      return fetchedBlogs.map((blog: APIBlog, index: number): BlogPost => {
+        const title = extractTitle(blog.blog_post);
+        const excerpt = extractExcerpt(blog.blog_post);
+        const imageUrl = extractImageUrl(blog.blog_post);
+        const slug = createSlug(title);
+
+        return {
+          id: 14 + index, // Start IDs after the static blogs (which end at ID 13)
+          title,
+          excerpt,
+          date: new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+          slug,
+          image: imageUrl || "/diverse-blog-community.png",
+          blog_post: blog.blog_post, // Keep the original content
+          user_id: blog.user_id, // Keep the original user_id
+        };
+      });
+    } catch (parseError) {
+      console.error("Failed to parse API response:", parseError);
+      return [];
+    }
+  } catch (err) {
+    console.error("Error fetching blogs:", err);
+    return [];
+  }
+}
 
 export default async function BlogPage() {
   // Get dynamic blog posts and combine with static ones
-  const dynamicPosts = await getBlogPosts()
+  const dynamicPosts: BlogPost[] = await fetchBlogsFromAPI();
+
+  // Log for debugging
+  console.log(`Fetched ${dynamicPosts.length} dynamic blog posts`);
 
   // Filter out any dynamic posts with IDs 1-13 (those are already in staticBlogPosts)
-  const filteredDynamicPosts = dynamicPosts.filter((post) => post.id > 13)
+  const filteredDynamicPosts = dynamicPosts.filter((post) => post.id > 13);
 
   // Combine static and dynamic posts
-  const blogPosts = [...staticBlogPosts, ...filteredDynamicPosts]
+  const blogPosts: BlogPost[] = [...staticBlogPosts, ...filteredDynamicPosts];
 
   // Sort by ID to maintain order
-  blogPosts.sort((a, b) => a.id - b.id)
+  blogPosts.sort((a, b) => a.id - b.id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -188,15 +349,15 @@ export default async function BlogPage() {
         url: "https://www.getmorebacklinks.org/logo.png",
       },
     },
-    blogPost: blogPosts.map((post) => ({
+    blogPost: blogPosts.map((post: BlogPost) => ({
       "@type": "BlogPosting",
       headline: post.title,
       description: post.excerpt,
       datePublished: post.date,
       url: `https://www.getmorebacklinks.org/blogs/${post.slug}`,
-      image: `https://www.getmorebacklinks.org${post.image}`,
+      image: post.image.startsWith("http") ? post.image : `https://www.getmorebacklinks.org${post.image}`,
     })),
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -239,14 +400,22 @@ export default async function BlogPage() {
             You can find guides, tutorials and actionable tips to grow your SaaS here.
           </p>
 
+          {/* Display total count of blogs */}
+          <div className="mb-8">
+            <p className="text-gray-600">
+              Showing {blogPosts.length} blog posts ({staticBlogPosts.length} static, {filteredDynamicPosts.length}{" "}
+              dynamic)
+            </p>
+          </div>
+
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {blogPosts.map((post) => (
+            {blogPosts.map((post: BlogPost) => (
               <div key={post.id} className="group">
                 <article className="flex flex-col h-full space-y-3 border border-gray-200 rounded-lg overflow-hidden transition-shadow duration-300 hover:shadow-md">
                   <Link href={`/blogs/${post.slug}`} className="block flex-grow">
                     <div className="aspect-[3/2] relative overflow-hidden rounded-t-lg bg-gray-100">
                       <Image
-                        src={post.image || "/placeholder.svg"}
+                        src={post.image || "/placeholder.svg?height=400&width=600&query=blog"}
                         alt={post.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -281,6 +450,5 @@ export default async function BlogPage() {
 
       <Footer />
     </div>
-  )
+  );
 }
-
