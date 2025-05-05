@@ -323,14 +323,16 @@ export default function CaseStudiesPage() {
                   </span>
                 </h2>
                 <div className="bg-white rounded-xl shadow-md overflow-hidden md:flex border border-gray-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="md:w-1/2 relative">
-                    <div className="aspect-[16/9] md:h-full relative">
+                  {/* Fixed the image container to prevent overlap */}
+                  <div className="md:w-1/2 relative flex items-center justify-center p-4">
+                    <div className="w-full h-full max-h-[300px] relative">
                       <Image
                         src={featuredCaseStudy.image || "/placeholder.svg"}
                         alt={featuredCaseStudy.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-contain p-4"
+                        className="object-contain"
+                        width={500}
+                        height={300}
+                        style={{ maxHeight: "300px" }}
                         priority
                       />
                     </div>
@@ -391,13 +393,14 @@ export default function CaseStudiesPage() {
                     className="bg-white rounded-lg overflow-hidden h-full border border-gray-100 hover:shadow-md transition-shadow duration-300"
                     data-category={study.category}
                   >
-                    <div className="aspect-[16/9] relative">
+                    {/* Fixed the image container for consistency */}
+                    <div className="relative h-[200px] flex items-center justify-center p-4">
                       <Image
                         src={study.image || "/placeholder.svg"}
                         alt={study.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-contain p-4"
+                        width={400}
+                        height={200}
+                        className="object-contain max-h-[200px]"
                       />
                     </div>
                     <div className="p-5">

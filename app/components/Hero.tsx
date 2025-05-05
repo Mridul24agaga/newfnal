@@ -22,21 +22,21 @@ export default function Hero() {
       if (directoryRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = directoryRef.current
 
-        // Change direction when reaching top or bottom
-        if (scrollTop >= scrollHeight - clientHeight - 10 && scrollDirection === "down") {
+        // Change direction when reaching top or bottom with a buffer
+        if (scrollTop >= scrollHeight - clientHeight - 20 && scrollDirection === "down") {
           setScrollDirection("up")
-        } else if (scrollTop <= 10 && scrollDirection === "up") {
+        } else if (scrollTop <= 20 && scrollDirection === "up") {
           setScrollDirection("down")
         }
 
-        // Scroll based on direction
+        // Scroll based on direction with smoother movement
         if (scrollDirection === "down") {
-          directoryRef.current.scrollTop += 1
+          directoryRef.current.scrollTop += 1.5
         } else {
-          directoryRef.current.scrollTop -= 1
+          directoryRef.current.scrollTop -= 1.5
         }
       }
-    }, 30)
+    }, 20) // Faster interval for smoother scrolling
 
     // Auto-scrolling effect for mobile slider
     const mobileScrollInterval = setInterval(() => {
@@ -435,14 +435,14 @@ export default function Hero() {
               <div className="absolute inset-0 overflow-hidden rounded-lg border border-gray-200">
                 <div
                   ref={directoryRef}
-                  className="h-full overflow-y-auto scrollbar-hide"
-                  style={{ scrollBehavior: "smooth" }}
+                  className="h-full overflow-y-auto scrollbar-hide scroll-smooth"
+                  style={{ scrollBehavior: "smooth", WebkitOverflowScrolling: "touch" }}
                 >
                   <div className="grid grid-cols-2 gap-3 p-3">
                     {directoryItems.map((item, index) => (
                       <div
                         key={index}
-                        className="bg-gray-50 rounded-lg border border-gray-100 p-3 hover:border-gray-300 transition-colors"
+                        className="bg-gray-50 rounded-lg border border-gray-100 p-3 hover:border-gray-300 transition-colors h-[90px] flex items-center"
                       >
                         <div className="flex items-center gap-3">
                           <div

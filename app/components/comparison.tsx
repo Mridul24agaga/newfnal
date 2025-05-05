@@ -37,7 +37,7 @@ export default function ComparisonSection() {
       name: "GetMoreBacklinks",
       highlight: true,
       tagline: "All-in-one backlink solution",
-      price: "$187",
+      price: "$127",
       pricePeriod: "one-time",
       features: {
         "directory-submissions": true,
@@ -288,7 +288,7 @@ export default function ComparisonSection() {
               </div>
               <h4 className="text-lg font-semibold mb-2">Best Value</h4>
               <p className="text-gray-600">
-                At just $187 one-time, we're more affordable than monthly subscriptions and provide comprehensive
+                At just $127 one-time, we're more affordable than monthly subscriptions and provide comprehensive
                 backlink services.
               </p>
             </div>
