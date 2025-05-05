@@ -100,17 +100,21 @@ export function PricingSection({ uniqueId }: PricingProps) {
           <div
             key={index}
             className={`relative bg-white rounded-2xl transition-all duration-200 hover:shadow-lg ${
-              plan.popular ? "shadow-lg ring-2 ring-[#EA580C]" : "border border-gray-200 hover:border-[#EA580C]/50"
+              plan.popular
+                ? "shadow-lg ring-2 ring-[#FB8C33]"
+                : index === 3
+                  ? "border border-gray-200 hover:border-[#FB8C33]/50"
+                  : "border border-gray-200 hover:border-[#EA580C]/50"
             }`}
           >
             {plan.popular && (
               <div className="absolute -top-5 inset-x-0 flex justify-center">
-                <div className="bg-[#EA580C] text-white px-4 py-1 rounded-full text-sm font-medium shadow-sm">
+                <div className={`text-white px-4 py-1 rounded-full text-sm font-medium shadow-sm bg-[#FB8C33]`}>
                   Most Popular
                 </div>
               </div>
             )}
-            <div className={`h-full flex flex-col ${plan.popular ? "bg-[#EA580C] rounded-2xl text-white" : ""}`}>
+            <div className={`h-full flex flex-col ${plan.popular ? "bg-[#FB8C33] rounded-2xl text-white" : ""}`}>
               <div className="p-6 pb-0">
                 <h3 className="text-2xl font-bold">{plan.name}</h3>
                 <p className={`mt-2 ${plan.popular ? "text-white/90" : "text-gray-600"}`}>{plan.description}</p>
@@ -134,7 +138,11 @@ export function PricingSection({ uniqueId }: PricingProps) {
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center">
                       {feature.included ? (
-                        <Check className={`h-5 w-5 mr-3 ${plan.popular ? "text-white" : "text-[#F97316]"}`} />
+                        <Check
+                          className={`h-5 w-5 mr-3 ${
+                            plan.popular ? "text-white" : index === 3 ? "text-[#FB8C33]" : "text-[#FB8C33]"
+                          }`}
+                        />
                       ) : (
                         <X className={`h-5 w-5 mr-3 ${plan.popular ? "text-white" : "text-red-500"}`} />
                       )}
@@ -153,8 +161,8 @@ export function PricingSection({ uniqueId }: PricingProps) {
                   rel="noopener noreferrer"
                   className={`block w-full text-center py-3 px-6 rounded-xl text-base font-medium transition-colors ${
                     plan.popular
-                      ? "bg-white text-[#EA580C] hover:bg-gray-50"
-                      : "bg-[#EA580C] text-white hover:bg-[#EA580C]/90"
+                      ? "bg-white text-[#FB8C33] hover:bg-gray-50"
+                      : "bg-[#FB8C33] text-white hover:bg-[#FB8C33]/90"
                   }`}
                 >
                   Get Started
@@ -168,12 +176,12 @@ export function PricingSection({ uniqueId }: PricingProps) {
       {/* Special Offer - Solo-Founder Plan */}
       <div className="max-w-4xl mx-auto mt-20 mb-8">
         <div className="text-center mb-8">
-          <span className="inline-block bg-[#EA580C] text-white px-6 py-2 rounded-full text-lg font-semibold shadow-md">
+          <span className="inline-block bg-[#FB8C33] text-white px-6 py-2 rounded-full text-lg font-semibold shadow-md">
             Special Offer
           </span>
         </div>
 
-        <div className="bg-gradient-to-br from-[#EA580C]/5 to-[#EA580C]/20 rounded-3xl border-2 border-[#EA580C] shadow-xl overflow-hidden">
+        <div className="bg-gradient-to-br from-[#FB8C33]/5 to-[#FB8C33]/20 rounded-3xl border-2 border-[#FB8C33] shadow-xl overflow-hidden">
           <div className="p-8 md:p-10">
             <div className="grid md:grid-cols-2 gap-8">
               <div>
@@ -184,18 +192,18 @@ export function PricingSection({ uniqueId }: PricingProps) {
 
                 <div className="mt-6">
                   <div className="flex items-center">
-                    <span className="text-5xl font-bold text-[#EA580C]">$1499</span>
+                    <span className="text-5xl font-bold text-[#FB8C33]">$1499</span>
                   </div>
                   <div className="mt-1 text-gray-600">
                     <span className="line-through">Original price: $2197 + $799 = $3996</span>
                   </div>
-                  <div className="mt-1 font-semibold text-[#EA580C]">SAVE $2497</div>
+                  <div className="mt-1 font-semibold text-[#FB8C33]">SAVE $2497</div>
                 </div>
 
                 <div className="mt-8">
                   <a
                     href="https://checkout.dodopayments.com/buy/pdt_CgE0m3XOryT3ujTl0pRjV?quantity=1&redirect_url=https://blogosocial.com%2Fafter-payment"
-                    className="inline-block w-full md:w-auto text-center py-4 px-8 rounded-xl text-lg font-medium bg-[#EA580C] text-white hover:bg-[#EA580C]/90 transition-colors shadow-md"
+                    className="inline-block w-full md:w-auto text-center py-4 px-8 rounded-xl text-lg font-medium bg-[#FB8C33] text-white hover:bg-[#FB8C33]/90 transition-colors shadow-md"
                   >
                     Get Solo-Founder Plan
                   </a>
@@ -206,42 +214,42 @@ export function PricingSection({ uniqueId }: PricingProps) {
                 <h4 className="text-xl font-semibold mb-4">Why Choose This Plan?</h4>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">Complete solution for solo founders</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">62% discount on combined services</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">Combines content and directory services</span>
                   </li>
                 </ul>
 
                 <div className="mt-6 space-y-3">
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">200+ only high DA directory submissions</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">X engagement from founders</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">30+ Paid directory list</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">SEO and landing page basic audit</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">60 blogs every month</span>
                   </li>
                   <li className="flex items-start">
-                    <Check className="h-5 w-5 mr-3 text-[#F97316] mt-0.5" />
+                    <Check className="h-5 w-5 mr-3 text-[#FB8C33] mt-0.5" />
                     <span className="text-[15px] text-gray-700">Dedicated manager support</span>
                   </li>
                 </div>
