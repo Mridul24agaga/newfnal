@@ -91,7 +91,6 @@ export default function TestimonialSection() {
         },
         body: JSON.stringify({
           email,
-          apiKey: "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",
           notifyEmail: "founder@markupxbrands.com",
         }),
       })
