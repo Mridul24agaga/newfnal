@@ -1,8 +1,17 @@
 import Link from "next/link"
+import { Saira } from "next/font/google"
+
+// Initialize the Saira font
+const saira = Saira({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-saira",
+})
 
 export default function CTASection() {
   return (
-    <div className="w-full py-24 bg-white relative">
+    <div className={`w-full py-24 bg-white relative ${saira.className}`}>
       {/* Grid Background */}
       <div
         className="absolute inset-0"
@@ -20,12 +29,9 @@ export default function CTASection() {
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <div className="space-y-2">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-10">
-              Perfect <span className="text-orange-500">backlinks</span>. Boost rankings.
-              <span className="text-orange-500">  Start today</span>.
+              Submit your <span className="text-orange-500">product now</span>. Get listed on
+              <span className="text-orange-500"> 200+ directories</span> today.
             </h2>
-            <p className="text-lg text-gray-600 mt-30">
-              Let our Smart AI help you build the best backlink profile for your website in a click.
-            </p>
           </div>
 
           <div className="flex flex-col items-center space-y-4">
@@ -33,7 +39,7 @@ export default function CTASection() {
               href="/#pricing"
               className="inline-flex items-center bg-orange-500 text-white rounded-lg px-8 py-3 font-semibold hover:bg-orange-600 transition-all text-lg"
             >
-              Start Building Backlinks
+              Get Started
             </Link>
           </div>
         </div>
@@ -47,4 +53,3 @@ export default function CTASection() {
     </div>
   )
 }
-

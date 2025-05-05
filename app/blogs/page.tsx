@@ -1,25 +1,28 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight } from "lucide-react";
-import Footer from "@/app/components/footer";
+import type { Metadata } from "next"
+import Link from "next/link"
+import Image from "next/image"
+import { ArrowRight, Rss } from "lucide-react"
+import Footer from "@/app/components/footer"
+import SearchBar from "../components/serach-bar"
+import CategoryFilter from "../components/category-filter"
 
 // Define interface for API blog data
 interface APIBlog {
-  blog_post: string;
-  user_id: string;
+  blog_post: string
+  user_id: string
+  title: string
 }
 
 // Define interface for blog post (used for both static and dynamic posts)
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  date: string;
-  slug: string;
-  image: string;
-  blog_post?: string; // Optional for dynamic posts
-  user_id?: string; // Optional for dynamic posts
+export interface BlogPost {
+  id: number
+  title: string
+  excerpt: string
+  date: string
+  slug: string
+  image: string
+  blog_post?: string // Optional for dynamic posts
+  user_id?: string // Optional for dynamic posts
 }
 
 export const metadata: Metadata = {
@@ -54,7 +57,7 @@ export const metadata: Metadata = {
       "en-US": "https://www.getmorebacklinks.org/blogs",
     },
   },
-};
+}
 
 // This would typically come from a database or CMS
 const staticBlogPosts: BlogPost[] = [
@@ -175,37 +178,37 @@ const staticBlogPosts: BlogPost[] = [
     slug: "link-building-on-a-budget-get-results-without-breaking-the-rank",
     image: "/123.png",
   },
-];
+]
 
 // Helper function to extract a title from blog post and remove asterisks
 export const extractTitle = (blogPost: string): string => {
-  if (!blogPost) return "Untitled Blog";
+  if (!blogPost) return "Untitled Blog"
 
   // Remove asterisks from the blog post
-  const cleanBlogPost = blogPost.replace(/\*/g, "");
+  const cleanBlogPost = blogPost.replace(/\*/g, "")
 
   // Extract first sentence or first 50 characters as title
-  const firstSentence = cleanBlogPost.split(".")[0];
-  return firstSentence.length > 50 ? firstSentence.substring(0, 50) + "..." : firstSentence;
-};
+  const firstSentence = cleanBlogPost.split(".")[0]
+  return firstSentence.length > 50 ? firstSentence.substring(0, 50) + "..." : firstSentence
+}
 
 // Helper function to extract an excerpt from blog post
 export const extractExcerpt = (blogPost: string): string => {
-  if (!blogPost) return "No content available";
+  if (!blogPost) return "No content available"
 
   // Remove asterisks from the blog post
-  const cleanBlogPost = blogPost.replace(/\*/g, "");
+  const cleanBlogPost = blogPost.replace(/\*/g, "")
 
   // Get content after the first sentence for the excerpt
-  const sentences = cleanBlogPost.split(".");
+  const sentences = cleanBlogPost.split(".")
   if (sentences.length > 1) {
-    const excerpt = sentences.slice(1, 3).join("."); // Use 2nd and 3rd sentences for excerpt
-    return excerpt.length > 150 ? excerpt.substring(0, 150) + "..." : excerpt;
+    const excerpt = sentences.slice(1, 3).join(".") // Use 2nd and 3rd sentences for excerpt
+    return excerpt.length > 150 ? excerpt.substring(0, 150) + "..." : excerpt
   }
 
   // If there's only one sentence, use part of it
-  return cleanBlogPost.length > 150 ? cleanBlogPost.substring(0, 150) + "..." : cleanBlogPost;
-};
+  return cleanBlogPost.length > 150 ? cleanBlogPost.substring(0, 150) + "..." : cleanBlogPost
+}
 
 // Helper function to create a URL-friendly slug from a title
 export const createSlug = (title: string): string => {
@@ -214,36 +217,36 @@ export const createSlug = (title: string): string => {
     .replace(/[^\w\s-]/g, "") // Remove special characters
     .replace(/\s+/g, "-") // Replace spaces with hyphens
     .replace(/--+/g, "-") // Replace multiple hyphens with single hyphen
-    .trim(); // Trim whitespace
-};
+    .trim() // Trim whitespace
+}
 
 // Helper function to extract the first URL from a blog post
 export const extractImageUrl = (blogPost: string): string | null => {
-  if (!blogPost) return null;
+  if (!blogPost) return null
 
   // Regular expression to match URLs
-  const urlRegex = /(https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp))/i;
-  const match = blogPost.match(urlRegex);
+  const urlRegex = /(https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp))/i
+  const match = blogPost.match(urlRegex)
 
   if (match && match[0]) {
-    return match[0];
+    return match[0]
   }
 
   // If no image URL found, try to find any URL
-  const generalUrlRegex = /(https?:\/\/[^\s]+)/i;
-  const generalMatch = blogPost.match(generalUrlRegex);
+  const generalUrlRegex = /(https?:\/\/[^\s]+)/i
+  const generalMatch = blogPost.match(generalUrlRegex)
 
   if (generalMatch && generalMatch[0]) {
-    return generalMatch[0];
+    return generalMatch[0]
   }
 
-  return null;
-};
+  return null
+}
 
 // This function fetches blogs from the API
 async function fetchBlogsFromAPI(): Promise<BlogPost[]> {
   // API key - in production, this should be stored in environment variables
-  const API_KEY = "351f7b8a-f756-47cb-a44d-b37420d54516"; // Replace with your actual API key
+  const API_KEY = "351f7b8a-f756-47cb-a44d-b37420d54516" // Replace with your actual API key
 
   try {
     // Fetch blogs from the API endpoint
@@ -254,48 +257,49 @@ async function fetchBlogsFromAPI(): Promise<BlogPost[]> {
         Accept: "application/json",
       },
       cache: "no-store",
-    });
+    })
 
     if (!response.ok) {
-      console.error("API response not OK:", response.status, response.statusText);
-      return [];
+      console.error("API response not OK:", response.status, response.statusText)
+      return []
     }
 
     // Parse the response as text first to inspect it
-    const responseText = await response.text();
+    const responseText = await response.text()
 
     try {
       // Try to parse the response as JSON
-      const result = JSON.parse(responseText);
-      let fetchedBlogs: APIBlog[] = [];
+      const result = JSON.parse(responseText)
+      let fetchedBlogs: APIBlog[] = []
 
       // Check if the result contains an error about multiple rows
       if (result.error && typeof result.error === "string" && result.error.includes("multiple (or no) rows returned")) {
         // If the error contains blogs data, use it
         if (result.blogs && Array.isArray(result.blogs)) {
-          fetchedBlogs = result.blogs;
+          fetchedBlogs = result.blogs
         }
       } else {
         // Handle different response formats
         if (Array.isArray(result)) {
-          fetchedBlogs = result;
+          fetchedBlogs = result
         } else if (result.blogs && Array.isArray(result.blogs)) {
-          fetchedBlogs = result.blogs;
+          fetchedBlogs = result.blogs
         } else if (typeof result === "object" && result.blog_post) {
-          fetchedBlogs = [result];
+          fetchedBlogs = [result]
         }
       }
 
       // Convert the fetched blogs to the format expected by the main blogs page
       return fetchedBlogs.map((blog: APIBlog, index: number): BlogPost => {
-        const title = extractTitle(blog.blog_post);
-        const excerpt = extractExcerpt(blog.blog_post);
-        const imageUrl = extractImageUrl(blog.blog_post);
-        const slug = createSlug(title);
+        // Use the title from the API if available, otherwise extract from blog_post
+        const blogTitle = blog.title || extractTitle(blog.blog_post)
+        const excerpt = extractExcerpt(blog.blog_post)
+        const imageUrl = extractImageUrl(blog.blog_post)
+        const slug = createSlug(blogTitle)
 
         return {
           id: 14 + index, // Start IDs after the static blogs (which end at ID 13)
-          title,
+          title: blogTitle, // Use the API title or extracted title
           excerpt,
           date: new Date().toLocaleDateString("en-US", {
             year: "numeric",
@@ -306,33 +310,70 @@ async function fetchBlogsFromAPI(): Promise<BlogPost[]> {
           image: imageUrl || "/diverse-blog-community.png",
           blog_post: blog.blog_post, // Keep the original content
           user_id: blog.user_id, // Keep the original user_id
-        };
-      });
+        }
+      })
     } catch (parseError) {
-      console.error("Failed to parse API response:", parseError);
-      return [];
+      console.error("Failed to parse API response:", parseError)
+      return []
     }
   } catch (err) {
-    console.error("Error fetching blogs:", err);
-    return [];
+    console.error("Error fetching blogs:", err)
+    return []
   }
+}
+
+// Categories for filtering
+export const categories = [
+  "SEO",
+  "Directory Submissions",
+  "Backlinks",
+  "SaaS Growth",
+  "AI Tools",
+  "Marketing",
+  "Automation",
+]
+
+// Assign categories to blog posts
+export function assignCategories(posts: BlogPost[]): Record<number, string> {
+  const postCategories: Record<number, string> = {}
+
+  posts.forEach((post) => {
+    // Assign a category based on post ID or content
+    // This is a simple assignment - in a real app, you'd have proper category assignments
+    const categoryIndex = post.id % categories.length
+    postCategories[post.id] = categories[categoryIndex]
+  })
+
+  return postCategories
 }
 
 export default async function BlogPage() {
   // Get dynamic blog posts and combine with static ones
-  const dynamicPosts: BlogPost[] = await fetchBlogsFromAPI();
+  const dynamicPosts: BlogPost[] = await fetchBlogsFromAPI()
 
   // Log for debugging
-  console.log(`Fetched ${dynamicPosts.length} dynamic blog posts`);
+  console.log(`Fetched ${dynamicPosts.length} dynamic blog posts`)
 
   // Filter out any dynamic posts with IDs 1-13 (those are already in staticBlogPosts)
-  const filteredDynamicPosts = dynamicPosts.filter((post) => post.id > 13);
+  const filteredDynamicPosts = dynamicPosts.filter((post) => post.id > 13)
 
   // Combine static and dynamic posts
-  const blogPosts: BlogPost[] = [...staticBlogPosts, ...filteredDynamicPosts];
+  const blogPosts: BlogPost[] = [...staticBlogPosts, ...filteredDynamicPosts]
 
   // Sort by ID to maintain order
-  blogPosts.sort((a, b) => a.id - b.id);
+  blogPosts.sort((a, b) => a.id - b.id)
+
+  // Featured post (first post)
+  const featuredPost = blogPosts[0]
+
+  // Recent posts (next 3 posts)
+  const recentPosts = blogPosts.slice(1, 4)
+
+  // Remaining posts
+  const remainingPosts = blogPosts.slice(4)
+
+  // Assign categories to posts
+  const postCategories = assignCategories(blogPosts)
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -357,98 +398,236 @@ export default async function BlogPage() {
       url: `https://www.getmorebacklinks.org/blogs/${post.slug}`,
       image: post.image.startsWith("http") ? post.image : `https://www.getmorebacklinks.org${post.image}`,
     })),
-  };
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       {/* Header */}
-      <header className="border-b border-gray-200 relative bg-white z-10">
-        <div className="container mx-auto px-4">
-          <div className="h-16 sm:h-20 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/getmorepacklinks.png"
-                alt="getmorebacklinks"
-                width={100}
-                height={32}
-                className="h-6 sm:h-8 w-auto"
-              />
-            </div>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <Link
-                href="/blogs"
-                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-              >
-                Blogs
-              </Link>
-              <Link
-                href="/auth-form"
-                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
-              >
-                Login
-              </Link>
+            <header className="border-b border-gray-200 relative bg-white z-10">
+              <div className="container mx-auto px-4">
+                <div className="h-16 sm:h-20 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src="/getmorepacklinks.png"
+                      alt="GetMoreBacklinks"
+                      width={100}
+                      height={32}
+                      className="h-6 sm:h-8 w-auto"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-4">
+                    <a
+                      href="/"
+                      className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                    >
+                      Home
+                    </a>
+                    <a
+                      href="/case-study"
+                      className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                    >
+                      Case Studies
+                    </a>
+                    <a
+                      href="/blogs"
+                      className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                    >
+                      Blogs
+                    </a>
+                    <a
+                      href="/#pricing"
+                      className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+                    >
+                      Get Started
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-r from-orange-50 to-orange-100 py-12 md:py-20 border-b border-orange-200">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+                GetMoreBacklinks Blog
+              </h1>
+              <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
+                Discover guides, tutorials, and actionable tips to grow your SaaS business through effective SEO
+                strategies.
+              </p>
+              <SearchBar blogPosts={blogPosts} />
             </div>
           </div>
-        </div>
-      </header>
+        </section>
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">GetMoreBacklinks Blog</h1>
-          <p className="text-xl text-gray-600 mb-12">
-            You can find guides, tutorials and actionable tips to grow your SaaS here.
-          </p>
+        {/* Featured Post */}
+        {featuredPost && (
+          <section className="py-12 container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
+                <span className="mr-2">Featured Article</span>
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200">
+                  Latest
+                </span>
+              </h2>
+              <div className="bg-white rounded-xl shadow-md overflow-hidden md:flex border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="md:w-1/2 relative">
+                  <div className="aspect-[16/9] md:h-full relative">
+                    <Image
+                      src={featuredPost.image || "/placeholder.svg?height=600&width=800&query=featured blog post"}
+                      alt={featuredPost.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                </div>
+                <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-between">
+                  <div>
+                    <time className="text-sm text-gray-500 mb-2 block" dateTime={featuredPost.date}>
+                      {featuredPost.date}
+                    </time>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3 line-clamp-2">{featuredPost.title}</h3>
+                    <p className="text-gray-600 mb-4 line-clamp-3">{featuredPost.excerpt}</p>
+                  </div>
+                  <div>
+                    <Link
+                      href={`/blogs/${featuredPost.slug}`}
+                      className="inline-flex items-center text-orange-500 hover:text-orange-600 font-medium transition-colors"
+                    >
+                      Read Full Article <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
-          {/* Display total count of blogs */}
-          <div className="mb-8">
-            <p className="text-gray-600">
-              Showing {blogPosts.length} blog posts ({staticBlogPosts.length} static, {filteredDynamicPosts.length}{" "}
-              dynamic)
-            </p>
+        {/* Categories */}
+        <section className="container mx-auto px-4 pb-8">
+          <div className="max-w-6xl mx-auto">
+            <CategoryFilter categories={categories} blogPosts={blogPosts} postCategories={postCategories} />
           </div>
+        </section>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {blogPosts.map((post: BlogPost) => (
-              <div key={post.id} className="group">
-                <article className="flex flex-col h-full space-y-3 border border-gray-200 rounded-lg overflow-hidden transition-shadow duration-300 hover:shadow-md">
-                  <Link href={`/blogs/${post.slug}`} className="block flex-grow">
-                    <div className="aspect-[3/2] relative overflow-hidden rounded-t-lg bg-gray-100">
+        {/* Recent Posts */}
+        {recentPosts.length > 0 && (
+          <section className="py-12 container mx-auto px-4 border-t border-gray-100">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-2xl font-bold text-gray-900 mb-8">Recent Articles</h2>
+              <div className="grid md:grid-cols-3 gap-8">
+                {recentPosts.map((post) => (
+                  <article
+                    key={post.id}
+                    className="bg-white rounded-lg overflow-hidden h-full border border-gray-100 hover:shadow-md transition-shadow duration-300"
+                    data-category={postCategories[post.id]}
+                  >
+                    <div className="aspect-[16/9] relative">
                       <Image
-                        src={post.image || "/placeholder.svg?height=400&width=600&query=blog"}
+                        src={post.image || "/placeholder.svg?height=400&width=600&query=blog post"}
                         alt={post.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="object-cover"
                       />
                     </div>
-                    <div className="p-4 space-y-2 flex-grow">
-                      <time className="text-sm text-gray-500" dateTime={post.date}>
-                        {post.date}
-                      </time>
-                      <h2 className="text-xl font-semibold text-gray-900 group-hover:text-gray-600 transition-colors">
-                        {post.title}
-                      </h2>
-                      <p className="text-gray-600 line-clamp-2">{post.excerpt}</p>
+                    <div className="p-5">
+                      <div className="flex justify-between items-center mb-1">
+                        <time className="text-sm text-gray-500" dateTime={post.date}>
+                          {post.date}
+                        </time>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-50 text-gray-600 border border-gray-200">
+                          {postCategories[post.id]}
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 line-clamp-2 hover:text-orange-500 transition-colors mb-2">
+                        <Link href={`/blogs/${post.slug}`} className="hover:underline">
+                          {post.title}
+                        </Link>
+                      </h3>
+                      <p className="text-gray-600 line-clamp-3 mb-4">{post.excerpt}</p>
+                      <Link
+                        href={`/blogs/${post.slug}`}
+                        className="inline-flex items-center text-orange-500 hover:text-orange-600 font-medium transition-colors"
+                      >
+                        Read Article <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
                     </div>
-                  </Link>
-                  <div className="px-4 pb-4">
-                    <Link
-                      href={`/blogs/${post.slug}`}
-                      className="inline-flex items-center text-orange-500 hover:text-orange-600 transition-colors"
-                      aria-label={`Read more about ${post.title}`}
-                    >
-                      Read More <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-                    </Link>
-                  </div>
-                </article>
+                  </article>
+                ))}
               </div>
-            ))}
+            </div>
+          </section>
+        )}
+
+        {/* All Posts */}
+        <section className="py-12 bg-gray-50 border-t border-gray-100">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold text-gray-900">All Articles</h2>
+                <div className="flex items-center gap-2">
+                  <button className="inline-flex items-center px-3 py-1.5 text-sm text-gray-600 hover:text-orange-500 transition-colors">
+                    <Rss className="h-4 w-4 mr-1" /> RSS
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {remainingPosts.map((post) => (
+                  <article
+                    key={post.id}
+                    className="bg-white rounded-lg overflow-hidden h-full border border-gray-200 hover:shadow-md transition-shadow duration-300"
+                    data-category={postCategories[post.id]}
+                  >
+                    <Link href={`/blogs/${post.slug}`} className="block">
+                      <div className="aspect-[16/9] relative">
+                        <Image
+                          src={post.image || "/placeholder.svg?height=400&width=600&query=blog post"}
+                          alt={post.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                      </div>
+                    </Link>
+                    <div className="p-5">
+                      <div className="flex justify-between items-center mb-1">
+                        <time className="text-sm text-gray-500" dateTime={post.date}>
+                          {post.date}
+                        </time>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-50 text-gray-600 border border-gray-200">
+                          {postCategories[post.id]}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-bold text-gray-900 line-clamp-2 hover:text-orange-500 transition-colors mb-2">
+                        <Link href={`/blogs/${post.slug}`} className="hover:underline">
+                          {post.title}
+                        </Link>
+                      </h3>
+                      <p className="text-gray-600 text-sm line-clamp-2 mb-3">{post.excerpt}</p>
+                      <Link
+                        href={`/blogs/${post.slug}`}
+                        className="inline-flex items-center text-sm text-orange-500 hover:text-orange-600 font-medium transition-colors"
+                      >
+                        Read More <ArrowRight className="ml-1 h-3 w-3" />
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
       </main>
 
       <Footer />
     </div>
-  );
+  )
 }

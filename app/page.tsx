@@ -7,7 +7,7 @@ import { DirectoriesSection } from './components/directories-section'
 import ListingSection from './components/listing'
 import BacklinkFeatures from './components/backlinkfeatures'
 import WhyChooseSection from './components/whychooseus'
-import ComparisonSection from './components/comparisonsection'
+import ComparisonSection from './components/comparison'
 import TeamStats from './components/teamstats'
 import FAQSection from './components/faq'
 import EarlyBirdFooter from './components/cta'
@@ -20,7 +20,8 @@ import { PricingSection } from './components/pricing-section'
 import CTASection from './components/cta-section'
 import DirectoryListing from './components/directory-listing'
 import CardGrid from './components/card-grid'
-
+import TrafficResultsSection from './components/results'
+import HowItWorksSection from './components/how-it-works'
 export const metadata: Metadata = {
   title: 'GetMoreBacklinks - Boost Your SEO with 500+ Directory Listings',
   description: 'List your website on 500+ directories to improve SEO, backlinks, ratings, and sales. Get instant traffic on your site, save days of manual work with just one click. Submit Your AI Startup To 100+ Plaƞorms In 7 Days',
@@ -90,13 +91,14 @@ export default function Home() {
       <body>
         <main>
           <Hero/>
-          <DirectoryListing/>
           <CardGrid/>
+          <HowItWorksSection/>
+          <TrafficResultsSection/>
+          <Testimonials />
           <PricingSection uniqueId="pricing" />
-          <Testimonials/>
+          <ComparisonSection/>
           <TeamStats/>
           <FAQSection/>
-          <SenjaWidget/>
 
           <CTASection/>
          

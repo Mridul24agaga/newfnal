@@ -253,4 +253,3 @@ export function PricingSection({ uniqueId }: PricingProps) {
     </section>
   )
 }
-

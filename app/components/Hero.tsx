@@ -1,43 +1,242 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { ArrowUpRight, Search, X, Gift, ExternalLink, Info } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { BacklinksTable } from "./backlinks-table"
-import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-
-const chartData = [
-  { date: "22 Mar", domains: 0 },
-  { date: "17 Apr", domains: 0 },
-  { date: "13 May", domains: 0 },
-  { date: "8 Jun", domains: 5 },
-  { date: "4 Jul", domains: 8 },
-  { date: "30 Jul", domains: 10 },
-  { date: "25 Aug", domains: 30 },
-  { date: "20 Sep", domains: 45 },
-]
+import { ArrowUpRight, Check } from "lucide-react"
 
 export default function Hero() {
-  const [url, setUrl] = useState("")
   const [isVisible, setIsVisible] = useState(false)
-  const [showPopup, setShowPopup] = useState(true)
+  const [scrollDirection, setScrollDirection] = useState("down")
+  const [mobileScrollDirection, setMobileScrollDirection] = useState("right")
+  const directoryRef = useRef<HTMLDivElement>(null)
+  const mobileSliderRef = useRef<HTMLDivElement>(null)
+  const mobileSliderContentRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
   useEffect(() => {
     setIsVisible(true)
-  }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (url) {
-      router.push("/#pricing")
+    // Auto-scrolling effect with direction change for desktop
+    const scrollInterval = setInterval(() => {
+      if (directoryRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = directoryRef.current
+
+        // Change direction when reaching top or bottom
+        if (scrollTop >= scrollHeight - clientHeight - 10 && scrollDirection === "down") {
+          setScrollDirection("up")
+        } else if (scrollTop <= 10 && scrollDirection === "up") {
+          setScrollDirection("down")
+        }
+
+        // Scroll based on direction
+        if (scrollDirection === "down") {
+          directoryRef.current.scrollTop += 1
+        } else {
+          directoryRef.current.scrollTop -= 1
+        }
+      }
+    }, 30)
+
+    // Auto-scrolling effect for mobile slider
+    const mobileScrollInterval = setInterval(() => {
+      if (mobileSliderRef.current && mobileSliderContentRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = mobileSliderRef.current
+
+        // Change direction when reaching end or start
+        if (scrollLeft >= scrollWidth - clientWidth - 10 && mobileScrollDirection === "right") {
+          setMobileScrollDirection("left")
+        } else if (scrollLeft <= 10 && mobileScrollDirection === "left") {
+          setMobileScrollDirection("right")
+        }
+
+        // Scroll based on direction
+        if (mobileScrollDirection === "right") {
+          mobileSliderRef.current.scrollLeft += 2 // Faster scroll speed
+        } else {
+          mobileSliderRef.current.scrollLeft -= 2
+        }
+      }
+    }, 20) // Faster interval for smoother scrolling
+
+    // Add touch scrolling behavior for mobile slider
+    const mobileSlider = mobileSliderRef.current
+    if (mobileSlider) {
+      let isDown = false
+      let startX: number
+      let scrollLeft: number
+
+      const handleMouseDown = (e: MouseEvent) => {
+        isDown = true
+        mobileSlider.classList.add("active")
+        startX = e.pageX - mobileSlider.getBoundingClientRect().left
+        scrollLeft = mobileSlider.scrollLeft
+      }
+
+      const handleMouseLeave = () => {
+        isDown = false
+        mobileSlider.classList.remove("active")
+      }
+
+      const handleMouseUp = () => {
+        isDown = false
+        mobileSlider.classList.remove("active")
+      }
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!isDown) return
+        e.preventDefault()
+        const x = e.pageX - mobileSlider.getBoundingClientRect().left
+        const walk = (x - startX) * 2 // Scroll speed
+        mobileSlider.scrollLeft = scrollLeft - walk
+      }
+
+      mobileSlider.addEventListener("mousedown", handleMouseDown as EventListener)
+      mobileSlider.addEventListener("mouseleave", handleMouseLeave)
+      mobileSlider.addEventListener("mouseup", handleMouseUp)
+      mobileSlider.addEventListener("mousemove", handleMouseMove as EventListener)
+
+      // Touch events for mobile
+      const handleTouchStart = (e: TouchEvent) => {
+        isDown = true
+        startX = e.touches[0].clientX - mobileSlider.getBoundingClientRect().left
+        scrollLeft = mobileSlider.scrollLeft
+      }
+
+      const handleTouchEnd = () => {
+        isDown = false
+      }
+
+      const handleTouchMove = (e: TouchEvent) => {
+        if (!isDown) return
+        const x = e.touches[0].clientX - mobileSlider.getBoundingClientRect().left
+        const walk = (x - startX) * 2
+        mobileSlider.scrollLeft = scrollLeft - walk
+      }
+
+      mobileSlider.addEventListener("touchstart", handleTouchStart as EventListener)
+      mobileSlider.addEventListener("touchend", handleTouchEnd)
+      mobileSlider.addEventListener("touchmove", handleTouchMove as EventListener)
+
+      return () => {
+        clearInterval(scrollInterval)
+        clearInterval(mobileScrollInterval)
+
+        if (mobileSlider) {
+          mobileSlider.removeEventListener("mousedown", handleMouseDown as EventListener)
+          mobileSlider.removeEventListener("mouseleave", handleMouseLeave)
+          mobileSlider.removeEventListener("mouseup", handleMouseUp)
+          mobileSlider.removeEventListener("mousemove", handleMouseMove as EventListener)
+
+          mobileSlider.removeEventListener("touchstart", handleTouchStart as EventListener)
+          mobileSlider.removeEventListener("touchend", handleTouchEnd)
+          mobileSlider.removeEventListener("touchmove", handleTouchMove as EventListener)
+        }
+      }
     }
-  }
+
+    return () => {
+      clearInterval(scrollInterval)
+      clearInterval(mobileScrollInterval)
+    }
+  }, [scrollDirection, mobileScrollDirection])
+
+  // Directory data - Product directories with logos
+  const directoryItems = [
+    {
+      name: "Product Hunt",
+      description: "Tech products and tools",
+      logo: "https://ph-static.imgix.net/ph-logo-1.png",
+      color: "#DA552F",
+    },
+    {
+      name: "Hacker News",
+      description: "Tech news and discussions",
+      logo: "https://news.ycombinator.com/favicon.ico",
+      color: "#FFFFFF",
+    },
+    {
+      name: "Reddit",
+      description: "Community discussions",
+      logo: "https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png",
+      color: "#FF4500",
+    },
+    {
+      name: "Indie Hackers",
+      description: "Independent founders",
+      logo: "https://www.indiehackers.com/images/logos/indie-hackers-logo__glyph--light.svg",
+      color: "#FFFFFF",
+    },
+    {
+      name: "BetaList",
+      description: "Early-stage startups",
+      logo: "https://www.indiemakers.tools/media/images/betalist.jpg",
+      color: "#FFFFFF",
+    },
+    {
+      name: "AppSumo",
+      description: "Software deals",
+      logo: "https://appsumo2-cdn.appsumo.com/static/images/favicon.ico",
+      color: "#FFBC00",
+    },
+    {
+      name: "G2",
+      description: "Business software reviews",
+      logo: "https://images.seeklogo.com/logo-png/40/1/g2-logo-png_seeklogo-407782.png",
+      color: "#FFFFFF",
+    },
+    {
+      name: "Capterra",
+      description: "Software reviews",
+      logo: "https://www.capterra.com/favicon.ico",
+      color: "#FF9D28",
+    },
+    {
+      name: "AlternativeTo",
+      description: "Software alternatives",
+      logo: "https://alternativeto.net/favicon.ico",
+      color: "#5064EC",
+    },
+    {
+      name: "SaaSHub",
+      description: "Software alternatives",
+      logo: "https://www.saashub.com/images/app/service_logos/9/ae995212f366/small.png",
+      color: "#3498DB",
+    },
+    {
+      name: "StackShare",
+      description: "Tech stack sharing",
+      logo: "https://media.licdn.com/dms/image/v2/C560BAQF6ChuKvla6GA/company-logo_200_200/company-logo_200_200/0/1631347132099?e=2147483647&v=beta&t=gYYzd0IpNVqpIInfBpVivXL19iUuxG68Nmu6oLYS6uU",
+      color: "#FFFFFF",
+    },
+    {
+      name: "Slant",
+      description: "Product comparisons",
+      logo: "https://www.slant.co/favicon.ico",
+      color: "#FF7A59",
+    },
+    {
+      name: "Crunchbase",
+      description: "Company database",
+      logo: "https://www.crunchbase.com/favicon.ico",
+      color: "#0288D1",
+    },
+    {
+      name: "AngelList",
+      description: "Startup jobs",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvoAyOng9I9rmvHX2Y-XXhcYLrCETnrpsuuA&s",
+      color: "#FFFFFF",
+    },
+    {
+      name: "Producthunt Alternatives",
+      description: "Similar platforms",
+      logo: "https://ph-static.imgix.net/ph-logo-1.png",
+      color: "#6C5CE7",
+    },
+  ]
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen font-saira">
       {/* Header */}
       <header className="border-b border-gray-200 relative bg-white z-10">
         <div className="container mx-auto px-4">
@@ -45,191 +244,234 @@ export default function Hero() {
             <div className="flex items-center gap-2">
               <Image
                 src="/getmorepacklinks.png"
-                alt="getmorebacklinks"
+                alt="GetMoreBacklinks"
                 width={100}
                 height={32}
                 className="h-6 sm:h-8 w-auto"
               />
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
-              <Link
+              <a
+                href="/"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Home
+              </a>
+              <a
+                href="/case-study"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Case Studies
+              </a>
+              <a
                 href="/blogs"
                 className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
               >
                 Blogs
-              </Link>
-              <Link
-                href="/#results"
-                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+              </a>
+
+              <a
+                href="/#pricing"
+                className="text-xs sm:text-sm font-medium text-white bg-[#FB8C33] hover:bg-[#EA7B22] transition-colors px-4 py-2 rounded-full"
               >
-                See Results
-              </Link>
+                Get Started
+              </a>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Orange Gradient Section */}
-      <div className="bg-gradient-to-r from-[#F36516] to-[#FE9D40] pt-8 sm:pt-12 pb-72 sm:pb-80 md:pb-96 relative z-0">
+      {/* Main Content - Orange Background */}
+      <div className="py-12 md:py-16 lg:py-20 bg-[#FB8C33]">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6">
-            {/* Subtle element */}
-            <div
-              className={`inline-flex items-center bg-white transition-all duration-1000 ease-out ${
-                isVisible ? "opacity-100 transform translate-y-0" : "opacity-0 transform -translate-y-4"
-              } rounded-full px-2 sm:px-3 py-1 sm:py-1.5 shadow-sm border border-gray-100`}
-            >
-              <span className="text-xs sm:text-sm">✨</span>
-              <span className="text-black text-xs sm:text-sm font-medium ml-1 sm:ml-2">
-                One Click to SEO and Authority
-              </span>
-            </div>
-
-            {/* Main Heading */}
-            <h1
-              className={`text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight transition-all duration-1000 ease-out ${
-                isVisible ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-4"
-              }`}
-            >
-             Most Affordable High DA 
-              <br className="hidden sm:inline" />
-              <span className="text-white"> Directory Submission Services</span>
-            </h1>
-
-            <p
-              className={`text-white/90 text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto transition-all duration-1000 delay-300 ease-out ${
-                isVisible ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-4"
-              }`}
-            >
-              The ultimate link building software. Get premium backlinks with high quality outreach, rank higher with
-              90% less effort.
-            </p>
-
-            {/* Search Form */}
-            <div
-              className={`max-w-xl mx-auto transition-all duration-1000 delay-500 ease-out ${
-                isVisible ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-4"
-              }`}
-            >
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 sm:gap-0 relative">
-                <input
-                  type="url"
-                  placeholder="Website URL"
-                  className="w-full sm:flex-1 h-12 px-4 rounded-full sm:rounded-l-full sm:rounded-r-none border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent text-sm"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  required
-                />
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto h-12 px-6 bg-orange-600 text-white font-medium transition-colors hover:bg-orange-700 text-sm rounded-full sm:rounded-l-none sm:rounded-r-full"
-                >
-                  Get Backlinks
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Overlapping Card and Additional Cards */}
-      <div className="relative z-10 -mt-64 sm:-mt-72 md:-mt-80">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            {/* Overlapping Card */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 md:p-12 mb-16">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-6">
-                Supercharge Your SEO with <span className="text-[#F46A1A]">10x More Backlinks</span>
-              </h2>
-              <p className="text-gray-600 text-sm sm:text-base md:text-lg text-center mb-6 sm:mb-8 md:mb-12">
-                Our AI-powered platform finds high-quality, relevant backlinks and automates outreach, saving you time
-                and boosting your rankings.
-              </p>
-              <div className="relative">
-                <div className="absolute -right-2 -top-2 sm:-right-4 sm:-top-4">
-                  <Image
-                    src="/wand.webp"
-                    alt="Cursor icon"
-                    width={50}
-                    height={50}
-                    className="w-8 h-8 sm:w-12 sm:h-12"
-                  />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            {/* Left Column - Text Content */}
+            <div className="space-y-6 flex flex-col h-full">
+              <div className="space-y-6 flex-grow">
+                {/* Tagline before heading */}
+                <div className="inline-flex bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                  <p className="text-white font-semibold text-sm md:text-base">
+                    #1 Most affordable directory submission service since 2024
+                  </p>
                 </div>
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
-                  <div className="h-[400px] relative p-4">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                        <XAxis
-                          dataKey="date"
-                          tick={{ fontSize: 12 }}
-                          tickLine={false}
-                          axisLine={{ stroke: "#e5e7eb" }}
-                        />
-                        <YAxis
-                          label={{
-                            value: "Referring domains",
-                            angle: -90,
-                            position: "insideLeft",
-                            style: { textAnchor: "middle" },
-                          }}
-                          tick={{ fontSize: 12 }}
-                          tickLine={false}
-                          axisLine={{ stroke: "#e5e7eb" }}
-                          domain={[0, 45]}
-                        />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "white",
-                            border: "1px solid #e5e7eb",
-                            borderRadius: "4px",
-                            padding: "8px",
-                          }}
-                          formatter={(value) => [`${value} referring domains`]}
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="domains"
-                          stroke="#F97316"
-                          strokeWidth={2}
-                          dot={{ fill: "#F97316", strokeWidth: 2 }}
-                          activeDot={{ r: 6 }}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
 
-                    {/* Arrow and Label */}
-                    <div className="absolute left-[45%] top-[45%] flex flex-col items-center">
-                      <div className="text-center mb-2 bg-white px-2 py-1 rounded-md shadow-sm">
-                        <div className="font-medium">Started SEO with</div>
-                        <div className="text-[#F97316] font-semibold">GetMoreBacklinks</div>
+                {/* Heading in 3 lines */}
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
+                  <span className="block">List on 200+</span>
+                  <span className="block">Product Hunt-style </span>
+                  <span className="block">platforms with one click.</span>
+                </h1>
+
+                {/* Description after heading */}
+                <p className="text-white/90 text-lg">
+                  GetMoreBacklinks - Your SaaS, Product, Apps, Extensions, Directories, D2C, E-commerce, Blog,
+                  Newsletters on 200+ High DA-DR directories in One click
+                </p>
+
+                {/* Benefits styled like the image */}
+                <div className="flex flex-wrap gap-3 pt-4">
+                  <div className="flex items-center gap-2 bg-[#FB8C33] border border-white/30 rounded-full px-4 py-2">
+                    <Check className="w-4 h-4 text-white" />
+                    <span className="font-medium text-white text-sm">Boost SEO</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-[#FB8C33] border border-white/30 rounded-full px-4 py-2">
+                    <Check className="w-4 h-4 text-white" />
+                    <span className="font-medium text-white text-sm">Increase Sales</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-[#FB8C33] border border-white/30 rounded-full px-4 py-2">
+                    <Check className="w-4 h-4 text-white" />
+                    <span className="font-medium text-white text-sm">Improve Ranking</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-[#FB8C33] border border-white/30 rounded-full px-4 py-2">
+                    <Check className="w-4 h-4 text-white" />
+                    <span className="font-medium text-white text-sm">Expand Visibility</span>
+                  </div>
+                </div>
+
+                {/* Mobile-only directory horizontal slider */}
+                <div className="md:hidden mt-6">
+                  <h3 className="font-medium text-white mb-3">Some of our 200+ directories</h3>
+                  <div
+                    ref={mobileSliderRef}
+                    className="overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide"
+                    style={{ scrollBehavior: "smooth" }}
+                  >
+                    <div
+                      ref={mobileSliderContentRef}
+                      className="flex space-x-3"
+                      style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
+                    >
+                      {/* Show more items to ensure continuous scrolling */}
+                      {directoryItems.slice(0, 15).map((item, index) => (
+                        <div
+                          key={index}
+                          className="flex-shrink-0 w-[180px] bg-white rounded-lg p-3 shadow-lg border border-gray-100"
+                          style={{ scrollSnapAlign: "start" }}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"
+                              style={{ backgroundColor: `${item.color}20` }}
+                            >
+                              <Image
+                                src={item.logo || "/placeholder.svg"}
+                                alt={item.name}
+                                width={40}
+                                height={40}
+                                className="w-7 h-7 object-contain"
+                                unoptimized
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-gray-900 truncate">{item.name}</div>
+                              <div className="text-xs text-gray-500 truncate">{item.description}</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-3 text-center">
+                      <span className="text-sm text-white/80">+ more directories</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Got a question section - Styled to match the image */}
+                <div className="mt-8 pt-4">
+                  <div className="bg-gray-900 text-white p-4 rounded-lg flex items-center gap-4 max-w-md">
+                    <div className="w-12 h-12 rounded-full overflow-hidden">
+                      <Image
+                        src="/mridul2.jpg"
+                        alt="Founder"
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1 font-medium text-lg">
+                        Got a question? <ArrowUpRight className="w-4 h-4" />
                       </div>
-                      <svg
-                        width="24"
-                        height="60"
-                        viewBox="0 0 24 60"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="transform rotate-45"
-                      >
-                        <path
-                          d="M12 60L23.547 40L0.452994 40L12 60ZM10.5 0L10.5 42L13.5 42L13.5 0L10.5 0Z"
-                          fill="black"
-                        />
-                      </svg>
+                      <div className="text-sm text-gray-300">
+                        DM me on{" "}
+                        <a
+                          href="https://www.linkedin.com/in/mridulthareja/"
+                          className="text-white hover:underline font-medium"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          LinkedIn
+                        </a>
+                        ,{" "}
+                        <a
+                          href="https://x.com/Innvisionagency"
+                          className="text-white hover:underline font-medium"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Twitter
+                        </a>{" "}
+                        or by{" "}
+                        <a href="mailto:hi@mridulthareja.com" className="text-white hover:underline font-medium">
+                          Email
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            
+            {/* Right Column - Directory with Auto-Scroll and Blur Effects - White Background */}
+            {/* Hidden on mobile, visible on md screens and up */}
+            <div className="hidden md:block relative h-[500px] rounded-lg bg-white shadow-lg">
+              {/* Top blur gradient */}
+              <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none rounded-t-lg"></div>
+
+              {/* Bottom blur gradient */}
+              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none rounded-b-lg"></div>
+
+              {/* Directory container */}
+              <div className="absolute inset-0 overflow-hidden rounded-lg border border-gray-200">
+                <div
+                  ref={directoryRef}
+                  className="h-full overflow-y-auto scrollbar-hide"
+                  style={{ scrollBehavior: "smooth" }}
+                >
+                  <div className="grid grid-cols-2 gap-3 p-3">
+                    {directoryItems.map((item, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-50 rounded-lg border border-gray-100 p-3 hover:border-gray-300 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"
+                            style={{ backgroundColor: `${item.color}20` }} // Light version of the brand color
+                          >
+                            <Image
+                              src={item.logo || "/placeholder.svg"}
+                              alt={item.name}
+                              width={40}
+                              height={40}
+                              className="w-7 h-7 object-contain"
+                              unoptimized
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-gray-900 truncate">{item.name}</div>
+                            <div className="text-sm text-gray-500 truncate">{item.description}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-    
     </div>
   )
 }
-

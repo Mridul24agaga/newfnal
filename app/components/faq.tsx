@@ -42,8 +42,8 @@ const faqs = [
     answer: "Yes, by building backlinks across trusted directories, GetMoreBacklinks.org can enhance your domain rating and online visibility."
   },
   {
-    question: "Do you offer a money-back guarantee?",
-    answer: "Yes, if we determine we cannot add value to your website, a refund will be provided."
+    question: "If I have DR Above 20, Will it work?",
+    answer: "It wont really affect much on the DR but will surely help your backlinks Increase"
   }
 ]
 
