@@ -161,8 +161,7 @@ export default function TestimonialSection() {
       name: "Sofus K",
       position: "@Sofuskilde",
       avatar: "/sofus.jpg",
-      content:
-        "Totally agree! Good morals and fair pricing make marketing a breeze and keep customers coming back.",
+      content: "Totally agree! Good morals and fair pricing make marketing a breeze and keep customers coming back.",
       date: "Dec 15, 2024",
       hasTwitter: true,
       twitterUrl: "http://x.com/Sofuskilde/status/1868313140150333532",
@@ -185,7 +184,6 @@ export default function TestimonialSection() {
       date: "Apr 8, 2025",
       hasTwitter: true,
     },
-    
   ]
 
   const results = [

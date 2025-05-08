@@ -2,10 +2,16 @@ import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const { email, apiKey, notifyEmail } = await request.json()
+    const { email, notifyEmail } = await request.json()
+    const apiKey = process.env.SENDINBLUE_API_KEY
 
-    if (!email || !apiKey) {
-      return NextResponse.json({ success: false, message: "Email and API key are required" }, { status: 400 })
+    if (!email) {
+      return NextResponse.json({ success: false, message: "Email is required" }, { status: 400 })
+    }
+
+    if (!apiKey) {
+      console.error("SENDINBLUE_API_KEY environment variable is not set")
+      return NextResponse.json({ success: false, message: "Server configuration error" }, { status: 500 })
     }
 
     // Add contact to Brevo
