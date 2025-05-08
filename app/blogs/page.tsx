@@ -11,6 +11,7 @@ interface APIBlog {
   blog_post: string
   user_id: string
   title: string
+  created_at?: string // Add this optional field
 }
 
 // Define interface for blog post (used for both static and dynamic posts)
@@ -297,15 +298,30 @@ async function fetchBlogsFromAPI(): Promise<BlogPost[]> {
         const imageUrl = extractImageUrl(blog.blog_post)
         const slug = createSlug(blogTitle)
 
+        // Format the date based on created_at if available, otherwise use current date
+        let postDate
+        if (blog.created_at) {
+          // If created_at exists, format it
+          const createdDate = new Date(blog.created_at)
+          postDate = createdDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        } else {
+          // Fallback to current date
+          postDate = new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        }
+
         return {
           id: 14 + index, // Start IDs after the static blogs (which end at ID 13)
           title: blogTitle, // Use the API title or extracted title
           excerpt,
-          date: new Date().toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }),
+          date: postDate,
           slug,
           image: imageUrl || "/diverse-blog-community.png",
           blog_post: blog.blog_post, // Keep the original content
@@ -405,47 +421,47 @@ export default async function BlogPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Header */}
-            <header className="border-b border-gray-200 relative bg-white z-10">
-              <div className="container mx-auto px-4">
-                <div className="h-16 sm:h-20 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src="/getmorepacklinks.png"
-                      alt="GetMoreBacklinks"
-                      width={100}
-                      height={32}
-                      className="h-6 sm:h-8 w-auto"
-                    />
-                  </div>
-                  <div className="flex items-center gap-2 sm:gap-4">
-                    <a
-                      href="/"
-                      className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                    >
-                      Home
-                    </a>
-                    <a
-                      href="/case-study"
-                      className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                    >
-                      Case Studies
-                    </a>
-                    <a
-                      href="/blogs"
-                      className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                    >
-                      Blogs
-                    </a>
-                    <a
-                      href="/#pricing"
-                      className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
-                    >
-                      Get Started
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </header>
+      <header className="border-b border-gray-200 relative bg-white z-10">
+        <div className="container mx-auto px-4">
+          <div className="h-16 sm:h-20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/getmorepacklinks.png"
+                alt="GetMoreBacklinks"
+                width={100}
+                height={32}
+                className="h-6 sm:h-8 w-auto"
+              />
+            </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <a
+                href="/"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Home
+              </a>
+              <a
+                href="/case-study"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Case Studies
+              </a>
+              <a
+                href="/blogs"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Blogs
+              </a>
+              <a
+                href="/#pricing"
+                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+              >
+                Get Started
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
 
       <main className="flex-grow">
         {/* Hero Section */}

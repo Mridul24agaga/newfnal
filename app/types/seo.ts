@@ -1,47 +1,23 @@
-export interface AnalysisResult {
-    onPageSEO: {
-      titleTag: {
-        score: number;
-        suggestions: string;
-      };
-      metaDescription: {
-        score: number;
-        suggestions: string;
-      };
-      headings: {
-        score: number;
-        suggestions: string;
-      };
-    };
-    technicalSEO: {
-      https: boolean;
-      mobileResponsive: boolean;
-      canonicalUrl: string;
-      robotsTxt: boolean;
-    };
-    imageOptimization: {
-      totalImages: number;
-      imagesWithAltText: number;
-      lazyLoadedImages: number;
-      suggestions: string;
-    };
-    contentAnalysis: {
-      wordCount: number;
-      qualitySuggestions: string;
-    };
-    structuredData: {
-      implemented: boolean;
-      recommendations: string;
-    };
-    competitiveEdge: {
-      comparison: string;
-      uniqueFeatures: string;
-    };
-    overallQuality: {
-      highPriority: string[];
-      mediumPriority: string[];
-      lowPriority: string[];
-    };
+export interface SeoAuditResult {
+  results: {
+    category: string
+    score: number
+    feedback: string
+    recommendations: string[]
+  }[]
+  summary?: {
+    good: number
+    needsImprovement: number
+    critical: number
   }
-  
-  
+  priorityActions?: {
+    high: string[]
+    medium: string[]
+    low: string[]
+  }
+  metadata: {
+    url: string
+    score: number
+    date: string
+  }
+}

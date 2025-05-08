@@ -3,7 +3,7 @@ import TeamMembers from './team-members'
 
 export default function TeamStats() {
   return (
-    <div className="bg-white py-12 sm:py-24 px-4 sm:px-6 lg:px-8">
+    <div id="founders" className="bg-white py-12 sm:py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="bg-gradient-to-br from-orange-50 to-white border-2 border-orange-200 rounded-3xl p-6 sm:p-8 md:p-16 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-orange-300"></div>

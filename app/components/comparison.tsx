@@ -161,7 +161,7 @@ export default function ComparisonSection() {
                   <div className="mt-6">
                     <a
                       href="#pricing"
-                      className="block w-full text-center bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded-full transition-colors"
+                      className="block w-full text-center bg-[#EB5C0E] hover:bg-[#EB5C0E] text-white font-medium px-6 py-3 rounded-full transition-colors"
                     >
                       Get Started
                     </a>
@@ -194,7 +194,7 @@ export default function ComparisonSection() {
                 {competitor.highlight && (
                   <a
                     href="#pricing"
-                    className="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-2 rounded-full transition-colors"
+                    className="inline-flex items-center bg-[#EB5C0E] hover:bg-orange-600 text-white font-medium px-6 py-2 rounded-full transition-colors"
                   >
                     Get Started
                   </a>
@@ -324,7 +324,7 @@ export default function ComparisonSection() {
           <a
             href="#pricing"
             rel="noopener noreferrer"
-            className="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-medium px-8 py-3 rounded-full relative overflow-hidden group transition-all duration-300 border border-orange-600"
+            className="inline-flex items-center bg-[#EB5C0E] hover:bg-orange-600 text-white font-medium px-8 py-3 rounded-full relative overflow-hidden group transition-all duration-300 border border-orange-600"
             style={{ fontFamily: "Saira, sans-serif" }}
           >
             <span className="relative z-10">Get More Backlinks Today</span>

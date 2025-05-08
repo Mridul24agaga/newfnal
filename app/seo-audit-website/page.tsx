@@ -1,69 +1,43 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import type { User } from "@supabase/auth-helpers-nextjs"
-import { useRouter } from "next/navigation"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { Menu, Search, ArrowRight, CheckCircle } from "lucide-react"
+import { useState } from "react"
+import { CheckCircle, ArrowRight, Globe } from "lucide-react"
 import Image from "next/image"
-import Sidebar from "@/app/components/Sidebar"
-import type { AnalysisResult } from "@/app/types/seo"
+import performSeoAudit from "./actions/seo-audit"
+import Footer from "../components/footer"
 
-export default function SEOOptimizer() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
+export default function SEOAuditTool() {
   const [url, setUrl] = useState("")
-  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
+  const [auditResults, setAuditResults] = useState<any | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
-  const supabase = createClientComponentClient()
 
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setUser(user)
-    }
-    getUser()
-  }, [supabase.auth])
+  const handleAudit = async () => {
+    if (!url) return
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.push("/auth-form")
-  }
-
-  const handleAnalyze = async () => {
     setLoading(true)
     setError(null)
+
     try {
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      })
-      if (!response.ok) {
-        throw new Error("Failed to analyze website")
-      }
-      const result = await response.json()
-      setAnalysis(result)
+      const results = await performSeoAudit(url)
+      setAuditResults(results)
     } catch (error) {
-      console.error("Error analyzing website:", error)
-      setError("An error occurred while analyzing the website. Please try again.")
+      console.error("Error performing SEO audit:", error)
+      setError("An error occurred while auditing the website. Please try again.")
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "SEO Website Auditor",
+    name: "SEO Audit Tool",
     applicationCategory: "SEOApplication",
     description:
-      "Analyze and optimize your website's SEO with our comprehensive SEO Website Auditor. Get detailed insights on on-page SEO, technical SEO, content quality, and more.",
+      "Comprehensive SEO audit tool that analyzes your website's search engine optimization factors and provides actionable recommendations to improve rankings.",
     operatingSystem: "Web",
-    url: "https://getmorebacklinks.org/seo-audit-website",
+    url: "https://getmorebacklinks.org/seo-audit-tool",
     offers: {
       "@type": "Offer",
       price: "0",
@@ -77,283 +51,348 @@ export default function SEOOptimizer() {
   }
 
   return (
-    <div className="flex h-screen bg-[#FBFCFE]">
+    <div className="min-h-screen bg-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Sidebar user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white border-b border-gray-200 md:hidden">
-          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <div className="w-8" /> {/* Spacer for centering */}
-            <h1 className="text-xl font-bold text-center text-gray-900">SEO Website Auditor</h1>
-            <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-md hover:bg-gray-100">
-              <Menu className="h-6 w-6 text-gray-500" />
-              <span className="sr-only">Open sidebar</span>
-            </button>
+      {/* Header */}
+      <header className="relative bg-white z-10">
+        <div className="container mx-auto px-4">
+          <div className="h-16 sm:h-20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/getmorepacklinks.png"
+                alt="GetMoreBacklinks"
+                width={100}
+                height={32}
+                className="h-6 sm:h-8 w-auto"
+              />
+            </div>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <a
+                href="/"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Home
+              </a>
+              <a
+                href="/case-study"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Case Studies
+              </a>
+              <a
+                href="/blogs"
+                className="text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                Blogs
+              </a>
+              <a
+                href="/#pricing"
+                className="text-xs sm:text-sm font-medium text-white bg-[#F36516] hover:bg-[#E55505] transition-colors px-4 py-2 rounded-full"
+              >
+                Get Started
+              </a>
+            </div>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto">
-          <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">SEO Website Auditor</h1>
-              <p className="mt-4 text-lg text-gray-600">
-                Generate, analyze, and validate URLs to enhance your website's visibility and SEO performance.
+      <main className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        {!auditResults && (
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-block bg-orange-100 text-[#F36516] px-4 py-1 rounded-full text-sm font-medium mb-6">
+              Free SEO Audit Tool
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6">
+              Complete <span className="text-[#F36516]">SEO Audit</span>
+              <br />
+              For Your Website
+            </h1>
+
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
+              Get a comprehensive SEO analysis with actionable recommendations to improve your search rankings. Our free
+              audit tool identifies critical SEO issues in seconds.
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-4 mb-16">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-500" />
+                <span className="text-gray-700">On-Page SEO Analysis</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-500" />
+                <span className="text-gray-700">Technical SEO Check</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-500" />
+                <span className="text-gray-700">Content Quality Score</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-500" />
+                <span className="text-gray-700">Mobile SEO Performance</span>
+              </div>
+            </div>
+
+            <div className="max-w-xl mx-auto bg-white rounded-lg shadow-sm p-8">
+              <div className="flex justify-center mb-4">
+                <div className="bg-[#F36516] p-4 rounded-full">
+                  <Globe className="h-6 w-6 text-white" />
+                </div>
+              </div>
+
+              <h2 className="text-2xl font-bold text-center mb-2">Audit Your Website</h2>
+              <p className="text-gray-600 text-center mb-6">Get detailed SEO insights in seconds</p>
+
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-1">
+                    * Website URL
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                      <Globe className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="url"
+                      id="url"
+                      name="url"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      placeholder="https://your-website.com/"
+                      className="w-full pl-10 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F36516]/20 focus:border-[#F36516]"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleAudit}
+                  disabled={loading || !url}
+                  className="w-full py-3 px-4 bg-[#F36516] hover:bg-[#E55505] text-white rounded-md font-medium transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {loading ? (
+                    "Auditing..."
+                  ) : (
+                    <>
+                      Start SEO Audit
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </>
+                  )}
+                </button>
+
+                <p className="text-center text-sm text-gray-500">Audit typically takes 15-30 seconds</p>
+              </div>
+            </div>
+
+            <p className="text-center text-gray-600 mt-8">
+              Already audited over <span className="text-[#F36516] font-semibold">10,000+</span> websites
+            </p>
+          </div>
+        )}
+
+        {error && <div className="max-w-2xl mx-auto mt-4 p-4 bg-red-50 text-red-700 rounded-md">{error}</div>}
+
+        {auditResults && (
+          <div className="max-w-4xl mx-auto mt-10">
+            <h2 className="text-3xl font-bold text-center mb-8">SEO Audit Results</h2>
+
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-bold">Overall SEO Score</h3>
+                <div className="text-3xl font-bold text-[#F36516]">{auditResults.metadata.score}/100</div>
+              </div>
+              <p className="text-gray-600 mb-4">
+                Audit for: <span className="font-semibold">{auditResults.metadata.url}</span>
+              </p>
+              <p className="text-gray-600">
+                Completed on:{" "}
+                <span className="font-semibold">{new Date(auditResults.metadata.date).toLocaleString()}</span>
               </p>
             </div>
 
-            <div className="mt-10">
-              <div className="rounded-lg bg-white shadow-sm border border-gray-200 p-6">
-                <div className="space-y-6">
-                  <div>
-                    <label htmlFor="url" className="sr-only">
-                      Website URL
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="url"
-                        id="url"
-                        name="url"
-                        value={url}
-                        onChange={(e) => setUrl(e.target.value)}
-                        placeholder="Enter your website URL"
-                        className="block w-full rounded-lg border border-gray-300 py-4 pl-4 pr-12 text-gray-900 placeholder:text-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-                      />
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-                        <Search className="h-5 w-5 text-gray-400" />
-                      </div>
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-4">SEO Health Summary</h3>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                      <h4 className="font-semibold">Good</h4>
                     </div>
+                    <p className="text-sm text-gray-600">{auditResults.summary?.good || 0} factors</p>
                   </div>
-
-                  <button
-                    onClick={handleAnalyze}
-                    disabled={loading || !url}
-                    className="w-full rounded-lg bg-orange-500 px-4 py-4 text-base font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500/20 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-                  >
-                    {loading ? "Analyzing..." : "Analyze Website"}
-                  </button>
+                  <div className="bg-yellow-50 p-4 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <CheckCircle className="h-5 w-5 text-yellow-500 mr-2" />
+                      <h4 className="font-semibold">Needs Improvement</h4>
+                    </div>
+                    <p className="text-sm text-gray-600">{auditResults.summary?.needsImprovement || 0} factors</p>
+                  </div>
+                  <div className="bg-red-50 p-4 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <CheckCircle className="h-5 w-5 text-red-500 mr-2" />
+                      <h4 className="font-semibold">Critical Issues</h4>
+                    </div>
+                    <p className="text-sm text-gray-600">{auditResults.summary?.critical || 0} factors</p>
+                  </div>
                 </div>
+              </div>
+            </div>
 
-                {error && <div className="mt-4 p-4 rounded-lg bg-red-50 text-red-700 text-sm">{error}</div>}
+            <div className="space-y-8">
+              {/* On-Page SEO Section */}
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-gray-50 px-6 py-4">
+                  <h3 className="text-xl font-bold">On-Page SEO</h3>
+                </div>
+                <div className="p-6 space-y-6">
+                  {auditResults.results
+                    .filter((result: any) =>
+                      ["Meta Tags", "Content", "Headings", "Keywords", "Images"].includes(result.category),
+                    )
+                    .map((result: any, index: number) => (
+                      <div key={index} className="pb-6 last:pb-0">
+                        <div className="flex justify-between items-center mb-3">
+                          <h4 className="text-lg font-semibold">{result.category}</h4>
+                          <div className="flex items-center">
+                            <span className="text-lg font-bold text-[#F36516] mr-2">{result.score}/100</span>
+                            {result.score >= 70 ? (
+                              <CheckCircle className="h-5 w-5 text-green-500" />
+                            ) : result.score >= 40 ? (
+                              <CheckCircle className="h-5 w-5 text-yellow-500" />
+                            ) : (
+                              <CheckCircle className="h-5 w-5 text-red-500" />
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-gray-700 mb-4">{result.feedback}</p>
+                        <h5 className="font-semibold mb-2 text-gray-800">Recommendations:</h5>
+                        <ul className="list-disc pl-5 text-gray-600 space-y-1">
+                          {result.recommendations.map((rec: string, idx: number) => (
+                            <li key={idx}>{rec}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                </div>
               </div>
 
-              <div className="mt-8 space-y-8">
-                <div className="rounded-lg bg-white border border-gray-200 p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">About Our SEO Audit Tool</h2>
+              {/* Technical SEO Section */}
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-gray-50 px-6 py-4">
+                  <h3 className="text-xl font-bold">Technical SEO</h3>
+                </div>
+                <div className="p-6 space-y-6">
+                  {auditResults.results
+                    .filter((result: any) =>
+                      ["Structure", "Mobile Friendliness", "Page Speed", "Security"].includes(result.category),
+                    )
+                    .map((result: any, index: number) => (
+                      <div key={index} className="pb-6 last:pb-0">
+                        <div className="flex justify-between items-center mb-3">
+                          <h4 className="text-lg font-semibold">{result.category}</h4>
+                          <div className="flex items-center">
+                            <span className="text-lg font-bold text-[#F36516] mr-2">{result.score}/100</span>
+                            {result.score >= 70 ? (
+                              <CheckCircle className="h-5 w-5 text-green-500" />
+                            ) : result.score >= 40 ? (
+                              <CheckCircle className="h-5 w-5 text-yellow-500" />
+                            ) : (
+                              <CheckCircle className="h-5 w-5 text-red-500" />
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-gray-700 mb-4">{result.feedback}</p>
+                        <h5 className="font-semibold mb-2 text-gray-800">Recommendations:</h5>
+                        <ul className="list-disc pl-5 text-gray-600 space-y-1">
+                          {result.recommendations.map((rec: string, idx: number) => (
+                            <li key={idx}>{rec}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {/* User Experience & Credibility Section */}
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-gray-50 px-6 py-4">
+                  <h3 className="text-xl font-bold">User Experience & Credibility</h3>
+                </div>
+                <div className="p-6 space-y-6">
+                  {auditResults.results
+                    .filter((result: any) => ["Actionability", "Credibility"].includes(result.category))
+                    .map((result: any, index: number) => (
+                      <div key={index} className="pb-6 last:pb-0">
+                        <div className="flex justify-between items-center mb-3">
+                          <h4 className="text-lg font-semibold">{result.category}</h4>
+                          <div className="flex items-center">
+                            <span className="text-lg font-bold text-[#F36516] mr-2">{result.score}/100</span>
+                            {result.score >= 70 ? (
+                              <CheckCircle className="h-5 w-5 text-green-500" />
+                            ) : result.score >= 40 ? (
+                              <CheckCircle className="h-5 w-5 text-yellow-500" />
+                            ) : (
+                              <CheckCircle className="h-5 w-5 text-red-500" />
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-gray-700 mb-4">{result.feedback}</p>
+                        <h5 className="font-semibold mb-2 text-gray-800">Recommendations:</h5>
+                        <ul className="list-disc pl-5 text-gray-600 space-y-1">
+                          {result.recommendations.map((rec: string, idx: number) => (
+                            <li key={idx}>{rec}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {/* Priority Action Items */}
+              <div className="bg-[#FFF8F3] rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-[#FFF0E6] px-6 py-4">
+                  <h3 className="text-xl font-bold">Priority SEO Improvements</h3>
+                </div>
+                <div className="p-6">
                   <p className="text-gray-700 mb-4">
-                    Our SEO Website Auditor is a comprehensive tool designed to analyze and improve your website's
-                    search engine optimization. It provides in-depth insights and actionable recommendations to boost
-                    your site's visibility and performance in search results.
+                    Based on our audit, here are the most important SEO actions you should take to improve your
+                    website's search rankings:
                   </p>
-                  <Image
-                    src="/seoaudit.png"
-                    alt="SEO Audit Tool Dashboard"
-                    width={600}
-                    height={300}
-                    className="rounded-lg w-full mb-4"
-                  />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Key Features:</h3>
-                  <ul className="list-disc pl-5 text-gray-600 space-y-2 mb-4">
-                    <li>In-depth analysis of on-page SEO elements</li>
-                    <li>Technical SEO audit including HTTPS, mobile responsiveness, and more</li>
-                    <li>Image optimization check</li>
-                    <li>Content quality analysis</li>
-                    <li>Structured data implementation review</li>
-                    <li>Competitive analysis</li>
-                    <li>Prioritized recommendations for improvement</li>
-                  </ul>
-                </div>
-
-                <div className="rounded-lg bg-orange-50 border border-orange-200 p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Pro Tips for SEO Success</h2>
-                  <ul className="space-y-3">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
-                      <span className="text-gray-700">
-                        Conduct regular audits to stay on top of SEO trends and algorithm updates.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
-                      <span className="text-gray-700">
-                        Focus on creating high-quality, original content that provides value to your users.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
-                      <span className="text-gray-700">
-                        Optimize your website for mobile devices to improve user experience and search rankings.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
-                      <span className="text-gray-700">
-                        Build high-quality backlinks from reputable websites in your industry.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-6 w-6 text-orange-500 mr-2 flex-shrink-0" />
-                      <span className="text-gray-700">
-                        Use our SEO Audit Tool in conjunction with other SEO strategies for best results.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <p className="mt-8 text-center text-sm text-gray-600">
-                This professional-grade tool is provided free of charge. If you find it valuable, consider sharing it
-                with your network!
-              </p>
-            </div>
-
-            {analysis && (
-              <div className="mt-12 grid gap-6 md:grid-cols-2">
-                {analysis.onPageSEO && (
-                  <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">On-Page SEO</h2>
-                    {analysis.onPageSEO.titleTag && (
-                      <div className="mb-4">
-                        <p className="font-semibold">
-                          Title Score: <span className="text-orange-500">{analysis.onPageSEO.titleTag.score}/100</span>
-                        </p>
-                        <p className="text-gray-600">{analysis.onPageSEO.titleTag.suggestions}</p>
-                      </div>
-                    )}
-                    {analysis.onPageSEO.metaDescription && (
-                      <div className="mb-4">
-                        <p className="font-semibold">
-                          Meta Description Score:{" "}
-                          <span className="text-orange-500">{analysis.onPageSEO.metaDescription.score}/100</span>
-                        </p>
-                        <p className="text-gray-600">{analysis.onPageSEO.metaDescription.suggestions}</p>
-                      </div>
-                    )}
-                    {analysis.onPageSEO.headings && (
-                      <div>
-                        <p className="font-semibold">
-                          Headings Score:{" "}
-                          <span className="text-orange-500">{analysis.onPageSEO.headings.score}/100</span>
-                        </p>
-                        <p className="text-gray-600">{analysis.onPageSEO.headings.suggestions}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {analysis.technicalSEO && (
-                  <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">Technical SEO</h2>
-                    <p className="mb-2">
-                      <span className="font-semibold">HTTPS:</span>{" "}
-                      {analysis.technicalSEO.https ? "Enabled" : "Disabled"}
-                    </p>
-                    <p className="mb-2">
-                      <span className="font-semibold">Mobile Responsive:</span>{" "}
-                      {analysis.technicalSEO.mobileResponsive ? "Yes" : "No"}
-                    </p>
-                    <p className="mb-2">
-                      <span className="font-semibold">Canonical URL:</span> {analysis.technicalSEO.canonicalUrl}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Robots.txt:</span>{" "}
-                      {analysis.technicalSEO.robotsTxt ? "Valid" : "Invalid/Missing"}
-                    </p>
-                  </div>
-                )}
-
-                {analysis.imageOptimization && (
-                  <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">Image Optimization</h2>
-                    <p className="mb-2">
-                      <span className="font-semibold">Total Images:</span> {analysis.imageOptimization.totalImages}
-                    </p>
-                    <p className="mb-2">
-                      <span className="font-semibold">Images with Alt Text:</span>{" "}
-                      {analysis.imageOptimization.imagesWithAltText}
-                    </p>
-                    <p className="mb-2">
-                      <span className="font-semibold">Lazy Loaded Images:</span>{" "}
-                      {analysis.imageOptimization.lazyLoadedImages}
-                    </p>
-                    <p className="text-gray-600">{analysis.imageOptimization.suggestions}</p>
-                  </div>
-                )}
-
-                {analysis.contentAnalysis && (
-                  <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">Content Analysis</h2>
-                    <p className="mb-4">
-                      <span className="font-semibold">Word Count:</span> {analysis.contentAnalysis.wordCount}
-                    </p>
-                    <p className="font-semibold mb-2">Quality Suggestions:</p>
-                    <ul className="list-disc pl-5 text-gray-600">
-                      {analysis.contentAnalysis.qualitySuggestions.split(". ").map((suggestion, index) => (
-                        <li key={index}>{suggestion}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {analysis.structuredData && (
-                  <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">Structured Data</h2>
-                    <p className="mb-2">
-                      <span className="font-semibold">Implemented:</span>{" "}
-                      {analysis.structuredData.implemented ? "Yes" : "No"}
-                    </p>
-                    <p className="text-gray-600">{analysis.structuredData.recommendations}</p>
-                  </div>
-                )}
-
-                {analysis.competitiveEdge && (
-                  <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">Competitive Edge</h2>
-                    <p className="mb-2">
-                      <span className="font-semibold">Comparison:</span> {analysis.competitiveEdge.comparison}
-                    </p>
-                    <p className="text-gray-600">{analysis.competitiveEdge.uniqueFeatures}</p>
-                  </div>
-                )}
-
-                {analysis.overallQuality && (
-                  <div className="bg-white shadow-md rounded-lg p-6 md:col-span-2">
-                    <h2 className="text-xl font-bold mb-4 text-gray-800">Overall SEO Quality</h2>
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="font-bold text-red-500 mb-2">High Priority:</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
-                          {analysis.overallQuality.highPriority.map((item, index) => (
-                            <li key={index}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-yellow-500 mb-2">Medium Priority:</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
-                          {analysis.overallQuality.mediumPriority.map((item, index) => (
-                            <li key={index}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-green-500 mb-2">Low Priority:</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
-                          {analysis.overallQuality.lowPriority.map((item, index) => (
-                            <li key={index}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-bold text-red-500 mb-2">High Priority:</h4>
+                      <ul className="list-disc pl-5 text-gray-600 space-y-1">
+                        {auditResults.priorityActions?.high?.map((item: string, index: number) => (
+                          <li key={index}>{item}</li>
+                        )) || <li>No high priority issues found.</li>}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-yellow-500 mb-2">Medium Priority:</h4>
+                      <ul className="list-disc pl-5 text-gray-600 space-y-1">
+                        {auditResults.priorityActions?.medium?.map((item: string, index: number) => (
+                          <li key={index}>{item}</li>
+                        )) || <li>No medium priority issues found.</li>}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-green-500 mb-2">Low Priority:</h4>
+                      <ul className="list-disc pl-5 text-gray-600 space-y-1">
+                        {auditResults.priorityActions?.low?.map((item: string, index: number) => (
+                          <li key={index}>{item}</li>
+                        )) || <li>No low priority issues found.</li>}
+                      </ul>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
-            )}
+            </div>
           </div>
-        </main>
-      </div>
+        )}
+      </main>
+
+      <Footer />
     </div>
   )
 }
-

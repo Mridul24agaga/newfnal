@@ -101,20 +101,20 @@ export function PricingSection({ uniqueId }: PricingProps) {
             key={index}
             className={`relative bg-white rounded-2xl transition-all duration-200 hover:shadow-lg ${
               plan.popular
-                ? "shadow-lg ring-2 ring-[#FB8C33]"
+                ? "shadow-lg ring-2 ring-[#EB5C0E]"
                 : index === 3
-                  ? "border border-gray-200 hover:border-[#FB8C33]/50"
-                  : "border border-gray-200 hover:border-[#EA580C]/50"
+                  ? "border border-gray-200 hover:border-[#EB5C0E]/50"
+                  : "border border-gray-200 hover:border-[#EB5C0E]/50"
             }`}
           >
             {plan.popular && (
               <div className="absolute -top-5 inset-x-0 flex justify-center">
-                <div className={`text-white px-4 py-1 rounded-full text-sm font-medium shadow-sm bg-[#FB8C33]`}>
+                <div className={`text-white px-4 py-1 rounded-full text-sm font-medium shadow-sm bg-[#EB5C0E]`}>
                   Most Popular
                 </div>
               </div>
             )}
-            <div className={`h-full flex flex-col ${plan.popular ? "bg-[#FB8C33] rounded-2xl text-white" : ""}`}>
+            <div className={`h-full flex flex-col ${plan.popular ? "bg-[#EB5C0E] rounded-2xl text-white" : ""}`}>
               <div className="p-6 pb-0">
                 <h3 className="text-2xl font-bold">{plan.name}</h3>
                 <p className={`mt-2 ${plan.popular ? "text-white/90" : "text-gray-600"}`}>{plan.description}</p>
@@ -140,7 +140,7 @@ export function PricingSection({ uniqueId }: PricingProps) {
                       {feature.included ? (
                         <Check
                           className={`h-5 w-5 mr-3 ${
-                            plan.popular ? "text-white" : index === 3 ? "text-[#FB8C33]" : "text-[#FB8C33]"
+                            plan.popular ? "text-white" : index === 3 ? "text-[#EB5C0E]" : "text-[#EB5C0E]"
                           }`}
                         />
                       ) : (
@@ -161,8 +161,8 @@ export function PricingSection({ uniqueId }: PricingProps) {
                   rel="noopener noreferrer"
                   className={`block w-full text-center py-3 px-6 rounded-xl text-base font-medium transition-colors ${
                     plan.popular
-                      ? "bg-white text-[#FB8C33] hover:bg-gray-50"
-                      : "bg-[#FB8C33] text-white hover:bg-[#FB8C33]/90"
+                      ? "bg-white text-[#EB5C0E] hover:bg-gray-50"
+                      : "bg-[#EB5C0E] text-white hover:bg-[#EB5C0E]/90"
                   }`}
                 >
                   Get Started
@@ -176,12 +176,12 @@ export function PricingSection({ uniqueId }: PricingProps) {
       {/* Special Offer - Solo-Founder Plan */}
       <div className="max-w-4xl mx-auto mt-20 mb-8">
         <div className="text-center mb-8">
-          <span className="inline-block bg-[#FB8C33] text-white px-6 py-2 rounded-full text-lg font-semibold shadow-md">
+          <span className="inline-block bg-[#EB5C0E] text-white px-6 py-2 rounded-full text-lg font-semibold shadow-md">
             Special Offer
           </span>
         </div>
 
-        <div className="bg-gradient-to-br from-[#FB8C33]/5 to-[#FB8C33]/20 rounded-3xl border-2 border-[#FB8C33] shadow-xl overflow-hidden">
+        <div className="bg-gradient-to-br from-[#EB5C0E]/5 to-[#EB5C0E]/20 rounded-3xl border-2 border-[#EB5C0E] shadow-xl overflow-hidden">
           <div className="p-8 md:p-10">
             <div className="grid md:grid-cols-2 gap-8">
               <div>
@@ -192,18 +192,18 @@ export function PricingSection({ uniqueId }: PricingProps) {
 
                 <div className="mt-6">
                   <div className="flex items-center">
-                    <span className="text-5xl font-bold text-[#FB8C33]">$1499</span>
+                    <span className="text-5xl font-bold text-[#EB5C0E]">$1499</span>
                   </div>
                   <div className="mt-1 text-gray-600">
                     <span className="line-through">Original price: $2197 + $799 = $3996</span>
                   </div>
-                  <div className="mt-1 font-semibold text-[#FB8C33]">SAVE $2497</div>
+                  <div className="mt-1 font-semibold text-[#EB5C0E]">SAVE $2497</div>
                 </div>
 
                 <div className="mt-8">
                   <a
                     href="https://checkout.dodopayments.com/buy/pdt_CgE0m3XOryT3ujTl0pRjV?quantity=1&redirect_url=https://blogosocial.com%2Fafter-payment"
-                    className="inline-block w-full md:w-auto text-center py-4 px-8 rounded-xl text-lg font-medium bg-[#FB8C33] text-white hover:bg-[#FB8C33]/90 transition-colors shadow-md"
+                    className="inline-block w-full md:w-auto text-center py-4 px-8 rounded-xl text-lg font-medium bg-[#EB5C0E] text-white hover:bg-[#FB8C33]/90 transition-colors shadow-md"
                   >
                     Get Solo-Founder Plan
                   </a>

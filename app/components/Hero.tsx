@@ -282,7 +282,7 @@ export default function Hero() {
       </header>
 
       {/* Main Content - Orange Background */}
-      <div className="py-12 md:py-16 lg:py-20 bg-[#FB8C33]">
+      <div className="py-12 md:py-16 lg:py-20 bg-[#EB5C0E]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             {/* Left Column - Text Content */}
@@ -298,7 +298,7 @@ export default function Hero() {
                 {/* Heading in 3 lines */}
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
                   <span className="block">List on 200+</span>
-                  <span className="block">Product Hunt-style </span>
+                  <span className="block">Product Hunt - Like</span>
                   <span className="block">platforms with one click.</span>
                 </h1>
 

@@ -1,13 +1,11 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import {
   ExternalLink,
   TrendingUp,
   Award,
   Users,
-  ChevronRight,
-  ChevronLeft,
   X,
   AlertTriangle,
   Search,
@@ -18,49 +16,11 @@ import {
 } from "lucide-react"
 
 export default function TestimonialSection() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
   const [showPopup, setShowPopup] = useState(false)
   const [email, setEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState("")
-
-  // Check scroll position
-  const checkScrollPosition = () => {
-    if (!scrollContainerRef.current) return
-
-    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
-    setCanScrollLeft(scrollLeft > 0)
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10) // 10px buffer
-  }
-
-  // Scroll handlers
-  const scrollLeft = () => {
-    if (!scrollContainerRef.current) return
-    scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" })
-  }
-
-  const scrollRight = () => {
-    if (!scrollContainerRef.current) return
-    scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" })
-  }
-
-  // Initialize and update scroll position check
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current
-    if (scrollContainer) {
-      checkScrollPosition()
-      scrollContainer.addEventListener("scroll", checkScrollPosition)
-      window.addEventListener("resize", checkScrollPosition)
-
-      return () => {
-        scrollContainer.removeEventListener("scroll", checkScrollPosition)
-        window.removeEventListener("resize", checkScrollPosition)
-      }
-    }
-  }, [])
 
   // Show popup after a delay
   useEffect(() => {
@@ -197,6 +157,35 @@ export default function TestimonialSection() {
       hasTwitter: true,
       twitterUrl: "https://x.com/pureshimon/status/1871376482116964685",
     },
+    {
+      name: "Sofus K",
+      position: "@Sofuskilde",
+      avatar: "/sofus.jpg",
+      content:
+        "Totally agree! Good morals and fair pricing make marketing a breeze and keep customers coming back.",
+      date: "Dec 15, 2024",
+      hasTwitter: true,
+      twitterUrl: "http://x.com/Sofuskilde/status/1868313140150333532",
+    },
+    {
+      name: "holys",
+      position: "@chendahui007",
+      avatar: "/chen.jpg",
+      content:
+        "Shoutout to www.getmorebacklinks.org for helping me submit 200 backlinks! 🙌 Thanks for the great work—excited to see the results in a month or two! 🚀 @KrissmannGupta.",
+      date: "Jan 5, 2025",
+      hasTwitter: true,
+    },
+    {
+      name: "James S",
+      position: "@James",
+      avatar: "/new.webp",
+      content:
+        "I was drowning in manual directory submissions before I found GetMoreBacklinks.org. Their semi-automated system saved me days of work. I saw results in weeks—my SEO score shot up, and my startup's visibility has never been better!",
+      date: "Apr 8, 2025",
+      hasTwitter: true,
+    },
+    
   ]
 
   const results = [
@@ -217,36 +206,6 @@ export default function TestimonialSection() {
       value: "70+",
       unit: "Founders",
       icon: <Users className="h-5 w-5 text-orange-500" />,
-    },
-  ]
-
-  const caseStudies = [
-    {
-      name: "SaasyDB",
-      industry: "SaaS",
-      image: "/placeholder.svg?key=saasydb-chart",
-      quote: "This crazy jump in domain rating is from actively building links for saasyDB. It's wild!",
-      beforeDR: 12,
-      afterDR: 32,
-      author: "Stuart, saasyDB",
-    },
-    {
-      name: "Blogosocial",
-      industry: "Dev Tools",
-      image: "/placeholder.svg?key=buildfast-chart",
-      quote: "Excited to level up SEO game with GetMoreBacklinks. Already seeing significant improvements!",
-      beforeDR: 1,
-      afterDR: 9,
-      author: "MarkupX ",
-    },
-    {
-      name: "Softgen",
-      industry: "B2B",
-      image: "/placeholder.svg?key=techflow-chart",
-      quote: "The compounding SEO effect kicked in fast. Our traffic doubled in just 2 months.",
-      beforeDR: 15,
-      afterDR: 27,
-      author: "Softgen",
     },
   ]
 
@@ -433,7 +392,7 @@ export default function TestimonialSection() {
         <div className="flex flex-col lg:flex-row gap-8 mb-12">
           <div className="lg:w-2/3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {testimonials.slice(0, 6).map((testimonial, index) => (
+              {testimonials.map((testimonial, index) => (
                 <div
                   key={index}
                   className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col transition-all duration-300 relative"
@@ -510,85 +469,6 @@ export default function TestimonialSection() {
                   ))}
                 </div>
               </div>
-
-              <div className="border border-gray-200 rounded-xl p-6 bg-white">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-gray-800">Case Studies</h3>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={scrollLeft}
-                      disabled={!canScrollLeft}
-                      className={`p-1.5 rounded-full border border-gray-200 ${
-                        canScrollLeft ? "text-gray-700 hover:bg-gray-100" : "text-gray-300 cursor-not-allowed"
-                      }`}
-                      aria-label="Scroll left"
-                    >
-                      <ChevronLeft size={16} />
-                    </button>
-                    <button
-                      onClick={scrollRight}
-                      disabled={!canScrollRight}
-                      className={`p-1.5 rounded-full border border-gray-200 ${
-                        canScrollRight ? "text-gray-700 hover:bg-gray-100" : "text-gray-300 cursor-not-allowed"
-                      }`}
-                      aria-label="Scroll right"
-                    >
-                      <ChevronRight size={16} />
-                    </button>
-                  </div>
-                </div>
-
-                <div
-                  ref={scrollContainerRef}
-                  className="overflow-x-auto pb-4 -mx-1 px-1 scrollbar-hide"
-                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                >
-                  <div className="flex space-x-4" style={{ minWidth: "max-content" }}>
-                    {caseStudies.map((study, index) => (
-                      <div
-                        key={index}
-                        className="border border-gray-200 rounded-lg p-4 min-w-[260px] max-w-[260px] flex flex-col"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-gray-800">{study.name}</h4>
-                          <div className="text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded">
-                            {study.industry}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between mb-3 text-sm">
-                          <div>
-                            <p className="text-xs text-gray-500">Before</p>
-                            <p className="font-bold">DR {study.beforeDR}</p>
-                          </div>
-                          <TrendingUp className="text-orange-500 mx-1" size={16} />
-                          <div>
-                            <p className="text-xs text-gray-500">After</p>
-                            <p className="font-bold text-orange-600">DR {study.afterDR}</p>
-                          </div>
-                          <div className="bg-green-100 text-green-800 px-1.5 py-0.5 rounded text-xs font-medium">
-                            +{study.afterDR - study.beforeDR}
-                          </div>
-                        </div>
-
-                        <p className="text-sm text-gray-600 mb-2 flex-grow">"{study.quote}"</p>
-                        <p className="text-xs text-gray-500">— {study.author}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-4 text-center">
-                  <a
-                    href="/case-study"
-                    className="inline-flex items-center text-orange-500 font-medium text-sm hover:text-orange-600 transition-colors"
-                  >
-                    See more case studies
-                    <ChevronRight size={14} className="ml-1" />
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -597,7 +477,7 @@ export default function TestimonialSection() {
           <a
             href="#pricing"
             rel="noopener noreferrer"
-            className="inline-flex items-center bg-[#FB8C33] hover:bg-orange-600 text-white font-medium px-8 py-3 rounded-full relative overflow-hidden group transition-all duration-300 border border-orange-600"
+            className="inline-flex items-center bg-[#EB5C0E] hover:bg-orange-600 text-white font-medium px-8 py-3 rounded-full relative overflow-hidden group transition-all duration-300 border border-orange-600"
             style={{ fontFamily: "Saira, sans-serif" }}
           >
             <span className="relative z-10">Get More Backlinks Today</span>

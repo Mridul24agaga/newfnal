@@ -77,9 +77,9 @@ export default function Footer() {
                     <>
                       <li>
                         {pathname === '/' ? (
-                          <button onClick={() => scrollTo('free')} className="hover:text-gray-900 transition-colors">Features</button>
+                          <button onClick={() => scrollTo('howitwork')} className="hover:text-gray-900 transition-colors">Features</button>
                         ) : (
-                          <Link href="/#free" className="hover:text-gray-900 transition-colors">Features</Link>
+                          <Link href="/#howitworks" className="hover:text-gray-900 transition-colors">How It Works</Link>
                         )}
                       </li>
                       <li>
@@ -97,10 +97,17 @@ export default function Footer() {
                           <Link href="/#faq" className="hover:text-gray-900 transition-colors">FAQ</Link>
                         )}
                       </li>
+                      <li>
+                        {pathname === '/' ? (
+                          <button onClick={() => scrollTo('founders')} className="hover:text-gray-900 transition-colors">Founders</button>
+                        ) : (
+                          <Link href="/#founders" className="hover:text-gray-900 transition-colors">Founders </Link>
+                        )}
+                      </li>
                     </>
                   ) : (
                     <>
-                      <li><Link href="/#features" className="hover:text-gray-900 transition-colors">Features</Link></li>
+                      <li><Link href="/#howitworks" className="hover:text-gray-900 transition-colors">Features</Link></li>
                       <li><Link href="/#pricing-section" className="hover:text-gray-900 transition-colors">Pricing</Link></li>
                       <li><Link href="/#howitworks" className="hover:text-gray-900 transition-colors">How it Works</Link></li>
                       <li><Link href="/#faq" className="hover:text-gray-900 transition-colors">FAQ</Link></li>
@@ -117,9 +124,6 @@ export default function Footer() {
                   <li><Link href="/seo-audit-website" className="hover:text-gray-900 transition-colors">SEO Audit</Link></li>
                   <li><Link href="/open-graph-validator" className="hover:text-gray-900 transition-colors">Open Graph Validator</Link></li>
                   <li><Link href="/meta-description-generator" className="hover:text-gray-900 transition-colors">Meta Description Generator</Link></li>
-                  <li><Link href="/ai-content-checker" className="hover:text-gray-900 transition-colors">AI Content Checker</Link></li>
-                  <li><Link href="/paragraph-writer" className="hover:text-gray-900 transition-colors">Paragraph Rewriter</Link></li>
-                  <li><Link href="/backlink-checker" className="hover:text-gray-900 transition-colors">Backlink Checker</Link></li>
                   <li><Link href="/keyword-rank-tracker" className="hover:text-gray-900 transition-colors">Keyword Rank Tracker</Link></li>
                 </ul>
               </div>

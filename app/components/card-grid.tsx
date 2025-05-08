@@ -53,7 +53,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[0]}
             </div>
 
@@ -76,7 +76,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[1]}
             </div>
 
@@ -99,7 +99,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[2]}
             </div>
 
@@ -123,7 +123,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[3]}
             </div>
 
@@ -146,7 +146,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[4]}
             </div>
 
@@ -169,7 +169,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[5]}
             </div>
 
@@ -193,7 +193,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[6]}
             </div>
 
@@ -216,7 +216,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[7]}
             </div>
 
@@ -239,7 +239,7 @@ export default function CardGrid() {
             <div className="absolute inset-0 bg-[#2A2A2A] bg-opacity-60 rounded-xl transform scale-[1.05] -z-10 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
 
             {/* Orange badge with animation */}
-            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#FF8A00] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
+            <div className="absolute -right-[2%] -top-[10%] z-10 bg-[#EB5C0E] text-white font-semibold px-[0.8vw] py-[0.3vw] rounded-full text-[2.8vw] sm:text-[1.6vw] md:text-[1.1vw] lg:text-[0.8vw] shadow-md group-hover:scale-110 transition-all duration-300">
               {metrics[8]}
             </div>
 

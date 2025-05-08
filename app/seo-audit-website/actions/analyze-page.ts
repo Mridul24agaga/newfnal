@@ -89,6 +89,8 @@ async function callAzureOpenAI(prompt: string, maxTokens: number, temperature = 
   }
 }
 
+export default analyzeLandingPage
+
 export async function analyzeLandingPage(url: string) {
   try {
     // Fetch the content of the URL
