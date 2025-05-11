@@ -137,6 +137,15 @@ export default function TrafficResultsSection() {
           border-radius: 50%;
           background-color: #EB5C0E;
         }
+
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
       `}</style>
 
       <div className="max-w-6xl mx-auto">
@@ -162,51 +171,59 @@ export default function TrafficResultsSection() {
             isVisible ? "opacity-100 transform translate-y-0" : "opacity-0 transform translate-y-8"
           }`}
         >
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm mb-12">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+          <div className="bg-white border border-gray-200 rounded-2xl p-4 md:p-6 lg:p-8 shadow-sm mb-12">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8">
               <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-1">Real Traffic Growth</h3>
-                <p className="text-gray-500">Actual results from one of our clients over a 4-month period</p>
+                <p className="text-gray-500 text-sm md:text-base">
+                  Actual results from one of our clients over a 4-month period
+                </p>
               </div>
               <div className="flex items-center mt-4 md:mt-0 space-x-4">
                 <div className="flex items-center">
                   <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                  <span className="text-sm text-gray-600">Clicks</span>
+                  <span className="text-xs md:text-sm text-gray-600">Clicks</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 rounded-full bg-purple-600 mr-2"></div>
-                  <span className="text-sm text-gray-600">Impressions</span>
+                  <span className="text-xs md:text-sm text-gray-600">Impressions</span>
                 </div>
               </div>
             </div>
 
             {/* Traffic Graph */}
-            <div className="relative w-full h-[400px] mb-6">
-              <Image
-                src="/traffic-results.webp"
-                alt="Traffic growth graph showing clicks and impressions increasing over time"
-                fill
-                className="object-contain"
-              />
+            <div className="relative w-full mb-6">
+              <div className="w-full overflow-x-auto pb-2 -mx-2 px-2 scrollbar-hide">
+                <div className="min-w-[600px] sm:min-w-full h-[300px] md:h-[400px]">
+                  <Image
+                    src="/traffic-results.webp"
+                    alt="Traffic growth graph showing clicks and impressions increasing over time"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 1200px"
+                    priority
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Key Metrics */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-              <div className="bg-blue-100 rounded-lg p-4">
-                <p className="text-sm text-blue-700 font-medium">Total Clicks</p>
-                <p className="text-2xl font-bold text-blue-800">1.84K</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-4">
+              <div className="bg-blue-100 rounded-lg p-3 md:p-4">
+                <p className="text-xs md:text-sm text-blue-700 font-medium">Total Clicks</p>
+                <p className="text-xl md:text-2xl font-bold text-blue-800">1.84K</p>
               </div>
-              <div className="bg-purple-100 rounded-lg p-4">
-                <p className="text-sm text-purple-700 font-medium">Total Impressions</p>
-                <p className="text-2xl font-bold text-purple-800">48.4K</p>
+              <div className="bg-purple-100 rounded-lg p-3 md:p-4">
+                <p className="text-xs md:text-sm text-purple-700 font-medium">Total Impressions</p>
+                <p className="text-xl md:text-2xl font-bold text-purple-800">48.4K</p>
               </div>
-              <div className="bg-green-100 rounded-lg p-4">
-                <p className="text-sm text-green-700 font-medium">Average CTR</p>
-                <p className="text-2xl font-bold text-green-800">3.8%</p>
+              <div className="bg-green-100 rounded-lg p-3 md:p-4">
+                <p className="text-xs md:text-sm text-green-700 font-medium">Average CTR</p>
+                <p className="text-xl md:text-2xl font-bold text-green-800">3.8%</p>
               </div>
-              <div className="bg-amber-100 rounded-lg p-4">
-                <p className="text-sm text-amber-700 font-medium">Average Position</p>
-                <p className="text-2xl font-bold text-amber-800">23.4</p>
+              <div className="bg-amber-100 rounded-lg p-3 md:p-4">
+                <p className="text-xs md:text-sm text-amber-700 font-medium">Average Position</p>
+                <p className="text-xl md:text-2xl font-bold text-amber-800">23.4</p>
               </div>
             </div>
           </div>

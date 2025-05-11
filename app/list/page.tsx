@@ -6,7 +6,6 @@ import { useState, useEffect } from "react"
 import { Button } from "@/app/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/app/components/ui/card"
 import { Input } from "@/app/components/ui/input"
-import { Label } from "@/app/components/ui/label"
 import { Check, ExternalLink, Search, Sparkles, X } from "lucide-react"
 
 // Directory data
@@ -735,6 +734,9 @@ function DirectoryList() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
 
+  // PayPal payment URL
+  const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/ML2VJDY6WZT84"
+
   // Filter directories based on search term and category
   const filteredDirectories = directories.filter((directory) => {
     const matchesSearch =
@@ -793,13 +795,8 @@ function DirectoryList() {
                 asChild
                 className="w-full bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 transition-all"
               >
-                <a
-                  href={directory.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center"
-                >
-                  Visit Directory <ExternalLink className="ml-2 h-4 w-4" />
+                <a href="/#pricing" className="flex items-center justify-center">
+                  Auto Submit Now <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
               </Button>
             </CardFooter>
@@ -825,20 +822,18 @@ function DirectoryList() {
 
 // InterestPopup Component
 function InterestPopup() {
-  const scrollToPricing = () => {
-    const pricingSection = document.getElementById("pricing-section")
-    if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: "smooth" })
-    }
-  }
+  // PayPal payment URL
+  const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/L45V8DSQVT3N6"
 
   return (
     <Button
       size="lg"
       className="bg-white text-rose-600 hover:bg-gray-100 hover:text-rose-700 shadow-lg transition-all"
-      onClick={scrollToPricing}
+      asChild
     >
-      Want the Full List?
+      <a href={paypalPaymentUrl} target="_blank" rel="noopener noreferrer">
+        Buy 400+ Directories
+      </a>
     </Button>
   )
 }
@@ -847,6 +842,9 @@ function InterestPopup() {
 function ScrollPopup() {
   const [showPopup, setShowPopup] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+
+  // PayPal payment URL
+  const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/L45V8DSQVT3N6"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -861,15 +859,6 @@ function ScrollPopup() {
   }, [dismissed])
 
   const handleDismiss = () => {
-    setShowPopup(false)
-    setDismissed(true)
-  }
-
-  const scrollToPricing = () => {
-    const pricingSection = document.getElementById("pricing-section")
-    if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: "smooth" })
-    }
     setShowPopup(false)
     setDismissed(true)
   }
@@ -901,10 +890,12 @@ function ScrollPopup() {
           </p>
 
           <Button
-            onClick={scrollToPricing}
             className="w-full py-6 text-lg bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all"
+            asChild
           >
-            <Sparkles className="mr-2 h-5 w-5" /> Get Premium Access
+            <a href={paypalPaymentUrl} target="_blank" rel="noopener noreferrer">
+              <Sparkles className="mr-2 h-5 w-5" /> Buy 400+ Directories
+            </a>
           </Button>
 
           <p className="mt-4 text-sm text-gray-500">One-time payment of $50 for lifetime access</p>
@@ -927,116 +918,88 @@ function PremiumOfferCard() {
     alert("Thank you for your purchase! We'll send the full list to your email shortly.")
   }
 
-  return (
-    <Card className="w-full max-w-md shadow-xl border-0 transform hover:scale-105 transition-transform duration-300">
-      <CardHeader className="bg-gradient-to-r from-rose-500 to-orange-500 text-white rounded-t-lg">
-        <div className="flex items-center justify-center mb-2">
-          <Sparkles className="h-6 w-6 mr-2" />
-          <CardTitle className="text-2xl text-center">Premium Directory List</CardTitle>
-        </div>
-        <CardDescription className="text-white text-center text-lg font-medium mt-2">
-          $50 One-time Payment
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="pt-6 bg-gradient-to-b from-white to-gray-50 rounded-b-lg">
-        <div className="space-y-4">
-          <div className="flex items-start">
-            <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
-              <Check className="h-4 w-4 text-green-600" />
-            </div>
-            <p>
-              <span className="font-semibold">400+ curated directory listings</span> - 4x more than the free list
-            </p>
-          </div>
-          <div className="flex items-start">
-            <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
-              <Check className="h-4 w-4 text-green-600" />
-            </div>
-            <p>
-              <span className="font-semibold">Monthly updates</span> with new directories
-            </p>
-          </div>
-          <div className="flex items-start">
-            <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
-              <Check className="h-4 w-4 text-green-600" />
-            </div>
-            <p>
-              <span className="font-semibold">Categorized by industry</span> and submission type
-            </p>
-          </div>
-          <div className="flex items-start">
-            <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
-              <Check className="h-4 w-4 text-green-600" />
-            </div>
-            <p>
-              <span className="font-semibold">Submission tips</span> for higher acceptance rates
-            </p>
-          </div>
-          <div className="flex items-start">
-            <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
-              <Check className="h-4 w-4 text-green-600" />
-            </div>
-            <p>
-              <span className="font-semibold">Priority email support</span> for any questions
-            </p>
-          </div>
-        </div>
+  // PayPal payment URL
+  const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/L45V8DSQVT3N6"
 
-        {!showPaymentForm ? (
+  return (
+    <div className="bg-white p-4 rounded-xl shadow-xl">
+      <Card className="w-full max-w-md shadow-xl border-0 transform hover:scale-105 transition-transform duration-300 bg-white">
+        <CardHeader className="bg-gradient-to-r from-rose-500 to-orange-500 text-white rounded-t-lg">
+          <div className="flex items-center justify-center mb-2">
+            <Sparkles className="h-6 w-6 mr-2" />
+            <CardTitle className="text-2xl text-center">400+ Directory List</CardTitle>
+          </div>
+          <CardDescription className="text-white text-center text-lg font-medium mt-2">
+            $50 One-time Payment
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6 bg-white rounded-b-lg">
+          <div className="space-y-4">
+            <div className="flex items-start">
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                <Check className="h-4 w-4 text-green-600" />
+              </div>
+              <p>
+                <span className="font-semibold">400+ curated directory listings</span> - 4x more than the free list
+              </p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                <Check className="h-4 w-4 text-green-600" />
+              </div>
+              <p>
+                <span className="font-semibold">Monthly updates</span> with new directories
+              </p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                <Check className="h-4 w-4 text-green-600" />
+              </div>
+              <p>
+                <span className="font-semibold">Categorized by industry</span> and submission type
+              </p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                <Check className="h-4 w-4 text-green-600" />
+              </div>
+              <p>
+                <span className="font-semibold">Submission tips</span> for higher acceptance rates
+              </p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                <Check className="h-4 w-4 text-green-600" />
+              </div>
+              <p>
+                <span className="font-semibold">Priority email support</span> for any questions
+              </p>
+            </div>
+          </div>
+
           <Button
             className="w-full mt-8 py-6 text-lg bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all border-0"
-            onClick={() => setShowPaymentForm(true)}
+            asChild
           >
-            <Sparkles className="mr-2 h-5 w-5" /> Get Full 400+ Directory List
+            <a href={paypalPaymentUrl} target="_blank" rel="noopener noreferrer">
+              <Sparkles className="mr-2 h-5 w-5" /> Buy 400+ Directories Now
+            </a>
           </Button>
-        ) : (
-          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="John Doe" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="card">Card Information</Label>
-              <Input id="card" placeholder="1234 5678 9012 3456" required />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="expiry">Expiry Date</Label>
-                <Input id="expiry" placeholder="MM/YY" required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="cvc">CVC</Label>
-                <Input id="cvc" placeholder="123" required />
-              </div>
-            </div>
-            <Button
-              type="submit"
-              className="w-full py-6 text-lg bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all border-0"
-            >
-              Pay $50 and Get 400+ Directories
-            </Button>
-          </form>
-        )}
-      </CardContent>
-    </Card>
+
+          <div className="mt-4 text-center">
+            <p className="text-gray-500 text-sm">Secure payment via PayPal</p>
+            <p className="text-gray-500 text-sm mt-1">You'll receive the directory list immediately after payment</p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
 // Main Page Component
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-rose-500 to-orange-500 text-white py-20">
         <div className="container mx-auto px-4 text-center">
@@ -1050,13 +1013,10 @@ export default function Home() {
               size="lg"
               className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-rose-600 transition-all shadow-lg"
               onClick={() => {
-                const directorySection = document.querySelector(".container h2")
-                if (directorySection) {
-                  directorySection.scrollIntoView({ behavior: "smooth" })
-                }
+                window.location.href = "/#pricing"
               }}
             >
-              Browse Directories
+              Auto Submit Now
             </Button>
           </div>
         </div>
@@ -1069,9 +1029,9 @@ export default function Home() {
       </section>
 
       {/* Premium Offer */}
-      <section id="pricing-section" className="container mx-auto px-4 py-16 bg-gray-100 rounded-lg my-12">
-        <h2 className="text-3xl font-bold text-center mb-4">Want the Full 400+ Directory List?</h2>
-        <p className="text-xl text-center text-gray-600 mb-12">Get 4x more directories with our premium package</p>
+      <section id="pricing-section" className="container mx-auto px-4 py-16 bg-white rounded-lg my-12">
+        <h2 className="text-3xl font-bold text-center mb-4">Get the Full 400+ Directory List</h2>
+        <p className="text-xl text-center text-gray-600 mb-12">One-time payment for lifetime access</p>
         <div className="flex justify-center">
           <PremiumOfferCard />
         </div>

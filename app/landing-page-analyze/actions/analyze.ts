@@ -62,7 +62,76 @@ function cleanJsonString(str: string): string {
   // Ensure proper quote usage
   str = str.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?\s*:/g, '"$2": ')
 
-  return str.trim()
+  // Fix missing closing braces in objects
+  // This is a more robust approach to handle the specific error in your case
+  const categories = ["Messaging", "Readability", "Structure", "Actionability", "Design", "Credibility"]
+  let fixedStr = str
+
+  for (let i = 0; i < categories.length - 1; i++) {
+    const currentCategory = categories[i]
+    const nextCategory = categories[i + 1]
+
+    // Check if there's a missing closing brace between categories
+    const pattern = new RegExp(
+      `"${currentCategory}"\\s*:\\s*{[^}]*"recommendations"\\s*:\\s*\\[[^\\]]*\\]\\s*,\\s*"${nextCategory}"`,
+      "g",
+    )
+    if (pattern.test(fixedStr)) {
+      fixedStr = fixedStr.replace(
+        new RegExp(
+          `("${currentCategory}"\\s*:\\s*{[^}]*"recommendations"\\s*:\\s*\\[[^\\]]*\\])\\s*,\\s*("${nextCategory}")`,
+          "g",
+        ),
+        "$1 } , $2",
+      )
+    }
+  }
+
+  // As a fallback, try to ensure all objects are properly closed
+  let openBraces = 0
+  let openBrackets = 0
+  let newStr = ""
+
+  for (let i = 0; i < fixedStr.length; i++) {
+    const char = fixedStr[i]
+    newStr += char
+
+    if (char === "{") openBraces++
+    else if (char === "}") openBraces--
+    else if (char === "[") openBrackets++
+    else if (char === "]") openBrackets--
+
+    // If we're at the end of a section and the braces don't match, add closing braces
+    if (
+      i < fixedStr.length - 1 &&
+      fixedStr[i + 1] === '"' &&
+      categories.some((cat) => fixedStr.substring(i + 1, i + 1 + cat.length + 3) === `"${cat}":`) &&
+      openBraces > 0
+    ) {
+      // Add missing closing braces
+      while (openBraces > 0) {
+        newStr += " }"
+        openBraces--
+      }
+      // If we're not at the root level, add a comma
+      if (i < fixedStr.length - 1 && fixedStr[i + 1] !== "}") {
+        newStr += ","
+      }
+    }
+  }
+
+  // Ensure the JSON is properly closed at the end
+  while (openBraces > 0) {
+    newStr += " }"
+    openBraces--
+  }
+
+  while (openBrackets > 0) {
+    newStr += " ]"
+    openBrackets--
+  }
+
+  return newStr.trim()
 }
 
 // Call Azure OpenAI with your exact implementation
@@ -152,7 +221,17 @@ Analyze this content: ${content}`
       console.error("JSON Parse Error:", parseError)
       console.error("Generated Text:", generatedText)
       console.error("Cleaned JSON:", cleanedJson)
-      throw new Error("Failed to parse analysis results. Invalid JSON format received.")
+
+      // Attempt a more aggressive fix if the first cleaning didn't work
+      try {
+        // Try to manually construct a valid JSON by extracting each category
+        const manuallyFixedJson = constructValidJson(generatedText)
+        parsedAnalysis = JSON.parse(manuallyFixedJson)
+        console.log("Successfully parsed JSON after manual fix")
+      } catch (secondError) {
+        console.error("Second JSON Parse Error:", secondError)
+        throw new Error("Failed to parse analysis results. Invalid JSON format received.")
+      }
     }
 
     // Validate the parsed analysis structure
@@ -191,4 +270,59 @@ Analyze this content: ${content}`
     console.error("Error in analysis:", error)
     throw new Error("An error occurred during analysis: " + (error as Error).message)
   }
+}
+
+// Function to manually construct a valid JSON when all else fails
+function constructValidJson(text: string): string {
+  const categories = ["Messaging", "Readability", "Structure", "Actionability", "Design", "Credibility"]
+  const result: Record<string, any> = {}
+
+  // Extract each category using regex
+  for (const category of categories) {
+    try {
+      // Match the category section
+      const categoryRegex = new RegExp(
+        `"${category}"\\s*:\\s*{\\s*"score"\\s*:\\s*(\\d+)\\s*,\\s*"feedback"\\s*:\\s*"([^"]*)"\\s*,\\s*"recommendations"\\s*:\\s*\\[([^\\]]*)\\]`,
+      )
+      const match = text.match(categoryRegex)
+
+      if (match) {
+        const score = Number.parseInt(match[1], 10)
+        const feedback = match[2].trim()
+
+        // Extract recommendations
+        const recommendationsText = match[3]
+        const recommendationsRegex = /"([^"]*)"/g
+        const recommendations: string[] = []
+        let recMatch
+
+        while ((recMatch = recommendationsRegex.exec(recommendationsText)) !== null) {
+          recommendations.push(recMatch[1].trim())
+        }
+
+        result[category] = {
+          score,
+          feedback,
+          recommendations,
+        }
+      } else {
+        // Fallback with default values if we can't extract the data
+        result[category] = {
+          score: 50,
+          feedback: `Could not extract ${category} feedback.`,
+          recommendations: [`Improve ${category.toLowerCase()}`],
+        }
+      }
+    } catch (error) {
+      console.error(`Error extracting ${category}:`, error)
+      // Fallback with default values
+      result[category] = {
+        score: 50,
+        feedback: `Could not extract ${category} feedback.`,
+        recommendations: [`Improve ${category.toLowerCase()}`],
+      }
+    }
+  }
+
+  return JSON.stringify(result)
 }
