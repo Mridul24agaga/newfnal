@@ -735,7 +735,7 @@ function DirectoryList() {
   const [selectedCategory, setSelectedCategory] = useState("all")
 
   // PayPal payment URL
-  const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/ML2VJDY6WZT84"
+  const paypalPaymentUrl = "https://checkout.dodopayments.com/buy/pdt_t0TXUrMfV1UtSBx1aoXsP?quantity=1"
 
   // Filter directories based on search term and category
   const filteredDirectories = directories.filter((directory) => {
