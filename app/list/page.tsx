@@ -823,7 +823,7 @@ function DirectoryList() {
 // InterestPopup Component
 function InterestPopup() {
   // PayPal payment URL
-  const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/L45V8DSQVT3N6"
+  const paypalPaymentUrl = "https://checkout.dodopayments.com/buy/pdt_t0TXUrMfV1UtSBx1aoXsP?quantity=1"
 
   return (
     <Button
@@ -844,7 +844,7 @@ function ScrollPopup() {
   const [dismissed, setDismissed] = useState(false)
 
   // PayPal payment URL
-  const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/L45V8DSQVT3N6"
+  const paypalPaymentUrl = "https://checkout.dodopayments.com/buy/pdt_t0TXUrMfV1UtSBx1aoXsP?quantity=1"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -919,7 +919,7 @@ function PremiumOfferCard() {
   }
 
   // PayPal payment URL
-  const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/L45V8DSQVT3N6"
+  const paypalPaymentUrl = "https://checkout.dodopayments.com/buy/pdt_t0TXUrMfV1UtSBx1aoXsP?quantity=1"
 
   return (
     <div className="bg-white p-4 rounded-xl shadow-xl">
