@@ -25,7 +25,7 @@ export function PricingSection({ uniqueId }: PricingProps) {
         { text: "Blogs: 0", included: false },
       ],
       popular: false,
-      paypalLink: "https://www.paypal.com/ncp/payment/L45V8DSQVT3N6",
+      paypalLink: "https://checkout.dodopayments.com/buy/pdt_P5jU5n3o1oMcknNMr4RDm?quantity=1",
     },
     {
       name: "Advanced",
@@ -44,7 +44,7 @@ export function PricingSection({ uniqueId }: PricingProps) {
         { text: "Blogs: 0", included: false },
       ],
       popular: false,
-      paypalLink: "https://www.paypal.com/ncp/payment/CMM6QF99TTNEY",
+      paypalLink: "https://checkout.dodopayments.com/buy/pdt_ZBtFrX1MZK107BXkrjRZA?quantity=1",
     },
     {
       name: "Business",
@@ -63,7 +63,7 @@ export function PricingSection({ uniqueId }: PricingProps) {
         { text: "Blogs: 0", included: false },
       ],
       popular: true,
-      paypalLink: "https://www.paypal.com/ncp/payment/VK6EF5V9RT5V8",
+      paypalLink: "https://checkout.dodopayments.com/buy/pdt_8Xz6E2wM2w1CMjdZeriON?quantity=1",
     },
     {
       name: "Starter",
@@ -82,7 +82,7 @@ export function PricingSection({ uniqueId }: PricingProps) {
         { text: "5 Blogs", included: true },
       ],
       popular: false,
-      paypalLink: "https://www.paypal.com/ncp/payment/9ALKHKQNNS6FU",
+      paypalLink: "https://checkout.dodopayments.com/buy/pdt_YQiAH12iWSJQLU7k8DJgx?quantity=1",
     },
   ]
 
