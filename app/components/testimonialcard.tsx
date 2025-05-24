@@ -9,7 +9,6 @@ import {
   X,
   AlertTriangle,
   Search,
-  Target,
   Diamond,
   CheckCircle,
   Send,
@@ -235,9 +234,9 @@ export default function TestimonialSection() {
     ))
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
         <div
-          className="bg-white rounded-xl max-w-md w-full relative overflow-hidden mx-4"
+          className="bg-white rounded-xl max-w-[280px] sm:max-w-md w-full relative overflow-hidden mx-2 sm:mx-4"
           onClick={(e) => e.stopPropagation()}
         >
           <button
@@ -249,7 +248,7 @@ export default function TestimonialSection() {
           </button>
 
           {submitSuccess ? (
-            <div className="p-8 text-center">
+            <div className="p-6 sm:p-8 text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
@@ -264,58 +263,49 @@ export default function TestimonialSection() {
             </div>
           ) : (
             <>
-              <div className="p-6 pb-0 flex flex-col sm:flex-row items-start">
+              <div className="p-3 sm:p-6 pb-0 flex flex-col sm:flex-row items-start">
                 <div className="text-red-500 mr-3 mb-3 sm:mb-0">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold">Wait! Before you go...</h2>
+                  <h2 className="text-lg sm:text-xl font-bold">Wait! Before you go...</h2>
                   <p className="text-gray-600 mt-2">Get our</p>
                   <p className="text-blue-500 font-medium">
                     exclusive list of 100 startup directories and Hackers Guide on Getting your Startup Noticed
                   </p>
-                  <p className="text-gray-600 text-sm mt-1">
-                    The Ultimate Guide packed with secrets you need to steal traffic from your competitors
-                  </p>
+                  <p className="text-gray-600 text-sm mt-1"></p>
                 </div>
               </div>
 
-              <div className="p-6 overflow-y-auto max-h-[80vh]">
-                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+              <div className="p-3 sm:p-6 overflow-y-auto max-h-[70vh] sm:max-h-[80vh]">
+                <div className="bg-gray-50 p-2 sm:p-4 rounded-lg mb-4">
                   <div className="flex items-start mb-3">
                     <AlertTriangle className="text-amber-500 mr-2 mt-0.5 flex-shrink-0" size={18} />
                     <p className="font-medium">What does Hackers Guide includes:</p>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div className="flex items-start">
-                      <div className="bg-blue-100 p-1.5 rounded-full mr-3 flex-shrink-0 mt-0.5">
-                        <Search className="h-4 w-4 text-blue-600" />
+                      <div className="bg-blue-100 p-1 sm:p-1.5 rounded-full mr-3 flex-shrink-0 mt-0.5">
+                        <Search className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
                       </div>
-                      <p className="text-sm">100 High-authority startup directories</p>
+                      <p className="text-xs sm:text-sm">100 High-authority startup directories</p>
                     </div>
 
                     <div className="flex items-start">
-                      <div className="bg-red-100 p-1.5 rounded-full mr-3 flex-shrink-0 mt-0.5">
-                        <Target className="h-4 w-4 text-red-600" />
+                      <div className="bg-blue-100 p-1 sm:p-1.5 rounded-full mr-3 flex-shrink-0 mt-0.5">
+                        <Diamond className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
                       </div>
-                      <p className="text-sm">The MVP way of stealing traffic from your competitors</p>
+                      <p className="text-xs sm:text-sm">Hidden gems that only Indie Hackers know about</p>
                     </div>
 
                     <div className="flex items-start">
-                      <div className="bg-blue-100 p-1.5 rounded-full mr-3 flex-shrink-0 mt-0.5">
-                        <Diamond className="h-4 w-4 text-blue-600" />
+                      <div className="bg-green-100 p-1 sm:p-1.5 rounded-full mr-3 flex-shrink-0 mt-0.5">
+                        <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
                       </div>
-                      <p className="text-sm">Hidden gems that only Indie Hackers know about</p>
-                    </div>
-
-                    <div className="flex items-start">
-                      <div className="bg-green-100 p-1.5 rounded-full mr-3 flex-shrink-0 mt-0.5">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                      </div>
-                      <p className="text-sm">Building Backlinks in weeks what takes a year usually</p>
+                      <p className="text-xs sm:text-sm">Building Backlinks in weeks what takes a year usually</p>
                     </div>
                   </div>
                 </div>
@@ -330,11 +320,11 @@ export default function TestimonialSection() {
 
                   <EmailInput />
 
-                  <div className="flex flex-col sm:flex-row gap-3 w-full">
+                  <div className="flex flex-col gap-2 sm:gap-3 w-full">
                     <button
                       type="button"
                       onClick={() => setShowPopup(false)}
-                      className="py-2.5 px-4 border border-gray-300 rounded-full text-gray-700 font-medium flex items-center justify-center hover:bg-gray-50 w-full"
+                      className="py-2 px-3 sm:py-2.5 sm:px-4 border border-gray-300 rounded-full text-gray-700 font-medium flex items-center justify-center hover:bg-gray-50 w-full text-sm sm:text-base"
                     >
                       <X size={16} className="mr-2" />
                       No thanks
@@ -344,7 +334,7 @@ export default function TestimonialSection() {
                       type="button"
                       onClick={handleSubmit}
                       disabled={isSubmitting}
-                      className="bg-orange-500 text-white py-2.5 px-4 rounded-full font-medium flex items-center justify-center hover:bg-orange-600 disabled:opacity-70 w-full"
+                      className="bg-orange-500 text-white py-2 px-3 sm:py-2.5 sm:px-4 rounded-full font-medium flex items-center justify-center hover:bg-orange-600 disabled:opacity-70 w-full text-sm sm:text-base"
                     >
                       <Send size={16} className="mr-2" />
                       {isSubmitting ? "Sending..." : "Send me the list"}
@@ -409,7 +399,7 @@ export default function TestimonialSection() {
                       height="20"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      xmlns="http://www.w3.org/200encias/svg"
+                      xmlns="http://www.w3.org/2encias/svg"
                     >
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
